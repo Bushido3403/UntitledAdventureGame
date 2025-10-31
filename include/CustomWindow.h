@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -17,6 +19,9 @@ private:
     bool fullscreen;
     sf::Vector2u windowedSize;
     sf::Vector2i windowedPosition;
+    
+    sf::Image icon;  // Add this
+    bool hasIcon = false;  // Add this
     
     static constexpr float titlebarHeight = 40.f;
     
@@ -41,4 +46,6 @@ public:
     std::optional<sf::Event> pollEvent() { return window.pollEvent(); }
     
     sf::RenderWindow& getWindow() { return window; }
+    
+    void setIcon(const sf::Image& iconImage);  // Add this method
 };

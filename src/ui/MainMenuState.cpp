@@ -1,17 +1,20 @@
+// SFML 3.x
+
 #include "MainMenuState.h"
 
 MainMenuState::MainMenuState(ResourceManager& resources)
-    : backgroundSprite(resources.getTexture("background"))
-    , logoSprite(resources.getTexture("logo"))
-    , titleSprite(resources.getTexture("title"))
+    : resources(resources), // Store resources
+      backgroundSprite(resources.getTexture("background")),
+      logoSprite(resources.getTexture("logo")),
+      titleSprite(resources.getTexture("title"))
 {
     logoSprite.setScale({0.8f, 0.8f});
     titleSprite.setScale({0.8f, 0.8f});
     
-    startButton = std::make_unique<Button>(resources.getTexture("start"), sf::Vector2f(0, 0));
+    startButton = std::make_unique<Button>(resources, resources.getTexture("start"), sf::Vector2f(0, 0));
     startButton->setScale({0.8f, 0.8f});
     
-    settingsButton = std::make_unique<Button>(resources.getTexture("settings"), sf::Vector2f(0, 0));
+    settingsButton = std::make_unique<Button>(resources, resources.getTexture("settings"), sf::Vector2f(0, 0));
     settingsButton->setScale({0.8f, 0.8f});
 }
 
@@ -56,7 +59,7 @@ void MainMenuState::handleEvent(const sf::Event& event)
 
 void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 {
-    auto mousePos = sf::Mouse::getPosition(window);  // Add window parameter
+    auto mousePos = sf::Mouse::getPosition(window);
     startButton->update(mousePos);
     settingsButton->update(mousePos);
 }

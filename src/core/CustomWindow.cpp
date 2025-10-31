@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #include "CustomWindow.h"
 
 CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, const sf::Font& font) 
@@ -136,4 +138,10 @@ void CustomWindow::draw(const sf::Drawable& drawable) {
 
 sf::Vector2u CustomWindow::getSize() const { 
     return window.getSize(); 
+}
+
+void CustomWindow::setIcon(const sf::Image& iconImage) {
+    icon = iconImage;
+    hasIcon = true;
+    window.setIcon(icon);
 }

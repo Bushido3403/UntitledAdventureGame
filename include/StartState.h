@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #pragma once
 #include "GameState.h"
 #include "ResourceManager.h"

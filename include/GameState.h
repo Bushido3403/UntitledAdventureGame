@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #pragma once
 #include <SFML/Graphics.hpp>
 

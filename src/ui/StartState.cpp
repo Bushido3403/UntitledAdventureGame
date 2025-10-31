@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #include "StartState.h"
 
 StartState::StartState(ResourceManager& resources)

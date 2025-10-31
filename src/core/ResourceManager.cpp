@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #include "ResourceManager.h"
 #include <iostream>
 
@@ -38,6 +40,18 @@ bool ResourceManager::loadMusic(const std::string& id, const std::string& path)
     return true;
 }
 
+bool ResourceManager::loadSoundBuffer(const std::string& id, const std::string& path)
+{
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile(path))
+    {
+        std::cerr << "Failed to load sound buffer: " << path << std::endl;
+        return false;
+    }
+    soundBuffers[id] = std::move(buffer);
+    return true;
+}
+
 sf::Texture& ResourceManager::getTexture(const std::string& id)
 {
     return textures.at(id);
@@ -51,4 +65,9 @@ sf::Font& ResourceManager::getFont(const std::string& id)
 sf::Music& ResourceManager::getMusic(const std::string& id)
 {
     return *music.at(id);
+}
+
+sf::SoundBuffer& ResourceManager::getSoundBuffer(const std::string& id)
+{
+    return soundBuffers.at(id);
 }

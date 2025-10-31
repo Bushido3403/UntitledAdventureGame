@@ -1,3 +1,5 @@
+// SFML 3.x
+
 #include "SettingsState.h"
 #include <algorithm> // For std::max and std::min
 

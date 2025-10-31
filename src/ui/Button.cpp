@@ -1,9 +1,17 @@
+// SFML 3.x
+
 #include "Button.h"
 
-Button::Button(sf::Texture& texture, const sf::Vector2f& position)
-    : sprite(texture), isHovered(false)
+std::unique_ptr<sf::Sound> Button::clickSound;
+
+Button::Button(ResourceManager& resources, sf::Texture& texture, const sf::Vector2f& position)
+    : sprite(texture), 
+      isHovered(false)
 {
     sprite.setPosition(position);
+    if (!Button::clickSound) {
+        Button::clickSound = std::make_unique<sf::Sound>(resources.getSoundBuffer("click"));
+    }
 }
 
 void Button::setPosition(const sf::Vector2f& position)
@@ -29,11 +37,11 @@ void Button::handleEvent(const sf::Event& event)
     {
         if (mousePressed->button == sf::Mouse::Button::Left)
         {
-            // mousePressed->position is already in window coordinates
             sf::Vector2f mousePos(static_cast<float>(mousePressed->position.x), 
-                                 static_cast<float>(mousePressed->position.y));
+                                  static_cast<float>(mousePressed->position.y));
             if (sprite.getGlobalBounds().contains(mousePos))
             {
+                if (Button::clickSound) Button::clickSound->play();
                 if (onClick)
                     onClick();
             }
@@ -55,4 +63,16 @@ void Button::draw(sf::RenderWindow& window)
 sf::FloatRect Button::getBounds() const
 {
     return sprite.getGlobalBounds();
+}
+
+void Button::prime(ResourceManager& resources)
+{
+    if (!Button::clickSound) {
+        Button::clickSound = std::make_unique<sf::Sound>(resources.getSoundBuffer("click"));
+        float old = Button::clickSound->getVolume();
+        Button::clickSound->setVolume(0.f);   // warm up silently
+        Button::clickSound->play();
+        Button::clickSound->stop();
+        Button::clickSound->setVolume(old);
+    }
 }

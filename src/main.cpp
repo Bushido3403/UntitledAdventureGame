@@ -1,12 +1,14 @@
+// SFML 3.x
+
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "CustomWindow.h"
 #include "MainMenuState.h"
 #include "StartState.h"
 #include "SettingsState.h"
+#include "Button.h"
 #include <memory>
 
-// Add this helper function before main()
 void setupMainMenuCallbacks(MainMenuState* menuState, std::unique_ptr<GameState>& nextState, 
                            ResourceManager& resources, CustomWindow& customWindow);
 
@@ -44,6 +46,9 @@ int main()
     resources.loadTexture("start", "assets/images/start.png");
     resources.loadTexture("settings", "assets/images/settings.png");
     resources.loadFont("main", "assets/fonts/MedievalSharp.ttf");
+    resources.loadSoundBuffer("click", "assets/sfx/click.wav");
+    Button::prime(resources);
+
     resources.loadMusic("title", "assets/sfx/Title.mp3");
     
     resources.getMusic("title").setLooping(true);
@@ -60,7 +65,7 @@ int main()
     sf::Image icon;
     if (icon.loadFromFile("assets/images/logo.png"))
         customWindow.getWindow().setIcon(icon);
-    
+
     // Initialize state
     std::unique_ptr<GameState> currentState = std::make_unique<MainMenuState>(
         resources  // Remove window parameter
@@ -80,24 +85,20 @@ int main()
             if (event->is<sf::Event::Resized>())
             {
                 customWindow.handleEvent(*event);
-                currentState->updatePositions(customWindow.getSize());  // Much simpler!
+                currentState->updatePositions(customWindow.getSize());
             }
             else
             {
                 customWindow.handleEvent(*event);
-                
-                // Check if fullscreen was toggled (window recreated)
-                if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>())
-                {
-                    static sf::Vector2u lastSize = customWindow.getSize();
-                    sf::Vector2u currentSize = customWindow.getSize();
-                    
-                    if (currentSize != lastSize)
-                    {
-                        currentState->updatePositions(currentSize);  // Much simpler!
-                        lastSize = currentSize;
-                    }
-                }
+            }
+
+            // Check if window size changed (after any event)
+            static sf::Vector2u lastSize = customWindow.getSize();
+            sf::Vector2u currentSize = customWindow.getSize();
+            if (currentSize != lastSize)
+            {
+                currentState->updatePositions(currentSize);
+                lastSize = currentSize;
             }
             
             if (customWindow.getShouldClose()) {
