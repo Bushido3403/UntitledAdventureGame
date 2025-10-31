@@ -6,7 +6,7 @@
 class SettingsState : public GameState
 {
 public:
-    SettingsState(ResourceManager& resources);  // Remove window parameter
+    SettingsState(ResourceManager& resources);
     
     void handleEvent(const sf::Event& event) override;
     void update(float deltaTime, sf::RenderWindow& window) override;
@@ -17,7 +17,16 @@ public:
     void updatePositions(const sf::Vector2u& windowSize);
 
 private:
-    sf::Text placeholderText;
+    void updateVolumeText();
+
+    ResourceManager& resources;
+    sf::Text titleText;
     sf::Text backText;
+    sf::Text volumeLabel;
+    sf::Text volumeValue;
+    sf::RectangleShape sliderBar;
+    sf::RectangleShape sliderHandle;
+    bool isDragging;
+    
     std::function<void()> onBackClicked;
 };
