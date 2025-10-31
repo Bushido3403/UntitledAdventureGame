@@ -7,10 +7,11 @@
 int main()
 {
     sf::RenderWindow window(
-        sf::VideoMode({1920u, 1080u}),
+        sf::VideoMode({1280u, 720u}),  // Smaller windowed size
         "Untitled Adventure Game",
         sf::Style::None  // Remove default titlebar
     );
+    window.setPosition(sf::Vector2i(100, 100));
     window.setFramerateLimit(144);
 
     // Load background
@@ -50,16 +51,24 @@ int main()
     titleText.setPosition(sf::Vector2f(10.f, 10.f));
     titleText.setFillColor(sf::Color::White);
 
-    // Close button
-    sf::RectangleShape closeButton({40.f, titlebarHeight});
-    closeButton.setFillColor(sf::Color(200, 50, 50));
-    closeButton.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 40.f, 0.f));
-
+    // Close button (text only)
     sf::Text closeText(font);
     closeText.setString("X");
     closeText.setCharacterSize(20);
-    closeText.setPosition(sf::Vector2f(closeButton.getPosition().x + 12.f, 8.f));
-    closeText.setFillColor(sf::Color::White);
+    closeText.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 30.f, 8.f));
+    closeText.setFillColor(sf::Color::Red);
+
+    // Fullscreen toggle button (text only)
+    sf::Text fullscreenText(font);
+    fullscreenText.setString("[ ]");
+    fullscreenText.setCharacterSize(20);
+    fullscreenText.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 60.f, 8.f));
+    fullscreenText.setFillColor(sf::Color::Cyan);
+
+    // Fullscreen state
+    bool isFullscreen = false;
+    sf::Vector2u windowedSize(1280u, 720u);
+    sf::Vector2i windowedPosition(100, 100);
 
     // Dragging state
     bool isDragging = false;
@@ -98,12 +107,42 @@ int main()
                 auto mousePos = sf::Mouse::getPosition(window);
                 
                 // Check close button
-                if (closeButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+                if (closeText.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
                 {
                     window.close();
                 }
+                // Check fullscreen button
+                else if (fullscreenText.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+                {
+                    isFullscreen = !isFullscreen;
+                    
+                    if (isFullscreen)
+                    {
+                        // Save current windowed state
+                        windowedSize = window.getSize();
+                        windowedPosition = window.getPosition();
+                        
+                        // Switch to fullscreen
+                        window.create(sf::VideoMode::getDesktopMode(), "Untitled Adventure Game", sf::Style::None);
+                        window.setPosition(sf::Vector2i(0, 0));
+                    }
+                    else
+                    {
+                        // Restore windowed state
+                        window.create(sf::VideoMode(windowedSize), "Untitled Adventure Game", sf::Style::None);
+                        window.setPosition(windowedPosition);
+                    }
+                    
+                    window.setFramerateLimit(144);
+                    updateBackgroundScale();
+                    
+                    // Update UI positions
+                    titlebar.setSize({static_cast<float>(window.getSize().x), titlebarHeight});
+                    closeText.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 30.f, 8.f));
+                    fullscreenText.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 60.f, 8.f));
+                }
                 // Check titlebar for dragging
-                else if (mousePos.y < titlebarHeight)
+                else if (mousePos.y < titlebarHeight && !isFullscreen)
                 {
                     isDragging = true;
                     dragOffset = sf::Mouse::getPosition() - window.getPosition();
@@ -127,10 +166,10 @@ int main()
 
         window.clear();
         window.draw(backgroundSprite);
-        window.draw(titlebar);        // Draw titlebar
-        window.draw(titleText);        // Draw title
-        window.draw(closeButton);      // Draw close button
-        window.draw(closeText);        // Draw X text
+        window.draw(titlebar);
+        window.draw(titleText);
+        window.draw(fullscreenText);    // Blue [] symbol
+        window.draw(closeText);         // Red X symbol
         window.display();
     }
 
