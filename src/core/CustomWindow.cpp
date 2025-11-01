@@ -6,7 +6,8 @@ CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, c
     : window(sf::VideoMode(size), title, sf::Style::None),
       dragging(false), 
       shouldClose(false),
-      fullscreen(false), 
+      fullscreen(false),
+      resized(false),
       windowedSize(size),
       windowedPosition(100, 100),
       titleText(font, title, 16),
@@ -14,7 +15,7 @@ CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, c
       fullscreenText(font, "[ ]", 20) {
     
     window.setPosition(windowedPosition);
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(60);
     
     // Initialize titlebar
     titlebar.setSize(sf::Vector2f(static_cast<float>(size.x), titlebarHeight));
@@ -61,11 +62,12 @@ void CustomWindow::handleEvent(const sf::Event& event) {
                     windowedSize = window.getSize();
                     windowedPosition = window.getPosition();
                     
-                    window.create(sf::VideoMode::getDesktopMode(), titleText.getString(), sf::Style::None);
+                    auto desktopMode = sf::VideoMode::getDesktopMode();
+                    
+                    window.create(desktopMode, titleText.getString(), sf::Style::None);
                     window.setPosition(sf::Vector2i(0, 0));
                     
                     // Update view to match new size
-                    auto desktopMode = sf::VideoMode::getDesktopMode();
                     sf::FloatRect visibleArea({0.f, 0.f}, 
                         {static_cast<float>(desktopMode.size.x), 
                          static_cast<float>(desktopMode.size.y)});
@@ -82,7 +84,14 @@ void CustomWindow::handleEvent(const sf::Event& event) {
                 }
                 
                 window.setFramerateLimit(144);
+                
+                // Restore icon if it was set
+                if (hasIcon) {
+                    window.setIcon(icon);
+                }
+                
                 updateTitlebarElements();
+                resized = true;
                 return;
             }
             

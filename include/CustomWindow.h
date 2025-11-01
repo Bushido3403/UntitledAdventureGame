@@ -20,8 +20,9 @@ private:
     sf::Vector2u windowedSize;
     sf::Vector2i windowedPosition;
     
-    sf::Image icon;  // Add this
-    bool hasIcon = false;  // Add this
+    sf::Image icon;
+    bool hasIcon = false;
+    bool resized;
     
     static constexpr float titlebarHeight = 40.f;
     
@@ -38,6 +39,9 @@ public:
     
     bool isOpen() const { return window.isOpen(); }
     bool getShouldClose() const { return shouldClose; }
+    bool isFullscreen() const { return fullscreen; }
+    bool wasResized() const { return resized; }
+    void clearResized() { resized = false; }
     void close() { window.close(); }
     
     sf::Vector2u getSize() const;
@@ -47,5 +51,5 @@ public:
     
     sf::RenderWindow& getWindow() { return window; }
     
-    void setIcon(const sf::Image& iconImage);  // Add this method
+    void setIcon(const sf::Image& iconImage);
 };

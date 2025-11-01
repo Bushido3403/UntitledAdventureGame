@@ -29,6 +29,7 @@ file(GLOB_RECURSE HEADERS
 
 add_executable(main 
     src/main.cpp
+    src/core/GameEngine.cpp
     src/core/ResourceManager.cpp
     src/core/CustomWindow.cpp
     src/ui/Button.cpp
