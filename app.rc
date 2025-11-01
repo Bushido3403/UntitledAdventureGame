@@ -1,0 +1,31 @@
+#include <windows.h>
+
+IDI_ICON1 ICON "src/assets/images/logo.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L            // VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"      // US English, Unicode
+    BEGIN
+      VALUE "COMPSCI-135", "Kyle Buchanan"
+      VALUE "FileDescription", "Untitled Adventure Game"
+      VALUE "FileVersion", "1.0.0.0"
+      VALUE "InternalName", "UntitledAdventureGame"
+      VALUE "OriginalFilename", "UntitledAdventureGame.exe"
+      VALUE "ProductName", "Untitled Adventure Game"
+      VALUE "ProductVersion", "1.0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 1200
+  END
+END
