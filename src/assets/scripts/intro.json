@@ -1,0 +1,42 @@
+{
+    "scriptId": "intro",
+    "title": "The Beginning",
+    "scenes": [
+      {
+        "id": "scene_1",
+        "background": "menuBackground",
+        "text": "In the beginning, there was only void and fire...",
+        "speaker": "Narrator",
+        "choices": [
+          {
+            "text": "Continue",
+            "nextScene": "scene_2"
+          }
+        ]
+      },
+      {
+        "id": "scene_2",
+        "background": "menuBackground",
+        "text": "From the clash of ice and flame, the world was born.",
+        "speaker": "Narrator",
+        "choices": [
+          {
+            "text": "Continue",
+            "nextScene": "scene_3"
+          }
+        ]
+      },
+      {
+        "id": "scene_3",
+        "background": "menuBackground",
+        "text": "And with it, the age of gods and heroes began...",
+        "speaker": "Narrator",
+        "choices": [
+          {
+            "text": "Begin your journey",
+            "nextScene": "END"
+          }
+        ]
+      }
+    ]
+  }

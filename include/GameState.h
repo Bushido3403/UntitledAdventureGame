@@ -7,7 +7,7 @@ enum class GameStateType {
     MainMenu,
     Start,
     Settings,
-    Playing  // Add new state types as needed
+    Playing
 };
 
 class GameEngine;  // Forward declaration

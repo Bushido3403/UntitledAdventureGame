@@ -34,6 +34,7 @@ void StartState::handleEvent(const sf::Event& event)
         {
             onBackClicked();
         }
+        
     }
 }
 

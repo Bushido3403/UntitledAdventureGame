@@ -18,7 +18,15 @@ FetchContent_Declare(SFML
   EXCLUDE_FROM_ALL
   SYSTEM
 )
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/nlohmann/json.git
+  GIT_TAG        v3.11.3
+  GIT_SHALLOW    ON
+  EXCLUDE_FROM_ALL
+  SYSTEM
+)
 FetchContent_MakeAvailable(SFML)
+FetchContent_MakeAvailable(json)
 
 # ---- Sources ----
 # Collect .cpp files
@@ -49,7 +57,7 @@ target_include_directories(game PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(game PRIVATE cxx_std_17)
 
 # Link SFML modules you use
-target_link_libraries(game PRIVATE SFML::Graphics SFML::Audio)
+target_link_libraries(game PRIVATE SFML::Graphics SFML::Audio nlohmann_json::nlohmann_json)
 
 # If you’re building SFML statically, this define is commonly used.
 if (WIN32)

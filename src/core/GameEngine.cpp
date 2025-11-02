@@ -5,6 +5,7 @@
 #include "StartState.h"
 #include "SettingsState.h"
 #include "Button.h"
+#include "PlayingState.h"
 
 GameEngine::GameEngine() {
     // Load all resources FIRST
@@ -85,13 +86,18 @@ std::unique_ptr<GameState> GameEngine::createSettingsState() {
     return std::make_unique<SettingsState>(resources);
 }
 
+std::unique_ptr<GameState> GameEngine::createPlayingState(const std::string& scriptPath) {
+    return std::make_unique<PlayingState>(resources, scriptPath);
+}
+
 void GameEngine::setupStateCallbacks(GameState* state) {
     switch (state->getType()) {
         case GameStateType::MainMenu: {
             auto* mainMenu = static_cast<MainMenuState*>(state);
             
             mainMenu->setOnStartClicked([this]() {
-                pushState(createStartState());
+                // Change this line to load your script instead of the placeholder StartState
+                pushState(createPlayingState("assets/scripts/intro.json"));
             });
             
             mainMenu->setOnSettingsClicked([this]() {
@@ -113,6 +119,15 @@ void GameEngine::setupStateCallbacks(GameState* state) {
             auto* settingsState = static_cast<SettingsState*>(state);
             
             settingsState->setOnBackClicked([this]() {
+                popState();
+            });
+            break;
+        }
+        
+        case GameStateType::Playing: {
+            auto* playingState = static_cast<PlayingState*>(state);
+            
+            playingState->setOnScriptComplete([this]() {
                 popState();
             });
             break;

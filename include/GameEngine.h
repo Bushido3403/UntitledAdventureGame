@@ -24,6 +24,7 @@ public:
     std::unique_ptr<GameState> createMainMenuState();
     std::unique_ptr<GameState> createStartState();
     std::unique_ptr<GameState> createSettingsState();
+    std::unique_ptr<GameState> createPlayingState(const std::string& scriptPath);
     
 private:
     void processEvents();
