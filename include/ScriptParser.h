@@ -18,6 +18,7 @@ struct Scene {
     std::string background;
     std::string text;
     std::string speaker;
+    std::string speakerColor;  // Add this field
     std::vector<Choice> choices;
 };
 

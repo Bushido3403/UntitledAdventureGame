@@ -11,7 +11,7 @@
       "background": "menuBackground",
       "text": "In the beginning, there was only void and fire. From the flames of Muspelheim and the ice of Niflheim, the Nine Realms were born.",
       "speaker": "Narrator",
-      "speakerColor": "#FFD700",
+      "speakerColor": "#ad0396",
       "tags": ["intro", "exposition"],
       "music": "intro_theme",
       "soundEffect": "",
@@ -73,7 +73,6 @@
       "soundEffect": "wind_strong",
       "effects": {
         "addFlag": "accepted_destiny",
-        "addFlag": "completed_intro",
         "modifyStat": {"wisdom": 2}
       },
       "choices": [
@@ -93,7 +92,6 @@
       "music": "melancholy_theme",
       "soundEffect": "",
       "effects": {
-        "addFlag": "rejected_destiny",
         "addFlag": "completed_intro",
         "modifyStat": {"strength": 2}
       },

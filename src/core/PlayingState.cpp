@@ -57,7 +57,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
                                                   resources.getFont("main"), 
                                                   dialogSize);
     
-    dialogBox->setText(wrappedText, currentScene->speaker);
+    dialogBox->setText(wrappedText, currentScene->speaker, currentScene->speakerColor);  // Pass speaker color
     
     createChoiceButtons();
     updatePositions(fullWindowSize);
@@ -226,7 +226,7 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
                                                       static_cast<unsigned int>(maxTextWidth), 
                                                       resources.getFont("main"), 
                                                       dialogSize);
-        dialogBox->setText(wrappedText, currentScene->speaker);
+        dialogBox->setText(wrappedText, currentScene->speaker, currentScene->speakerColor);  // Pass speaker color
         dialogBox->updateLayout(dialogBounds, metrics.scale.boxPadding, 
                                metrics.scale.scaleY, dialogSize, speakerSize);
     }

@@ -45,6 +45,13 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
             scene.text = sceneJson["text"];
             scene.speaker = sceneJson["speaker"];
 
+            // Parse speaker color if present, default to white
+            if (sceneJson.contains("speakerColor")) {
+                scene.speakerColor = sceneJson["speakerColor"];
+            } else {
+                scene.speakerColor = "#ffffffff";  // Default white color
+            }
+
             for (const auto& choiceJson : sceneJson["choices"]) {
                 Choice choice;
                 choice.text = choiceJson["text"];

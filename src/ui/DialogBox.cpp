@@ -12,9 +12,33 @@ DialogBox::DialogBox(const sf::Font& font)
     dialogText.setFillColor(sf::Color::White);
 }
 
-void DialogBox::setText(const std::string& text, const std::string& speaker) {
+void DialogBox::setText(const std::string& text, const std::string& speaker, const std::string& speakerColor) {
     speakerText.setString("[" + speaker + "]");
+    speakerText.setFillColor(parseHexColor(speakerColor));
     dialogText.setString(text);
+}
+
+sf::Color DialogBox::parseHexColor(const std::string& hexColor) {
+    std::string hex = hexColor;
+    
+    // Remove '#' if present
+    if (hex[0] == '#') {
+        hex = hex.substr(1);
+    }
+    
+    // Default to gold if parsing fails
+    if (hex.length() != 6) {
+        return sf::Color(200, 200, 100);
+    }
+    
+    try {
+        unsigned int r = std::stoi(hex.substr(0, 2), nullptr, 16);
+        unsigned int g = std::stoi(hex.substr(2, 2), nullptr, 16);
+        unsigned int b = std::stoi(hex.substr(4, 2), nullptr, 16);
+        return sf::Color(r, g, b);
+    } catch (...) {
+        return sf::Color(200, 200, 100);  // Default gold color
+    }
 }
 
 void DialogBox::updateLayout(const sf::FloatRect& bounds, float boxPadding, float scaleY, 
