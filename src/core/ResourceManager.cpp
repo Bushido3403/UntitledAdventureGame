@@ -34,9 +34,11 @@ bool ResourceManager::loadMusic(const std::string& id, const std::string& path)
     if (!musicPtr->openFromFile(path))
     {
         std::cerr << "Failed to load music: " << path << std::endl;
+        std::cerr << "Current working directory: " << std::filesystem::current_path() << std::endl;
         return false;
     }
     music[id] = std::move(musicPtr);
+    std::cout << "Successfully loaded music: " << id << std::endl; // Add this
     return true;
 }
 

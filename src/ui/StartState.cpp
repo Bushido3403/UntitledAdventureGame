@@ -3,7 +3,7 @@
 #include "StartState.h"
 
 StartState::StartState(ResourceManager& resources)
-    : placeholderText(resources.getFont("main"), "Game Starting... (Placeholder)", 48)
+    : placeholderText(resources.getFont("main"), "Game Starting...", 48)
     , backText(resources.getFont("main"), "Press ESC to return to menu", 24)
 {
     placeholderText.setFillColor(sf::Color::White);

@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "ResourceManager.h"
 #include "ScriptParser.h"
+#include "Button.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
@@ -40,6 +41,7 @@ private:
     
     std::vector<sf::Text> choiceTexts;
     std::vector<std::string> choiceNextScenes;
+    std::vector<std::unique_ptr<Button>> choiceButtons;
     
     sf::Vector2u windowSize;
     

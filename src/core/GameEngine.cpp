@@ -6,6 +6,7 @@
 #include "SettingsState.h"
 #include "Button.h"
 #include "PlayingState.h"
+#include <iostream>
 
 GameEngine::GameEngine() {
     // Load all resources FIRST
@@ -38,8 +39,13 @@ GameEngine::GameEngine() {
     }
     
     Button::prime(resources);
+    resources.getMusic("title").setVolume(100.f); // Add this
     resources.getMusic("title").setLooping(true);
     resources.getMusic("title").play();
+
+    // Check status
+    std::cout << "Music status: " << static_cast<int>(resources.getMusic("title").getStatus()) << std::endl;
+    // 0=Stopped, 1=Paused, 2=Playing
 }
 
 void GameEngine::run() {

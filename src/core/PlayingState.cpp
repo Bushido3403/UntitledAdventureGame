@@ -96,6 +96,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
 void PlayingState::createChoiceTexts() {
     choiceTexts.clear();
     choiceNextScenes.clear();
+    choiceButtons.clear();
     
     if (!currentScene) return;
     
@@ -104,13 +105,25 @@ void PlayingState::createChoiceTexts() {
     for (size_t i = 0; i < currentScene->choices.size() && i < 4; ++i) {
         const auto& choice = currentScene->choices[i];
         
-        sf::Text choiceText(resources.getFont("main"), "", 22);
-        choiceText.setString(std::string(1, labels[i]) + ") " + choice.text);
-        choiceText.setFillColor(sf::Color(180, 180, 200));
+        // Create text-based button (no texture)
+        auto button = std::make_unique<Button>(resources, nullptr, sf::Vector2f(0, 0));
         
-        choiceTexts.push_back(choiceText);
+        // SET TEXT FIRST, THEN POSITION
+        button->setText(std::string(1, labels[i]) + ") " + choice.text, resources.getFont("main"), 22);
+        button->setPosition(sf::Vector2f(0, 0)); // This will be updated in updateChoicePositions
+        
+        // Store the next scene for this button
+        std::string nextScene = choice.nextScene;
+        button->setOnClick([this, nextScene]() {
+            loadScene(nextScene);
+        });
+        
+        choiceButtons.push_back(std::move(button));
         choiceNextScenes.push_back(choice.nextScene);
     }
+    
+    // Make sure positions are updated after creating buttons
+    updateChoicePositions();
 }
 
 void PlayingState::updateChoicePositions() {
@@ -121,11 +134,12 @@ void PlayingState::updateChoicePositions() {
     float graphicsY = TITLEBAR_HEIGHT + BUFFER;
     float dialogBoxY = graphicsHeight + graphicsY + BUFFER;
     
-    float choiceStartY = dialogBoxY + 120.f; // Start below dialog text
+    float choiceStartY = dialogBoxY + 120.f;
     float choiceSpacing = 30.f;
     
-    for (size_t i = 0; i < choiceTexts.size(); ++i) {
-        choiceTexts[i].setPosition(sf::Vector2f(BUFFER + 20.f, choiceStartY + i * choiceSpacing));
+    // Fix: iterate over choiceButtons instead of choiceTexts
+    for (size_t i = 0; i < choiceButtons.size(); ++i) {
+        choiceButtons[i]->setPosition(sf::Vector2f(BUFFER + 20.f, choiceStartY + i * choiceSpacing));
     }
 }
 
@@ -190,23 +204,12 @@ void PlayingState::setOnScriptComplete(std::function<void()> callback) {
 }
 
 void PlayingState::handleEvent(const sf::Event& event) {
-    // Handle mouse clicks
-    if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-        if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
-            sf::Vector2f mousePos(static_cast<float>(mouseButtonPressed->position.x), 
-                                  static_cast<float>(mouseButtonPressed->position.y));
-        
-            for (size_t i = 0; i < choiceTexts.size(); ++i) {
-                sf::FloatRect bounds = choiceTexts[i].getGlobalBounds();
-                if (bounds.contains(mousePos)) {
-                    loadScene(choiceNextScenes[i]);
-                    break;
-                }
-            }
-        }
+    // Handle button events (includes click sound)
+    for (auto& button : choiceButtons) {
+        button->handleEvent(event);
     }
     
-    // Handle keyboard input
+    // Keep keyboard shortcuts
     if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
         int choiceIndex = -1;
         
@@ -235,16 +238,10 @@ void PlayingState::handleEvent(const sf::Event& event) {
 
 void PlayingState::update(float deltaTime, sf::RenderWindow& window) {
     auto mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
     
-    // Update choice text colors on hover
-    for (auto& choiceText : choiceTexts) {
-        sf::FloatRect bounds = choiceText.getGlobalBounds();
-        if (bounds.contains(mousePosF)) {
-            choiceText.setFillColor(sf::Color(255, 255, 150)); // Highlight color
-        } else {
-            choiceText.setFillColor(sf::Color(180, 180, 200)); // Normal color
-        }
+    // Update buttons
+    for (auto& button : choiceButtons) {
+        button->update(mousePos);
     }
 }
 
@@ -252,7 +249,6 @@ void PlayingState::draw(sf::RenderWindow& window) {
     window.draw(background);
     window.draw(graphicsBox);
     
-    // Draw graphics sprite if available
     if (graphicsSprite) {
         sf::FloatRect texBounds = graphicsSprite->getLocalBounds();
         float graphicsWidth = graphicsBox.getSize().x;
@@ -270,8 +266,8 @@ void PlayingState::draw(sf::RenderWindow& window) {
     window.draw(speakerText);
     window.draw(dialogText);
     
-    // Draw choice texts
-    for (auto& choiceText : choiceTexts) {
-        window.draw(choiceText);
+    // Draw buttons (now handles text rendering)
+    for (auto& button : choiceButtons) {
+        button->draw(window);
     }
 }

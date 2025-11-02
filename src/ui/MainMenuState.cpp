@@ -11,10 +11,10 @@ MainMenuState::MainMenuState(ResourceManager& resources)
     logoSprite.setScale({0.8f, 0.8f});
     titleSprite.setScale({0.8f, 0.8f});
     
-    startButton = std::make_unique<Button>(resources, resources.getTexture("start"), sf::Vector2f(0, 0));
+    startButton = std::make_unique<Button>(resources, &resources.getTexture("start"), sf::Vector2f(0, 0));
     startButton->setScale({0.8f, 0.8f});
     
-    settingsButton = std::make_unique<Button>(resources, resources.getTexture("settings"), sf::Vector2f(0, 0));
+    settingsButton = std::make_unique<Button>(resources, &resources.getTexture("settings"), sf::Vector2f(0, 0));
     settingsButton->setScale({0.8f, 0.8f});
 }
 
