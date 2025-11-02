@@ -24,6 +24,7 @@ public:
 private:
     void loadScene(const std::string& sceneId);
     void createChoiceTexts();
+    void updateChoicePositions();
 
     ResourceManager& resources;
     GameScript script;
@@ -39,6 +40,8 @@ private:
     
     std::vector<sf::Text> choiceTexts;
     std::vector<std::string> choiceNextScenes;
+    
+    sf::Vector2u windowSize;
     
     std::function<void()> onScriptComplete;
 };

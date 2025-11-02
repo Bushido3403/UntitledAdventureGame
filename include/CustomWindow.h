@@ -45,6 +45,8 @@ public:
     void close() { window.close(); }
     
     sf::Vector2u getSize() const;
+    sf::Vector2u getDrawableSize() const;
+    static constexpr float getTitlebarHeight() { return titlebarHeight; }
     void setView(const sf::View& view) { window.setView(view); }
     
     std::optional<sf::Event> pollEvent() { return window.pollEvent(); }

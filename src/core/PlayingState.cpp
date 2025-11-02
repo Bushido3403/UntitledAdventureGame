@@ -1,6 +1,7 @@
 // SFML 3.x
 
 #include "PlayingState.h"
+#include "CustomWindow.h"
 #include <iostream>
 
 PlayingState::PlayingState(ResourceManager& resources, const std::string& scriptPath)
@@ -8,7 +9,8 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
       currentScene(nullptr),
       dialogText(resources.getFont("main"), "", 24),
       speakerText(resources.getFont("main"), "", 28),
-      graphicsSprite(nullptr)
+      graphicsSprite(nullptr),
+      windowSize(800, 600) // Default size
 {
     auto scriptOpt = ScriptParser::loadScript(scriptPath);
     if (!scriptOpt) {
@@ -88,6 +90,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
     }
     
     createChoiceTexts();
+    updateChoicePositions(); // Update positions after creating choices
 }
 
 void PlayingState::createChoiceTexts() {
@@ -110,22 +113,51 @@ void PlayingState::createChoiceTexts() {
     }
 }
 
-void PlayingState::updatePositions(const sf::Vector2u& windowSize) {
+void PlayingState::updateChoicePositions() {
+    const float BUFFER = 20.f;
+    const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
+    float graphicsWidth = (static_cast<float>(windowSize.x) - (BUFFER * 3)) * 0.6f;
+    float graphicsHeight = graphicsWidth * (9.f / 16.f);
+    float graphicsY = TITLEBAR_HEIGHT + BUFFER;
+    float dialogBoxY = graphicsHeight + graphicsY + BUFFER;
+    
+    float choiceStartY = dialogBoxY + 120.f; // Start below dialog text
+    float choiceSpacing = 30.f;
+    
+    for (size_t i = 0; i < choiceTexts.size(); ++i) {
+        choiceTexts[i].setPosition(sf::Vector2f(BUFFER + 20.f, choiceStartY + i * choiceSpacing));
+    }
+}
+
+void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
+    const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
+    windowSize = sf::Vector2u(newWindowSize.x, 
+                              newWindowSize.y - static_cast<unsigned int>(TITLEBAR_HEIGHT));
     const float BUFFER = 20.f; // Consistent buffer between all elements
     
-    background.setSize(sf::Vector2f(static_cast<float>(windowSize.x), 
-                                     static_cast<float>(windowSize.y)));
+    // Background should start below titlebar
+    background.setSize(sf::Vector2f(static_cast<float>(newWindowSize.x), 
+                                     static_cast<float>(newWindowSize.y) - TITLEBAR_HEIGHT));
+    background.setPosition({0.f, TITLEBAR_HEIGHT});
     
-    // Dialog box at bottom of screen
-    float boxHeight = 200.f;
-    float boxWidth = static_cast<float>(windowSize.x) - (BUFFER * 2);
-    dialogBox.setSize(sf::Vector2f(boxWidth, boxHeight));
-    dialogBox.setPosition(sf::Vector2f(BUFFER, static_cast<float>(windowSize.y) - boxHeight - BUFFER));
+    // Calculate available space for graphics
+    float availableHeight = static_cast<float>(windowSize.y) - BUFFER * 2;
     
     // Calculate graphics box dimensions (16:9 aspect ratio)
     float graphicsWidth = (static_cast<float>(windowSize.x) - (BUFFER * 3)) * 0.6f;
     float graphicsHeight = graphicsWidth * (9.f / 16.f);
-    float graphicsY = static_cast<float>(windowSize.y) - boxHeight - graphicsHeight - (BUFFER * 2);
+    
+    // Reserve space for dialog box (at least 200px)
+    float minDialogHeight = 200.f;
+    float maxGraphicsHeight = availableHeight - minDialogHeight - BUFFER;
+    
+    // Limit graphics height if needed
+    if (graphicsHeight > maxGraphicsHeight) {
+        graphicsHeight = maxGraphicsHeight;
+        graphicsWidth = graphicsHeight * (16.f / 9.f);
+    }
+    
+    float graphicsY = TITLEBAR_HEIGHT + BUFFER;
     
     graphicsBox.setSize(sf::Vector2f(graphicsWidth, graphicsHeight));
     graphicsBox.setPosition(sf::Vector2f(BUFFER, graphicsY));
@@ -135,19 +167,22 @@ void PlayingState::updatePositions(const sf::Vector2u& windowSize) {
     statsBox.setSize(sf::Vector2f(statsWidth, graphicsHeight));
     statsBox.setPosition(sf::Vector2f(graphicsWidth + (BUFFER * 2), graphicsY));
     
+    // Dialog box fills remaining vertical space below graphics
+    float dialogBoxY = graphicsHeight + graphicsY + BUFFER;
+    float boxHeight = static_cast<float>(newWindowSize.y) - dialogBoxY - BUFFER;
+    float boxWidth = static_cast<float>(windowSize.x) - (BUFFER * 2);
+    
+    dialogBox.setSize(sf::Vector2f(boxWidth, boxHeight));
+    dialogBox.setPosition(sf::Vector2f(BUFFER, dialogBoxY));
+    
     // Speaker name inside dialog box at top-left
-    speakerText.setPosition(sf::Vector2f(BUFFER + 10.f, static_cast<float>(windowSize.y) - boxHeight - BUFFER + 10.f));
+    speakerText.setPosition(sf::Vector2f(BUFFER + 10.f, dialogBoxY + 10.f));
     
     // Dialog text inside box, below speaker name
-    dialogText.setPosition(sf::Vector2f(BUFFER + 10.f, static_cast<float>(windowSize.y) - boxHeight - BUFFER + 50.f));
+    dialogText.setPosition(sf::Vector2f(BUFFER + 10.f, dialogBoxY + 50.f));
     
-    // Position choice texts
-    float choiceStartY = static_cast<float>(windowSize.y) - boxHeight - BUFFER + 120.f;
-    float choiceSpacing = 30.f;
-    
-    for (size_t i = 0; i < choiceTexts.size(); ++i) {
-        choiceTexts[i].setPosition(sf::Vector2f(BUFFER + 20.f, choiceStartY + i * choiceSpacing));
-    }
+    // Update choice positions
+    updateChoicePositions();
 }
 
 void PlayingState::setOnScriptComplete(std::function<void()> callback) {
@@ -155,18 +190,45 @@ void PlayingState::setOnScriptComplete(std::function<void()> callback) {
 }
 
 void PlayingState::handleEvent(const sf::Event& event) {
+    // Handle mouse clicks
     if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
         if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
             sf::Vector2f mousePos(static_cast<float>(mouseButtonPressed->position.x), 
                                   static_cast<float>(mouseButtonPressed->position.y));
         
-        for (size_t i = 0; i < choiceTexts.size(); ++i) {
-            sf::FloatRect bounds = choiceTexts[i].getGlobalBounds();
-            if (bounds.contains(mousePos)) {
-                loadScene(choiceNextScenes[i]);
-                break;
+            for (size_t i = 0; i < choiceTexts.size(); ++i) {
+                sf::FloatRect bounds = choiceTexts[i].getGlobalBounds();
+                if (bounds.contains(mousePos)) {
+                    loadScene(choiceNextScenes[i]);
+                    break;
                 }
             }
+        }
+    }
+    
+    // Handle keyboard input
+    if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+        int choiceIndex = -1;
+        
+        switch (keyPressed->code) {
+            case sf::Keyboard::Key::A:
+                choiceIndex = 0;
+                break;
+            case sf::Keyboard::Key::B:
+                choiceIndex = 1;
+                break;
+            case sf::Keyboard::Key::C:
+                choiceIndex = 2;
+                break;
+            case sf::Keyboard::Key::D:
+                choiceIndex = 3;
+                break;
+            default:
+                break;
+        }
+        
+        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(choiceNextScenes.size())) {
+            loadScene(choiceNextScenes[choiceIndex]);
         }
     }
 }

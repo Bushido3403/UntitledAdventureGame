@@ -149,6 +149,11 @@ sf::Vector2u CustomWindow::getSize() const {
     return window.getSize(); 
 }
 
+sf::Vector2u CustomWindow::getDrawableSize() const {
+    auto size = window.getSize();
+    return sf::Vector2u(size.x, size.y - static_cast<unsigned int>(titlebarHeight));
+}
+
 void CustomWindow::setIcon(const sf::Image& iconImage) {
     icon = iconImage;
     hasIcon = true;
