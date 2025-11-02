@@ -46,4 +46,5 @@ private:
     sf::Vector2u windowSize;
     
     std::function<void()> onScriptComplete;
+    std::string pendingSceneId;  // Add this line
 };

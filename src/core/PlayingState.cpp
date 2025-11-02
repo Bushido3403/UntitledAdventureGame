@@ -95,7 +95,6 @@ void PlayingState::loadScene(const std::string& sceneId) {
 
 void PlayingState::createChoiceTexts() {
     choiceTexts.clear();
-    choiceNextScenes.clear();
     choiceButtons.clear();
     
     if (!currentScene) return;
@@ -115,11 +114,11 @@ void PlayingState::createChoiceTexts() {
         // Store the next scene for this button
         std::string nextScene = choice.nextScene;
         button->setOnClick([this, nextScene]() {
-            loadScene(nextScene);
+            // Instead of loading immediately, mark it as pending
+            pendingSceneId = nextScene;
         });
         
         choiceButtons.push_back(std::move(button));
-        choiceNextScenes.push_back(choice.nextScene);
     }
     
     // Make sure positions are updated after creating buttons
@@ -230,8 +229,8 @@ void PlayingState::handleEvent(const sf::Event& event) {
                 break;
         }
         
-        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(choiceNextScenes.size())) {
-            loadScene(choiceNextScenes[choiceIndex]);
+        if (currentScene && choiceIndex >= 0 && choiceIndex < static_cast<int>(currentScene->choices.size())) {
+            loadScene(currentScene->choices[choiceIndex].nextScene);
         }
     }
 }
@@ -243,7 +242,15 @@ void PlayingState::update(float deltaTime, sf::RenderWindow& window) {
     for (auto& button : choiceButtons) {
         button->update(mousePos);
     }
+    
+    // Load pending scene after button events have been processed
+    if (!pendingSceneId.empty()) {
+        std::string sceneToLoad = pendingSceneId;
+        pendingSceneId.clear();
+        loadScene(sceneToLoad);
+    }
 }
+
 
 void PlayingState::draw(sf::RenderWindow& window) {
     window.draw(background);

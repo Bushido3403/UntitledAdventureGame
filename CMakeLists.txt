@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.28)
 
-# ---- Project ----
 project(UntitledAdventureGame LANGUAGES CXX)
 
-# Put built exe in build/bin
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Optional: build static libs by default (SFML will still be shared unless you build it static)
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+# Force static linking
+set(BUILD_SHARED_LIBS OFF)
+set(SFML_STATIC_LIBRARIES TRUE)
+
+# Add static linking flags for MinGW
+if(MINGW)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
+endif()
 
 # ---- Dependencies: SFML 3 ----
 include(FetchContent)
@@ -78,13 +82,14 @@ if (WIN32)
 endif()
 
 # ---- Assets next to the exe ----
-add_custom_command(TARGET game POST_BUILD
+add_custom_target(copy_assets ALL
   COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:game>/assets"
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           "${CMAKE_SOURCE_DIR}/src/assets"
           "$<TARGET_FILE_DIR:game>/assets"
   COMMENT "Copying assets to build directory"
 )
+add_dependencies(game copy_assets)
 
 # ---- Nice source groups for IDEs (optional) ----
 source_group(TREE "${CMAKE_SOURCE_DIR}" FILES ${SOURCES} ${HEADERS})

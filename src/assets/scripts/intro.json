@@ -11,6 +11,10 @@
           {
             "text": "Continue",
             "nextScene": "scene_2"
+          },
+          {
+            "text": "Skip Intro",
+            "nextScene": "END"
           }
         ]
       },

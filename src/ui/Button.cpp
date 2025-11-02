@@ -51,12 +51,26 @@ void Button::setOnClick(std::function<void()> callback)
 
 void Button::handleEvent(const sf::Event& event)
 {
-    if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
+    // if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
+    // {
+    //     if (mousePressed->button == sf::Mouse::Button::Left)
+    //     {
+    //         sf::Vector2f mousePos(static_cast<float>(mousePressed->position.x), 
+    //                               static_cast<float>(mousePressed->position.y));
+    //         if (getBounds().contains(mousePos))
+    //         {
+    //             if (Button::clickSound) Button::clickSound->play();
+    //             if (onClick)
+    //                 onClick();
+    //         }
+    //     }
+    // }
+    if (const auto* mouseReleased = event.getIf<sf::Event::MouseButtonReleased>())
     {
-        if (mousePressed->button == sf::Mouse::Button::Left)
+        if (mouseReleased->button == sf::Mouse::Button::Left)
         {
-            sf::Vector2f mousePos(static_cast<float>(mousePressed->position.x), 
-                                  static_cast<float>(mousePressed->position.y));
+            sf::Vector2f mousePos(static_cast<float>(mouseReleased->position.x), 
+                                  static_cast<float>(mouseReleased->position.y));
             if (getBounds().contains(mousePos))
             {
                 if (Button::clickSound) Button::clickSound->play();
