@@ -9,15 +9,16 @@
 #include <iostream>
 
 GameEngine::GameEngine() {
-    // Load all resources FIRST
     resources.loadFont("main", "assets/fonts/MedievalSharp.ttf");
+    resources.loadTexture("cursor", "assets/images/cursor.png");  // Load cursor first
+    
     resources.loadTexture("background", "assets/images/menuBackground.jpg");
     resources.loadTexture("logo", "assets/images/logo.png");
     resources.loadTexture("title", "assets/images/title.png");
     resources.loadTexture("start", "assets/images/start.png");
     resources.loadTexture("settings", "assets/images/settings.png");
     resources.loadSoundBuffer("click", "assets/sfx/click.wav");
-    resources.loadMusic("title", "assets/sfx/Title.mp3");
+    resources.loadMusic("title", "assets/sfx/title.mp3");
     
     // Load icon BEFORE creating window
     sf::Image icon;
@@ -26,11 +27,12 @@ GameEngine::GameEngine() {
         // For now, just continue without icon
     }
     
-    // NOW construct the window
+    // NOW construct the window (use 'window', not 'customWindow')
     window = std::make_unique<CustomWindow>(
         sf::Vector2u(1280u, 720u), 
         "Untitled Adventure Game", 
-        resources.getFont("main")
+        resources.getFont("main"),
+        resources.getTexture("cursor")  // Pass cursor texture as 4th parameter
     );
     
     // Set icon immediately (only if loaded successfully)
@@ -39,7 +41,7 @@ GameEngine::GameEngine() {
     }
     
     Button::prime(resources);
-    resources.getMusic("title").setVolume(100.f); // Add this
+    resources.getMusic("title").setVolume(100.f);
     resources.getMusic("title").setLooping(true);
     resources.getMusic("title").play();
 

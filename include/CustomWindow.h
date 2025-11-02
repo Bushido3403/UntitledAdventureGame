@@ -8,6 +8,7 @@ class CustomWindow
 {
 private:
     sf::RenderWindow window;
+    sf::Sprite cursorSprite;  // Add this
     sf::RectangleShape titlebar;
     sf::Text titleText;
     sf::Text closeText;
@@ -29,7 +30,7 @@ private:
     void updateTitlebarElements();
 
 public:
-    CustomWindow(const sf::Vector2u& size, const std::string& title, const sf::Font& font);
+    CustomWindow(const sf::Vector2u& size, const std::string& title, const sf::Font& font, const sf::Texture& cursorTexture);
     
     void handleEvent(const sf::Event& event);
     void drawTitlebar();

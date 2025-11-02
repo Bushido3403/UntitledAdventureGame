@@ -2,7 +2,8 @@
 
 #include "CustomWindow.h"
 
-CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, const sf::Font& font) 
+CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, 
+                           const sf::Font& font, const sf::Texture& cursorTexture) 
     : window(sf::VideoMode(size), title, sf::Style::None),
       dragging(false), 
       shouldClose(false),
@@ -12,10 +13,17 @@ CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, c
       windowedPosition(100, 100),
       titleText(font, title, 16),
       closeText(font, "X", 20),
-      fullscreenText(font, "[ ]", 20) {
+      fullscreenText(font, "[ ]", 20),
+      cursorSprite(cursorTexture) {  // Initialize sprite with texture
+    
+    // Scale down the cursor
+    cursorSprite.setScale(sf::Vector2f(0.04f, 0.04f));  // Adjust this value as needed
     
     window.setPosition(windowedPosition);
     window.setFramerateLimit(60);
+    
+    // Hide the default cursor
+    window.setMouseCursorVisible(false);
     
     // Initialize titlebar
     titlebar.setSize(sf::Vector2f(static_cast<float>(size.x), titlebarHeight));
@@ -85,6 +93,9 @@ void CustomWindow::handleEvent(const sf::Event& event) {
                 
                 window.setFramerateLimit(144);
                 
+                // Hide the default cursor again after recreating window
+                window.setMouseCursorVisible(false);
+                
                 // Restore icon if it was set
                 if (hasIcon) {
                     window.setIcon(icon);
@@ -131,6 +142,10 @@ void CustomWindow::drawTitlebar() {
     window.draw(titleText);
     window.draw(fullscreenText);
     window.draw(closeText);
+    
+    // Update and draw cursor
+    cursorSprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+    window.draw(cursorSprite);
 }
 
 void CustomWindow::clear() {
