@@ -22,6 +22,22 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
         script.scriptId = j["scriptId"];
         script.title = j["title"];
 
+        // Parse metadata if present
+        if (j.contains("metadata")) {
+            const auto& metaJson = j["metadata"];
+            if (metaJson.contains("chapter")) {
+                script.metadata.chapter = metaJson["chapter"];
+            }
+            if (metaJson.contains("unlocks")) {
+                for (const auto& unlock : metaJson["unlocks"]) {
+                    script.metadata.unlocks.push_back(unlock);
+                }
+            }
+            if (metaJson.contains("estimatedTime")) {
+                script.metadata.estimatedTime = metaJson["estimatedTime"];
+            }
+        }
+
         for (const auto& sceneJson : j["scenes"]) {
             Scene scene;
             scene.id = sceneJson["id"];
@@ -33,6 +49,12 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                 Choice choice;
                 choice.text = choiceJson["text"];
                 choice.nextScene = choiceJson["nextScene"];
+
+                // Check for nextScript (script chaining)
+                if (choiceJson.contains("nextScript")) {
+                    choice.nextScript = choiceJson["nextScript"];
+                }
+
                 scene.choices.push_back(choice);
             }
 

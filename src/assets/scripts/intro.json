@@ -1,46 +1,97 @@
 {
-    "scriptId": "intro",
-    "title": "The Beginning",
-    "scenes": [
-      {
-        "id": "scene_1",
-        "background": "menuBackground",
-        "text": "In the beginning, there was only void and fire...",
-        "speaker": "Narrator",
-        "choices": [
-          {
-            "text": "Continue",
-            "nextScene": "scene_2"
-          },
-          {
-            "text": "Skip Intro",
-            "nextScene": "END"
+  "scriptId": "intro",
+  "title": "The Beginning",
+  "metadata": {
+    "chapter": 1,
+    "unlocks": ["chapter1_main"]
+  },
+  "scenes": [
+    {
+      "id": "scene_1",
+      "background": "menuBackground",
+      "text": "In the beginning, there was only void and fire. From the flames of Muspelheim and the ice of Niflheim, the Nine Realms were born.",
+      "speaker": "Narrator",
+      "speakerColor": "#FFD700",
+      "tags": ["intro", "exposition"],
+      "music": "intro_theme",
+      "soundEffect": "",
+      "choices": [
+        {
+          "text": "Continue",
+          "nextScene": "scene_2"
+        },
+        {
+          "text": "Skip Intro",
+          "nextScene": "END",
+          "condition": {
+            "flag": "completed_intro"
           }
-        ]
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "background": "menuBackground",
+      "text": "But the age of gods is ending. Ragnarök approaches—the twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate.",
+      "speaker": "Narrator",
+      "speakerColor": "#FFD700",
+      "tags": ["prophecy", "foreshadowing"],
+      "music": "ominous_theme",
+      "soundEffect": "thunder",
+      "choices": [
+        {
+          "text": "Accept your destiny",
+          "nextScene": "scene_3_accept",
+          "consequence": "hero_path"
+        },
+        {
+          "text": "Reject this burden",
+          "nextScene": "scene_3_reject",
+          "consequence": "skeptic_path"
+        }
+      ]
+    },
+    {
+      "id": "scene_3_accept",
+      "background": "menuBackground",
+      "text": "You feel the weight of destiny settle upon your shoulders. Whatever lies ahead, you will face it. The journey begins now.",
+      "speaker": "Narrator",
+      "speakerColor": "#FFD700",
+      "tags": ["resolution", "acceptance"],
+      "music": "heroic_theme",
+      "soundEffect": "wind_strong",
+      "effects": {
+        "addFlag": "accepted_destiny",
+        "addFlag": "completed_intro",
+        "modifyStat": {"wisdom": 2}
       },
-      {
-        "id": "scene_2",
-        "background": "menuBackground",
-        "text": "From the clash of ice and flame, the world was born.",
-        "speaker": "Narrator",
-        "choices": [
-          {
-            "text": "Continue",
-            "nextScene": "scene_3"
-          }
-        ]
+      "choices": [
+        {
+          "text": "Begin your adventure",
+          "nextScene": "END"
+        }
+      ]
+    },
+    {
+      "id": "scene_3_reject",
+      "background": "menuBackground",
+      "text": "You turn away from the call of destiny. Perhaps fate will find another. Or perhaps this refusal is part of the prophecy itself.",
+      "speaker": "Narrator",
+      "speakerColor": "#FFD700",
+      "tags": ["resolution", "rejection"],
+      "music": "melancholy_theme",
+      "soundEffect": "",
+      "effects": {
+        "addFlag": "rejected_destiny",
+        "addFlag": "completed_intro",
+        "modifyStat": {"strength": 2}
       },
-      {
-        "id": "scene_3",
-        "background": "menuBackground",
-        "text": "And with it, the age of gods and heroes began...",
-        "speaker": "Narrator",
-        "choices": [
-          {
-            "text": "Begin your journey",
-            "nextScene": "END"
-          }
-        ]
-      }
-    ]
-  }
+      "choices": [
+        {
+          "text": "Begin your adventure",
+          "nextScene": "END"
+        }
+      ]
+    }
+  ]
+}

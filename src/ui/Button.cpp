@@ -40,8 +40,37 @@ void Button::setScale(const sf::Vector2f& scale)
 
 void Button::setText(const std::string& text, const sf::Font& font, unsigned int characterSize)
 {
-    buttonText.emplace(font, text, characterSize);
-    buttonText->setFillColor(sf::Color(180, 180, 200));
+    if (!buttonText) {
+        buttonText.emplace(font);
+    }
+    buttonText->setFont(font);
+    buttonText->setString(text);
+    buttonText->setCharacterSize(characterSize);
+    // Center text on button if using texture, otherwise just position it
+    if (hasTexture && sprite) {
+        sf::FloatRect textBounds = buttonText->getLocalBounds();
+        sf::FloatRect spriteBounds = sprite->getGlobalBounds();
+        buttonText->setPosition(sf::Vector2f(
+            spriteBounds.position.x + (spriteBounds.size.x - textBounds.size.x) / 2.f,
+            spriteBounds.position.y + (spriteBounds.size.y - textBounds.size.y) / 2.f
+        ));
+    }
+}
+
+void Button::setTextSize(unsigned int characterSize)
+{
+    if (!buttonText) return;
+    buttonText->setCharacterSize(characterSize);
+    
+    // Re-center text if using texture
+    if (hasTexture && sprite) {
+        sf::FloatRect textBounds = buttonText->getLocalBounds();
+        sf::FloatRect spriteBounds = sprite->getGlobalBounds();
+        buttonText->setPosition(sf::Vector2f(
+            spriteBounds.position.x + (spriteBounds.size.x - textBounds.size.x) / 2.f,
+            spriteBounds.position.y + (spriteBounds.size.y - textBounds.size.y) / 2.f
+        ));
+    }
 }
 
 void Button::setOnClick(std::function<void()> callback)
@@ -51,20 +80,6 @@ void Button::setOnClick(std::function<void()> callback)
 
 void Button::handleEvent(const sf::Event& event)
 {
-    // if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
-    // {
-    //     if (mousePressed->button == sf::Mouse::Button::Left)
-    //     {
-    //         sf::Vector2f mousePos(static_cast<float>(mousePressed->position.x), 
-    //                               static_cast<float>(mousePressed->position.y));
-    //         if (getBounds().contains(mousePos))
-    //         {
-    //             if (Button::clickSound) Button::clickSound->play();
-    //             if (onClick)
-    //                 onClick();
-    //         }
-    //     }
-    // }
     if (const auto* mouseReleased = event.getIf<sf::Event::MouseButtonReleased>())
     {
         if (mouseReleased->button == sf::Mouse::Button::Left)
@@ -96,7 +111,8 @@ void Button::draw(sf::RenderWindow& window)
 {
     if (hasTexture && sprite) {
         window.draw(*sprite);
-    } else if (buttonText) {
+    }
+    if (buttonText) {
         window.draw(*buttonText);
     }
 }

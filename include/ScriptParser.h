@@ -5,10 +5,12 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include <unordered_map>
 
 struct Choice {
     std::string text;
     std::string nextScene;
+    std::string nextScript;  // Add this for script chaining
 };
 
 struct Scene {
@@ -19,9 +21,16 @@ struct Scene {
     std::vector<Choice> choices;
 };
 
+struct ScriptMetadata {
+    int chapter = 1;
+    std::vector<std::string> unlocks;
+    std::string estimatedTime;
+};
+
 struct GameScript {
     std::string scriptId;
     std::string title;
+    ScriptMetadata metadata;  // Add metadata
     std::vector<Scene> scenes;
 };
 

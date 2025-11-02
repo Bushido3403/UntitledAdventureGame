@@ -21,15 +21,21 @@ public:
     
     void updatePositions(const sf::Vector2u& windowSize) override;
     void setOnScriptComplete(std::function<void()> callback);
+    void setOnScriptChain(std::function<void(const std::string&)> callback);
 
 private:
     void loadScene(const std::string& sceneId);
+    void loadNextScript(const std::string& nextScriptPath);
     void createChoiceTexts();
     void updateChoicePositions();
+    void updateTextSizes();  // Add this
+    std::string wrapText(const std::string& text, unsigned int maxWidth, const sf::Font& font, unsigned int characterSize);
+    unsigned int getScaledCharacterSize(unsigned int baseSize) const;  // Add this
 
     ResourceManager& resources;
     GameScript script;
     const Scene* currentScene;
+    std::string currentScriptPath;
     
     sf::RectangleShape background;
     sf::Text dialogText;
@@ -44,7 +50,9 @@ private:
     std::vector<std::unique_ptr<Button>> choiceButtons;
     
     sf::Vector2u windowSize;
+    sf::Vector2u baseWindowSize;  // Add this - reference size for scaling
     
     std::function<void()> onScriptComplete;
-    std::string pendingSceneId;  // Add this line
+    std::function<void(const std::string&)> onScriptChain;
+    std::string pendingSceneId;
 };
