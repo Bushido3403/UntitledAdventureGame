@@ -32,7 +32,7 @@
     {
       "id": "scene_2",
       "background": "menuBackground",
-      "text": "But the age of gods is ending. Ragnarök approaches—the twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate.",
+      "text": "But the age of gods is ending. Ragnarok approaches. The twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate. And this is a lot a lot a lot of text so it'll just keep going and going and going and it should just get smaller and smaller as it goes :)",
       "speaker": "Narrator",
       "speakerColor": "#FFD700",
       "tags": ["prophecy", "foreshadowing"],
@@ -48,6 +48,17 @@
           "text": "Reject this burden",
           "nextScene": "scene_3_reject",
           "consequence": "skeptic_path"
+        },
+        {
+          "text": "Ask for more information",
+          "nextScene": "scene_2_info"
+        },
+        {
+          "text": "Skip Intro",
+          "nextScene": "END",
+          "condition": {
+            "flag": "completed_intro"
+          }
         }
       ]
     },

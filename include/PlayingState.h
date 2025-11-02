@@ -3,12 +3,13 @@
 #pragma once
 #include "GameState.h"
 #include "ResourceManager.h"
-#include "ScriptParser.h"
+#include "SceneManager.h"
+#include "DialogBox.h"
+#include "LayoutManager.h"
 #include "Button.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
-#include <string>
 
 class PlayingState : public GameState {
 public:
@@ -21,38 +22,25 @@ public:
     
     void updatePositions(const sf::Vector2u& windowSize) override;
     void setOnScriptComplete(std::function<void()> callback);
-    void setOnScriptChain(std::function<void(const std::string&)> callback);
 
 private:
-    void loadScene(const std::string& sceneId);
-    void loadNextScript(const std::string& nextScriptPath);
-    void createChoiceTexts();
+    void createChoiceButtons();
     void updateChoicePositions();
-    void updateTextSizes();  // Add this
-    std::string wrapText(const std::string& text, unsigned int maxWidth, const sf::Font& font, unsigned int characterSize);
-    unsigned int getScaledCharacterSize(unsigned int baseSize) const;  // Add this
+    void loadScene(const std::string& sceneId);
 
     ResourceManager& resources;
-    GameScript script;
-    const Scene* currentScene;
-    std::string currentScriptPath;
+    std::unique_ptr<SceneManager> sceneManager;
+    std::unique_ptr<DialogBox> dialogBox;
+    std::unique_ptr<LayoutManager> layoutManager;
     
     sf::RectangleShape background;
-    sf::Text dialogText;
-    sf::Text speakerText;
-    sf::RectangleShape dialogBox;
+    sf::RectangleShape dialogBoxShape;
     sf::RectangleShape graphicsBox;
-    std::unique_ptr<sf::Sprite> graphicsSprite;
     sf::RectangleShape statsBox;
     
-    std::vector<sf::Text> choiceTexts;
-    std::vector<std::string> choiceNextScenes;
     std::vector<std::unique_ptr<Button>> choiceButtons;
     
     sf::Vector2u windowSize;
-    sf::Vector2u baseWindowSize;  // Add this - reference size for scaling
-    
-    std::function<void()> onScriptComplete;
-    std::function<void(const std::string&)> onScriptChain;
     std::string pendingSceneId;
+    std::function<void()> onScriptComplete;
 };

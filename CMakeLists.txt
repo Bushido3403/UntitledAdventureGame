@@ -33,51 +33,67 @@ FetchContent_MakeAvailable(SFML)
 FetchContent_MakeAvailable(json)
 
 # ---- Sources ----
-# Collect .cpp files
-file(GLOB_RECURSE SOURCES
-  "${CMAKE_SOURCE_DIR}/src/*.cpp"
-  "${CMAKE_SOURCE_DIR}/src/core/*.cpp"
-  "${CMAKE_SOURCE_DIR}/src/ui/*.cpp"
+set(CORE_SOURCES
+  "${CMAKE_SOURCE_DIR}/src/main.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/GameEngine.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/CustomWindow.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/ResourceManager.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/ScriptParser.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/PlayingState.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/SceneManager.cpp"
 )
 
-# Collect headers (not strictly required to build, but useful for IDEs)
-file(GLOB_RECURSE HEADERS
-  "${CMAKE_SOURCE_DIR}/include/*.h"
-  "${CMAKE_SOURCE_DIR}/src/core/*.h"
-  "${CMAKE_SOURCE_DIR}/src/ui/*.h"
+set(UI_SOURCES
+  "${CMAKE_SOURCE_DIR}/src/ui/Button.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/MainMenuState.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/StartState.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/SettingsState.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/DialogBox.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/LayoutManager.cpp"
+)
+
+set(HEADERS
+  "${CMAKE_SOURCE_DIR}/include/GameEngine.h"
+  "${CMAKE_SOURCE_DIR}/include/GameState.h"
+  "${CMAKE_SOURCE_DIR}/include/CustomWindow.h"
+  "${CMAKE_SOURCE_DIR}/include/ResourceManager.h"
+  "${CMAKE_SOURCE_DIR}/include/ScriptParser.h"
+  "${CMAKE_SOURCE_DIR}/include/PlayingState.h"
+  "${CMAKE_SOURCE_DIR}/include/SceneManager.h"
+  "${CMAKE_SOURCE_DIR}/include/Button.h"
+  "${CMAKE_SOURCE_DIR}/include/MainMenuState.h"
+  "${CMAKE_SOURCE_DIR}/include/StartState.h"
+  "${CMAKE_SOURCE_DIR}/include/SettingsState.h"
+  "${CMAKE_SOURCE_DIR}/include/DialogBox.h"
+  "${CMAKE_SOURCE_DIR}/include/LayoutManager.h"
 )
 
 # ---- Executable ----
-# Use a simple target name; control the actual exe filename with OUTPUT_NAME below.
 add_executable(game WIN32
-  ${SOURCES}
+  ${CORE_SOURCES}
+  ${UI_SOURCES}
   ${HEADERS}
 )
 
-# Name the produced .exe nicely (instead of game.exe)
 set_target_properties(game PROPERTIES OUTPUT_NAME "UntitledAdventureGame")
 
 target_include_directories(game PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(game PRIVATE cxx_std_17)
 
-# Link SFML modules you use
+# Link SFML modules
 target_link_libraries(game PRIVATE SFML::Graphics SFML::Audio nlohmann_json::nlohmann_json)
 
-# If you’re building SFML statically, this define is commonly used.
 if (WIN32)
   target_compile_definitions(game PRIVATE SFML_STATIC)
 endif()
 
 # ---- Windows resources (icon + version info) ----
-# Put an app.rc next to this CMakeLists (root). It should contain the ICON and VS_VERSION_INFO blocks.
-# The .rc should reference your icon at "src/assets/images/logo.ico".
 if (WIN32)
-  # Ensure the .rc file exists; add it to the target. Adjust path if you placed it elsewhere.
   set(APP_RC "${CMAKE_SOURCE_DIR}/app.rc")
   if (EXISTS "${APP_RC}")
     target_sources(game PRIVATE "${APP_RC}")
   else()
-    message(WARNING "Windows resource file 'app.rc' not found. Task Manager will show the process name only.")
+    message(WARNING "Windows resource file 'app.rc' not found.")
   endif()
 endif()
 
@@ -91,5 +107,5 @@ add_custom_target(copy_assets ALL
 )
 add_dependencies(game copy_assets)
 
-# ---- Nice source groups for IDEs (optional) ----
-source_group(TREE "${CMAKE_SOURCE_DIR}" FILES ${SOURCES} ${HEADERS})
+# ---- Nice source groups for IDEs ----
+source_group(TREE "${CMAKE_SOURCE_DIR}" FILES ${CORE_SOURCES} ${UI_SOURCES} ${HEADERS})
