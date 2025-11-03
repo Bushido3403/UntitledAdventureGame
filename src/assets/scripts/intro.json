@@ -8,10 +8,10 @@
   "scenes": [
     {
       "id": "scene_1",
-      "background": "menuBackground",
+      "background": "scene1",
       "text": "In the beginning, there was only void and fire. From the flames of Muspelheim and the ice of Niflheim, the Nine Realms were born.",
       "speaker": "Narrator",
-      "speakerColor": "#ad0396",
+      "speakerColor": "#FFD700",
       "tags": ["intro", "exposition"],
       "music": "intro_theme",
       "soundEffect": "",
@@ -31,8 +31,8 @@
     },
     {
       "id": "scene_2",
-      "background": "menuBackground",
-      "text": "But the age of gods is ending. Ragnarok approaches. The twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate. And this is a lot a lot a lot of text so it'll just keep going and going and going and it should just get smaller and smaller as it goes :)",
+      "background": "scene2",
+      "text": "But the age of gods is ending. Ragnarok approaches. The twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate. Will you be that mortal? The choice is yours.",
       "speaker": "Narrator",
       "speakerColor": "#FFD700",
       "tags": ["prophecy", "foreshadowing"],
@@ -51,10 +51,10 @@
         },
         {
           "text": "Ask for more information",
-          "nextScene": "scene_2_info"
+          "nextScene": "scene_3_more_info"
         },
         {
-          "text": "Skip Intro",
+          "text": "Punch the narrator in the face",
           "nextScene": "END",
           "condition": {
             "flag": "completed_intro"
@@ -63,8 +63,30 @@
       ]
     },
     {
+      "id": "scene_3_more_info",
+      "background": "scene3moreinfo",
+      "text": "The prophecy is ancient, passed down through generations. It speaks of a mortal who will rise during the twilight of the gods, shaping the fate of all realms. The choice you make now will determine your path.",
+      "speaker": "Narrator",
+      "speakerColor": "#FFD700",
+      "tags": ["exposition", "lore"],
+      "music": "mystic_theme",
+      "soundEffect": "page_flip",
+      "choices": [
+        {
+          "text": "Accept your destiny",
+          "nextScene": "scene_3_accept",
+          "consequence": "hero_path"
+        },
+        {
+          "text": "Reject this burden",
+          "nextScene": "scene_3_reject",
+          "consequence": "skeptic_path"
+        }
+      ]
+    },
+    {
       "id": "scene_3_accept",
-      "background": "menuBackground",
+      "background": "scene3accept",
       "text": "You feel the weight of destiny settle upon your shoulders. Whatever lies ahead, you will face it. The journey begins now.",
       "speaker": "Narrator",
       "speakerColor": "#FFD700",
@@ -84,7 +106,7 @@
     },
     {
       "id": "scene_3_reject",
-      "background": "menuBackground",
+      "background": "scene3reject",
       "text": "You turn away from the call of destiny. Perhaps fate will find another. Or perhaps this refusal is part of the prophecy itself.",
       "speaker": "Narrator",
       "speakerColor": "#FFD700",
@@ -97,7 +119,7 @@
       },
       "choices": [
         {
-          "text": "Begin your adventure",
+          "text": "Sleep all day. Start your adventure later.",
           "nextScene": "END"
         }
       ]

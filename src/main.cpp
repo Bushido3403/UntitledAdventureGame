@@ -1,4 +1,4 @@
-// SFML 3.x
+// SFML 3.x, 2.x is retarded so dont use it and
 
 #include "GameEngine.h"
 
