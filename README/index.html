@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Adventure Game – Doc Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <div class="logo-orb"></div>
+        <div class="project-meta">
+          <div class="project-title" id="projectTitle"></div>
+          <div class="project-subtitle">
+            <span id="projectSubtitle"></span>
+            <span class="project-pill" id="projectPill">
+              <span class="project-pill-dot"></span>
+              <span id="projectPillText"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="top-chip" id="topChip">Single-page project overview</div>
+      </div>
+    </header>
+
+    <section class="hero" id="hero"></section>
+
+    <div class="layout">
+      <nav class="side-nav" id="sideNav" aria-label="On this page"></nav>
+
+      <main class="content">
+        <section class="card" id="about"></section>
+        <section class="card" id="features"></section>
+        <section class="card" id="building"></section>
+        <section class="card" id="prereqs"></section>
+        <section class="card" id="docmap"></section>
+        <section class="card" id="file-descriptions"></section>
+      </main>
+    </div>
+  </div>
+
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">
+    ⬆
+    <span>Back to top</span>
+  </button>
+
+  <script src="main.js"></script>
+</body>
+</html>

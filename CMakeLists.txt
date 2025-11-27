@@ -29,18 +29,18 @@ FetchContent_Declare(json
   EXCLUDE_FROM_ALL
   SYSTEM
 )
-FetchContent_Declare(cpr
-  GIT_REPOSITORY https://github.com/libcpr/cpr.git
-  GIT_TAG        1.10.5
-  GIT_SHALLOW    ON
-  EXCLUDE_FROM_ALL
-  SYSTEM
-)
+# FetchContent_Declare(cpr
+#   GIT_REPOSITORY https://github.com/libcpr/cpr.git
+#   GIT_TAG        1.10.5
+#   GIT_SHALLOW    ON
+#   EXCLUDE_FROM_ALL
+#   SYSTEM
+# )
 FetchContent_MakeAvailable(SFML)
 FetchContent_MakeAvailable(json)
-FetchContent_MakeAvailable(cpr)
+# FetchContent_MakeAvailable(cpr)
 
-# ---- Sources ----
+# Sources
 set(CORE_SOURCES
   "${CMAKE_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_SOURCE_DIR}/src/core/GameEngine.cpp"
@@ -89,7 +89,7 @@ target_include_directories(game PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(game PRIVATE cxx_std_17)
 
 # Link SFML modules
-target_link_libraries(game PRIVATE SFML::Graphics SFML::Audio nlohmann_json::nlohmann_json cpr::cpr)
+target_link_libraries(game PRIVATE SFML::Graphics SFML::Audio nlohmann_json::nlohmann_json)# cpr::cpr)
 
 if (WIN32)
   target_compile_definitions(game PRIVATE SFML_STATIC)

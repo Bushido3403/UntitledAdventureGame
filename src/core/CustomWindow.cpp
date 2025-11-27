@@ -2,6 +2,8 @@
 
 #include "CustomWindow.h"
 
+// Basically the entire function below was taken from the SFML docs and modified to fit my needs (variables, titlebar, buttons, etc.)
+
 CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title, 
                            const sf::Font& font, const sf::Texture& cursorTexture) 
     : window(sf::VideoMode(size), title, sf::Style::None),

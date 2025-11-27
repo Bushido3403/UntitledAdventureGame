@@ -1,33 +1,3 @@
-# Untitled Adventure Game
-
-A 2D text-oriented adventure game built with C++ and SFML 3.x.
-Storyline heavily based on Norse mythology.
-
-## About
-
-Untitled Adventure Game is my C++ game featuring a custom window system with a draggable titlebar, fullscreen support, and an intuitive menu system. It's been built for my CS 135 class under Prof. Damien Ennis using a cumulation of documents from the web from sources such as StackOverflow, the SFML documentation, and various C++ programming tutorials. (I have done my best to link these docs where applicable in my source code.)
-
-## Features I'm Proud Of
-
-- **Custom Window System**: Borderless window with custom titlebar, drag support, and fullscreen toggle
-- **State Management**: Clean state-based architecture supporting multiple game screens
-- **Settings System**: Adjustable music volume with a visual slider interface
-- **Resource Management**: Centralized loading and caching of textures, fonts, sounds, and music through SFML
-
-## Building
-
-- Install CMake Tools extension on VS Code
-- Press the build button in the toolbar .-.
-- (If this doesn't work then uh.... "It worked fine on my PC" xD)
-
-### Prerequisites for development
-
-- C++17 compatible compiler
-- CMake 3.28 or higher
-- Git/Github
-- A burning love for massochism
-- Significantly higher qualifications than a CS-135 class
-
 # ***Document Map***
 
 ### General Overview
@@ -65,6 +35,7 @@ That’s a high-level map. Below is the full breakdown of every file.
 - [`ScriptParser.h`](include/ScriptParser.h)
 - [`SettingsState.h`](include/SettingsState.h)
 - [`StartState.h`](include/StartState.h)
+- [`Types.h`](include/Types.h)
 
 #### src/
 - [`main.cpp`](src/main.cpp)
@@ -123,6 +94,7 @@ That’s a high-level map. Below is the full breakdown of every file.
 - **ResourceManager** - Asset loading and caching system
 - **ScriptParser** - JSON script parsing for game scenes
 - **SceneManager** - Scene loading and management
+- **ChatGPT** & **ChatGPTError** - OpenAI API integration (currently unused)
 
 #### UI Components:
 - **Button** - Interactive button widget
@@ -136,4 +108,5 @@ That’s a high-level map. Below is the full breakdown of every file.
 - **PlayingState** - Active gameplay screen
 
 #### Data Structures:
+- **Types** - OpenAI API type definitions
 - **GameState** - Abstract base class for all game states
