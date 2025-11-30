@@ -7,10 +7,23 @@
 #include <optional>
 #include <unordered_map>
 
+// Add these structs before the Choice struct
+struct Condition {
+    std::string flag;  // Flag name to check
+    bool requiredValue = true;  // Default: flag must be true
+};
+
+struct Effects {
+    std::string addFlag;  // Flag to set to true
+    std::string removeFlag;  // Flag to set to false
+    std::unordered_map<std::string, int> modifyStats;  // Stats to modify
+};
+
 struct Choice {
     std::string text;
     std::string nextScene;
     std::string nextScript;  // Add this for script chaining
+    std::optional<Condition> condition;  // Add condition support
 };
 
 struct Scene {
@@ -20,6 +33,7 @@ struct Scene {
     std::string speaker;
     std::string speakerColor;  // Add this field
     std::vector<Choice> choices;
+    std::optional<Effects> effects;  // Add effects support
 };
 
 struct ScriptMetadata {

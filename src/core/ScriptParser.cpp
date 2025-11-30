@@ -62,7 +62,39 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                     choice.nextScript = choiceJson["nextScript"];
                 }
 
+                // In the choices loop, after parsing nextScript:
+                if (choiceJson.contains("condition")) {
+                    Condition cond;
+                    const auto& condJson = choiceJson["condition"];
+                    if (condJson.contains("flag")) {
+                        cond.flag = condJson["flag"];
+                    }
+                    choice.condition = cond;
+                }
+
                 scene.choices.push_back(choice);
+            }
+
+            // After parsing all choices for a scene:
+            if (sceneJson.contains("effects")) {
+                Effects eff;
+                const auto& effJson = sceneJson["effects"];
+                
+                if (effJson.contains("addFlag")) {
+                    eff.addFlag = effJson["addFlag"];
+                }
+                
+                if (effJson.contains("removeFlag")) {
+                    eff.removeFlag = effJson["removeFlag"];
+                }
+                
+                if (effJson.contains("modifyStat")) {
+                    for (auto& [key, val] : effJson["modifyStat"].items()) {
+                        eff.modifyStats[key] = val;
+                    }
+                }
+                
+                scene.effects = eff;
             }
 
             script.scenes.push_back(scene);

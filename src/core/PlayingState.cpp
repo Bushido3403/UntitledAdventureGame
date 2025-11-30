@@ -3,7 +3,10 @@
 #include "PlayingState.h"
 #include "CustomWindow.h"
 #include <iostream>
+#include <nlohmann/json.hpp>
+#include <fstream>
 
+// Constructor: Load saved data
 PlayingState::PlayingState(ResourceManager& resources, const std::string& scriptPath)
     : resources(resources),
       sceneManager(std::make_unique<SceneManager>(resources)),
@@ -11,6 +14,9 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
       layoutManager(std::make_unique<LayoutManager>(sf::Vector2u(800, 600))),
       windowSize(800, 600)
 {
+    // Load save data first
+    loadGame();
+    
     // Initialize UI elements
     background.setFillColor(sf::Color(20, 20, 30));
     
@@ -32,6 +38,115 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
     }
 }
 
+bool PlayingState::checkCondition(const Condition& condition) const {
+    if (condition.flag.empty()) {
+        return true;  // No condition = always pass
+    }
+    
+    auto it = flags.find(condition.flag);
+    if (it == flags.end()) {
+        return !condition.requiredValue;  // Flag doesn't exist
+    }
+    
+    return it->second == condition.requiredValue;
+}
+
+void PlayingState::applyEffects(const Effects& effects) {
+    // Add flag
+    if (!effects.addFlag.empty()) {
+        flags[effects.addFlag] = true;
+    }
+    
+    // Remove flag (set to false)
+    if (!effects.removeFlag.empty()) {
+        flags[effects.removeFlag] = false;
+    }
+    
+    // Modify stats
+    for (const auto& [statName, modifier] : effects.modifyStats) {
+        stats[statName] += modifier;
+    }
+    
+    saveGame();
+}
+
+void PlayingState::saveGame() {
+    using json = nlohmann::json;
+    
+    json saveData;
+    saveData["playerName"] = "";  // TODO: Implement player naming
+    saveData["currentScript"] = sceneManager->getScript().scriptId;
+    
+    const Scene* currentScene = sceneManager->getCurrentScene();
+    if (currentScene) {
+        saveData["currentScene"] = currentScene->id;
+    }
+    
+    // Save flags
+    json flagsJson = json::object();
+    for (const auto& [key, value] : flags) {
+        flagsJson[key] = value;
+    }
+    saveData["flags"] = flagsJson;
+    
+    // Save stats
+    json statsJson = json::object();
+    for (const auto& [key, value] : stats) {
+        statsJson[key] = value;
+    }
+    saveData["stats"] = statsJson;
+    
+    // Write to file (FIXED PATH)
+    std::ofstream file("assets/save_data.json");  // Changed from src/core/save_data.json
+    if (file.is_open()) {
+        file << saveData.dump(2);  // Pretty print with 2-space indent
+        file.close();
+        std::cout << "Game saved successfully" << std::endl;
+    } else {
+        std::cerr << "Failed to save game" << std::endl;
+    }
+}
+
+void PlayingState::loadGame() {
+    using json = nlohmann::json;
+    
+    std::ifstream file("assets/save_data.json");
+    if (!file.is_open()) {
+        std::cout << "No save file found, starting fresh" << std::endl;
+        return;
+    }
+    
+    try {
+        json saveData;
+        file >> saveData;
+        
+        // Check if the file was empty or contained invalid JSON
+        if (saveData.is_null() || saveData.empty()) {
+            std::cout << "Save file is empty, starting fresh" << std::endl;
+            return;
+        }
+        
+        // Load flags
+        if (saveData.contains("flags") && saveData["flags"].is_object()) {
+            for (auto& [key, value] : saveData["flags"].items()) {
+                flags[key] = value;
+            }
+        }
+        
+        // Load stats
+        if (saveData.contains("stats") && saveData["stats"].is_object()) {
+            for (auto& [key, value] : saveData["stats"].items()) {
+                stats[key] = value;
+            }
+        }
+        
+        std::cout << "Game loaded successfully" << std::endl;
+    } catch (const json::exception& e) {
+        std::cerr << "Failed to load save data: " << e.what() << std::endl;
+        std::cout << "Starting fresh due to corrupted save" << std::endl;
+    }
+}
+
 void PlayingState::setOnScriptComplete(std::function<void()> callback) {
     onScriptComplete = callback;
     sceneManager->setOnScriptComplete(callback);
@@ -44,6 +159,11 @@ void PlayingState::loadScene(const std::string& sceneId) {
     
     const Scene* currentScene = sceneManager->getCurrentScene();
     if (!currentScene) return;
+    
+    // Apply scene effects
+    if (currentScene->effects.has_value()) {
+        applyEffects(currentScene->effects.value());
+    }
     
     // Calculate full window size (windowSize already has titlebar subtracted)
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
@@ -70,12 +190,18 @@ void PlayingState::createChoiceButtons() {
     if (!currentScene) return;
     
     const char labels[] = {'a', 'b', 'c', 'd'};
+    size_t labelIndex = 0;
     
-    for (size_t i = 0; i < currentScene->choices.size() && i < 4; ++i) {
+    for (size_t i = 0; i < currentScene->choices.size() && labelIndex < 4; ++i) {
         const auto& choice = currentScene->choices[i];
         
+        // Check condition - skip this choice if condition fails
+        if (choice.condition.has_value() && !checkCondition(choice.condition.value())) {
+            continue;
+        }
+        
         auto button = std::make_unique<Button>(resources, nullptr, sf::Vector2f(0, 0));
-        button->setText(std::string(1, labels[i]) + ") " + choice.text, 
+        button->setText(std::string(1, labels[labelIndex]) + ") " + choice.text, 
                        resources.getFont("main"), 22);
         
         std::string nextScene = choice.nextScene;
@@ -93,6 +219,7 @@ void PlayingState::createChoiceButtons() {
         });
         
         choiceButtons.push_back(std::move(button));
+        labelIndex++;
     }
 }
 

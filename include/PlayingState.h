@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 class PlayingState : public GameState {
 public:
@@ -43,4 +44,14 @@ private:
     sf::Vector2u windowSize;
     std::string pendingSceneId;
     std::function<void()> onScriptComplete;
+
+    // Add these member variables:
+    std::unordered_map<std::string, bool> flags;
+    std::unordered_map<std::string, int> stats;
+    
+    // Add these methods:
+    bool checkCondition(const Condition& condition) const;
+    void applyEffects(const Effects& effects);
+    void saveGame();
+    void loadGame();
 };

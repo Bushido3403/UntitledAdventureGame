@@ -12,7 +12,7 @@ GameEngine::GameEngine() {
     resources.loadFont("main", "assets/fonts/MedievalSharp.ttf");
     resources.loadTexture("cursor", "assets/images/cursor.png");  // Load cursor first
     
-    resources.loadTexture("background", "assets/images/menuBackground.jpg");
+    resources.loadTexture("background", "assets/images/menuBackground.jpeg");
     resources.loadTexture("logo", "assets/images/logo.png");
     resources.loadTexture("title", "assets/images/title.png");
     resources.loadTexture("start", "assets/images/start.png");

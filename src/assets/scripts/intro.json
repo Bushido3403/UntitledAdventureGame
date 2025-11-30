@@ -94,7 +94,7 @@
       "music": "heroic_theme",
       "soundEffect": "wind_strong",
       "effects": {
-        "addFlag": "accepted_destiny",
+        "addFlag": "completed_intro",
         "modifyStat": {"wisdom": 2}
       },
       "choices": [
@@ -114,7 +114,7 @@
       "music": "melancholy_theme",
       "soundEffect": "",
       "effects": {
-        "addFlag": "completed_intro",
+        "removeFlag": "completed_intro",
         "modifyStat": {"strength": 2}
       },
       "choices": [

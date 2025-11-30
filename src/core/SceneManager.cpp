@@ -9,7 +9,7 @@ SceneManager::SceneManager(ResourceManager& resources)
 bool SceneManager::loadScript(const std::string& scriptPath) {
     auto scriptOpt = ScriptParser::loadScript(scriptPath);
     if (!scriptOpt) {
-        std::cerr << "Failed to load script: " << scriptPath << std::endl;
+        // std::cerr << "Failed to load script: " << scriptPath << std::endl;
         return false;
     }
     
