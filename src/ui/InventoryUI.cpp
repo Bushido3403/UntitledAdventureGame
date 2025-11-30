@@ -94,6 +94,8 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
                 } else if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
                     result.action = InventoryAction::DeleteRequested;
                     result.itemIndex = itemIndex;
+                    result.removeAll = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) || 
+                                      sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RShift);
                 }
             }
         }

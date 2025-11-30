@@ -34,14 +34,11 @@ private:
         FadingIn
     };
     
-    enum class ConfirmationType { None, ThrowOut, UseItem };
+    enum class ConfirmationType { None, ThrowOut, ThrowOutAll, UseItem };
     
-    void showConfirmationDialog(ConfirmationType type, int itemIndex);
     void showConfirmationDialog(ConfirmationType type, int itemIndex, 
                                 const sf::Vector2u& windowSize, float titlebarHeight);
     void handleConfirmation(bool confirmed);
-    void showConfirmation(ConfirmationType type, int itemIndex, 
-                          const sf::Vector2u& windowSize, float titlebarHeight);
     
     ResourceManager& resources;
     std::unique_ptr<SceneManager> sceneManager;

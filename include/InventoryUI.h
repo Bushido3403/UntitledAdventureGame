@@ -18,6 +18,7 @@ enum class InventoryAction {
 struct InventoryInteraction {
     InventoryAction action = InventoryAction::None;
     int itemIndex = -1;
+    bool removeAll = false;  // NEW: indicates shift-click to remove all
 };
 
 class InventoryUI {

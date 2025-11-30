@@ -187,6 +187,15 @@ void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex,
                 message = "Use " + def->name + "?";
             }
         }
+    } else if (type == ConfirmationType::ThrowOutAll) {
+        const auto& items = inventorySystem->getItems();
+        if (itemIndex >= 0 && itemIndex < static_cast<int>(items.size())) {
+            const ItemDefinition* def = inventorySystem->getItemDefinition(items[itemIndex].id);
+            if (def) {
+                message = "Throw out all " + def->name + " (" + 
+                         std::to_string(items[itemIndex].quantity) + ")?";
+            }
+        }
     }
     
     ui->getConfirmationDialog().show(message, windowSize, titlebarHeight);
@@ -209,14 +218,22 @@ void PlayingState::handleConfirmation(bool confirmed) {
     }
     
     if (confirmationType == ConfirmationType::ThrowOut) {
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
+        gameState->saveGame(sceneManager->getScript().scriptId, 
+                          sceneManager->getCurrentScene()->id,
+                          inventorySystem.get());
+    }
+    else if (confirmationType == ConfirmationType::ThrowOutAll) {
         inventorySystem->removeItemAtIndex(pendingActionItemIndex, items[pendingActionItemIndex].quantity);
         gameState->saveGame(sceneManager->getScript().scriptId, 
                           sceneManager->getCurrentScene()->id,
                           inventorySystem.get());
     }
     else if (confirmationType == ConfirmationType::UseItem) {
-        // TODO: Implement item usage logic
-        // For now, just close the dialog
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
+        gameState->saveGame(sceneManager->getScript().scriptId, 
+                          sceneManager->getCurrentScene()->id,
+                          inventorySystem.get());
     }
     
     confirmationType = ConfirmationType::None;
@@ -225,7 +242,6 @@ void PlayingState::handleConfirmation(bool confirmed) {
 
 void PlayingState::handleEvent(const sf::Event& event) {
     if (confirmationType != ConfirmationType::None) {
-        // TODO: Handle confirmation dialog events (Y/N keys or buttons)
         if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
             if (keyPressed->code == sf::Keyboard::Key::Y) {
                 handleConfirmation(true);
@@ -240,11 +256,11 @@ void PlayingState::handleEvent(const sf::Event& event) {
         return;
     }
     
-    // Handle inventory interactions
     auto interaction = ui->handleInventoryEvent(event);
     
     if (interaction.action == InventoryAction::DeleteRequested) {
-        showConfirmationDialog(ConfirmationType::ThrowOut, interaction.itemIndex,
+        showConfirmationDialog(interaction.removeAll ? ConfirmationType::ThrowOutAll : ConfirmationType::ThrowOut, 
+                              interaction.itemIndex,
                               currentWindowSize, CustomWindow::getTitlebarHeight());
         return;
     }
