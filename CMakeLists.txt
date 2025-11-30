@@ -50,6 +50,7 @@ set(CORE_SOURCES
   "${CMAKE_SOURCE_DIR}/src/core/PlayingState.cpp"
   "${CMAKE_SOURCE_DIR}/src/core/SceneManager.cpp"
   "${CMAKE_SOURCE_DIR}/src/core/GameStateManager.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/InventorySystem.cpp"
 )
 
 set(UI_SOURCES
@@ -60,6 +61,7 @@ set(UI_SOURCES
   "${CMAKE_SOURCE_DIR}/src/ui/DialogBox.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/LayoutManager.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/PlayingStateUI.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/InventoryUI.cpp"
 )
 
 set(HEADERS
@@ -78,6 +80,8 @@ set(HEADERS
   "${CMAKE_SOURCE_DIR}/include/SettingsState.h"
   "${CMAKE_SOURCE_DIR}/include/DialogBox.h"
   "${CMAKE_SOURCE_DIR}/include/LayoutManager.h"
+  "${CMAKE_SOURCE_DIR}/include/InventorySystem.h"
+  "${CMAKE_SOURCE_DIR}/include/InventoryUI.h"
 )
 
 # ---- Executable ----

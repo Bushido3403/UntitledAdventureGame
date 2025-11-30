@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <unordered_map>
 
 class SceneManager {
 public:

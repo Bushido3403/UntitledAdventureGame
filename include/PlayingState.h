@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "PlayingStateUI.h"
 #include "GameStateManager.h"
+#include "InventorySystem.h"  // Add semicolon here
 #include "Button.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -33,10 +34,16 @@ private:
         FadingIn
     };
     
+    enum class ConfirmationType { None, ThrowOut, UseItem };
+    
+    void showConfirmationDialog(ConfirmationType type, int itemIndex);
+    void handleConfirmation(bool confirmed);
+    
     ResourceManager& resources;
     std::unique_ptr<SceneManager> sceneManager;
     std::unique_ptr<PlayingStateUI> ui;
     std::unique_ptr<GameStateManager> gameState;
+    std::unique_ptr<InventorySystem> inventorySystem;
     
     std::vector<std::unique_ptr<Button>> choiceButtons;
     
@@ -45,6 +52,9 @@ private:
     std::string nextSceneId;
     sf::RectangleShape transitionOverlay;
     const float transitionDuration = 0.25f;
+    
+    ConfirmationType confirmationType = ConfirmationType::None;
+    int pendingActionItemIndex = -1;
     
     std::function<void()> onScriptComplete;
 };

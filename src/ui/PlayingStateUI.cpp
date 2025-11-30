@@ -6,6 +6,7 @@ PlayingStateUI::PlayingStateUI(ResourceManager& resources)
     : resources(resources),
       dialogBox(std::make_unique<DialogBox>(resources.getFont("main"))),
       layoutManager(std::make_unique<LayoutManager>(sf::Vector2u(800, 600))),
+      inventoryUI(std::make_unique<InventoryUI>(resources)),
       windowSize(800, 600)
 {
     background.setFillColor(sf::Color(20, 20, 30));
@@ -21,6 +22,23 @@ PlayingStateUI::PlayingStateUI(ResourceManager& resources)
     statsBox.setFillColor(sf::Color(40, 40, 50, 220));
     statsBox.setOutlineColor(sf::Color(100, 100, 120));
     statsBox.setOutlineThickness(2.f);
+}
+
+void PlayingStateUI::setInventorySystem(InventorySystem* inventory) {
+    inventorySystem = inventory;
+}
+
+InventoryInteraction PlayingStateUI::handleInventoryEvent(const sf::Event& event) {
+    if (inventorySystem && inventoryUI) {
+        return inventoryUI->handleEvent(event, *inventorySystem);
+    }
+    return InventoryInteraction{};
+}
+
+void PlayingStateUI::updateInventory(const sf::Vector2i& mousePos) {
+    if (inventorySystem && inventoryUI) {
+        inventoryUI->update(mousePos, *inventorySystem);
+    }
 }
 
 void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Scene* currentScene) {
@@ -59,6 +77,15 @@ void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Sc
         dialogBox->setText(wrappedText, currentScene->speaker, currentScene->speakerColor);
         dialogBox->updateLayout(dialogBounds, metrics.scale.boxPadding, 
                                metrics.scale.scaleY, dialogSize, speakerSize);
+    }
+    
+    // Update inventory layout
+    if (inventoryUI) {
+        inventoryUI->updateLayout(
+            sf::FloatRect(statsBox.getPosition(), statsBox.getSize()),
+            metrics.scale.boxPadding,
+            metrics.scale.scaleY
+        );
     }
 }
 
@@ -185,6 +212,11 @@ void PlayingStateUI::draw(sf::RenderWindow& window, const std::vector<std::uniqu
     }
     
     window.draw(statsBox);
+    
+    if (inventorySystem && inventoryUI) {
+        inventoryUI->draw(window, *inventorySystem);
+    }
+    
     window.draw(dialogBoxShape);
     dialogBox->draw(window);
     

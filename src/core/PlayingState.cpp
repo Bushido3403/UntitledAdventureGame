@@ -5,13 +5,16 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
     : resources(resources),
       sceneManager(std::make_unique<SceneManager>(resources)),
       ui(std::make_unique<PlayingStateUI>(resources)),
-      gameState(std::make_unique<GameStateManager>())
+      gameState(std::make_unique<GameStateManager>()),
+      inventorySystem(std::make_unique<InventorySystem>(resources))
 {
+    ui->setInventorySystem(inventorySystem.get());
+    
     transitionOverlay.setFillColor(sf::Color(0, 0, 0, 255));
     transitionOverlay.setSize(sf::Vector2f(800.f, 600.f));
     
     if (sceneManager->loadScript(scriptPath)) {
-        gameState->loadGame();
+        gameState->loadGame(inventorySystem.get());
         loadScene(sceneManager->getScript().scenes[0].id);
     }
     
@@ -33,8 +36,9 @@ void PlayingState::loadScene(const std::string& sceneId) {
     if (!currentScene) return;
     
     if (currentScene->effects.has_value()) {
-        gameState->applyEffects(currentScene->effects.value());
-        gameState->saveGame(sceneManager->getScript().scriptId, currentScene->id);
+        gameState->applyEffects(currentScene->effects.value(), inventorySystem.get());
+        gameState->saveGame(sceneManager->getScript().scriptId, currentScene->id, 
+                          inventorySystem.get());
     }
     
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
@@ -159,8 +163,68 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
     ui->updateChoiceButtons(choiceButtons, currentScene);
 }
 
+void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex) {
+    confirmationType = type;
+    pendingActionItemIndex = itemIndex;
+    // TODO: Create confirmation dialog UI overlay
+}
+
+void PlayingState::handleConfirmation(bool confirmed) {
+    if (!confirmed) {
+        confirmationType = ConfirmationType::None;
+        pendingActionItemIndex = -1;
+        return;
+    }
+    
+    const auto& items = inventorySystem->getItems();
+    if (pendingActionItemIndex < 0 || pendingActionItemIndex >= static_cast<int>(items.size())) {
+        confirmationType = ConfirmationType::None;
+        return;
+    }
+    
+    const auto& item = items[pendingActionItemIndex];
+    
+    if (confirmationType == ConfirmationType::ThrowOut) {
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, item.quantity);
+        gameState->saveGame(sceneManager->getScript().scriptId, 
+                          sceneManager->getCurrentScene()->id,
+                          inventorySystem.get());
+    }
+    else if (confirmationType == ConfirmationType::UseItem) {
+        // TODO: Implement item usage logic
+        // Could trigger effects, consume item, etc.
+    }
+    
+    confirmationType = ConfirmationType::None;
+    pendingActionItemIndex = -1;
+}
+
 void PlayingState::handleEvent(const sf::Event& event) {
+    if (confirmationType != ConfirmationType::None) {
+        // TODO: Handle confirmation dialog events (Y/N keys or buttons)
+        if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+            if (keyPressed->code == sf::Keyboard::Key::Y) {
+                handleConfirmation(true);
+            } else if (keyPressed->code == sf::Keyboard::Key::N) {
+                handleConfirmation(false);
+            }
+        }
+        return;
+    }
+    
     if (transitionState != TransitionState::None) {
+        return;
+    }
+    
+    // Handle inventory interactions
+    auto interaction = ui->handleInventoryEvent(event);
+    
+    if (interaction.action == InventoryAction::DeleteRequested) {
+        showConfirmationDialog(ConfirmationType::ThrowOut, interaction.itemIndex);
+        return;
+    }
+    else if (interaction.action == InventoryAction::ItemUsed) {
+        showConfirmationDialog(ConfirmationType::UseItem, interaction.itemIndex);
         return;
     }
     
@@ -198,12 +262,14 @@ void PlayingState::handleEvent(const sf::Event& event) {
 void PlayingState::update(float deltaTime, sf::RenderWindow& window) {
     updateTransition(deltaTime);
     
-    if (transitionState == TransitionState::None) {
+    if (transitionState == TransitionState::None && confirmationType == ConfirmationType::None) {
         auto mousePos = sf::Mouse::getPosition(window);
         
         for (auto& button : choiceButtons) {
             button->update(mousePos);
         }
+        
+        ui->updateInventory(mousePos);
     }
 }
 

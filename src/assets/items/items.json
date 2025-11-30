@@ -1,0 +1,30 @@
+{
+    "health_potion": {
+      "name": "Health Potion",
+      "description": "Restores 50 HP",
+      "texture": "assets/items/health_potion.png",
+      "stackable": true,
+      "maxStackSize": 10
+    },
+    "key_bronze": {
+      "name": "Bronze Key",
+      "description": "Opens bronze locks",
+      "texture": "assets/items/key_bronze.png",
+      "stackable": false,
+      "maxStackSize": 1
+    },
+    "ancient_scroll": {
+      "name": "Ancient Scroll",
+      "description": "Contains forgotten knowledge",
+      "texture": "assets/items/scroll.png",
+      "stackable": false,
+      "maxStackSize": 1
+    },
+    "gold_coin": {
+      "name": "Gold Coins",
+      "description": "Currency of the realm",
+      "texture": "assets/items/gold_coin.png",
+      "stackable": true,
+      "maxStackSize": 99
+    }
+  }

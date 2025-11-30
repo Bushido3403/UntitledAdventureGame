@@ -115,7 +115,9 @@
       "soundEffect": "",
       "effects": {
         "removeFlag": "completed_intro",
-        "modifyStat": {"strength": 2}
+        "modifyStat": {"strength": 2},
+        "addItem": "health_potion",
+        "addItemQuantity": 3
       },
       "choices": [
         {

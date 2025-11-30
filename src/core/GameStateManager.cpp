@@ -1,5 +1,6 @@
 #include "GameStateManager.h"
 #include "SceneManager.h"
+#include "InventorySystem.h"
 #include <fstream>
 #include <iostream>
 
@@ -18,7 +19,7 @@ bool GameStateManager::checkCondition(const Condition& condition) const {
     return it->second == condition.requiredValue;
 }
 
-void GameStateManager::applyEffects(const Effects& effects) {
+void GameStateManager::applyEffects(const Effects& effects, InventorySystem* inventory) {
     if (!effects.addFlag.empty()) {
         flags[effects.addFlag] = true;
     }
@@ -30,9 +31,14 @@ void GameStateManager::applyEffects(const Effects& effects) {
     for (const auto& [statName, modifier] : effects.modifyStats) {
         stats[statName] += modifier;
     }
+    
+    if (!effects.addItem.empty()) {
+        inventory->addItem(effects.addItem, effects.addItemQuantity);
+    }
 }
 
-void GameStateManager::saveGame(const std::string& scriptId, const std::string& sceneId) {
+void GameStateManager::saveGame(const std::string& scriptId, const std::string& sceneId,
+                                const InventorySystem* inventory) {
     using json = nlohmann::json;
     
     json saveData;
@@ -52,6 +58,10 @@ void GameStateManager::saveGame(const std::string& scriptId, const std::string& 
     }
     saveData["stats"] = statsJson;
     
+    if (inventory) {
+        inventory->saveToJson(saveData);
+    }
+    
     std::ofstream file("assets/save_data.json");
     if (file.is_open()) {
         file << saveData.dump(2);
@@ -62,7 +72,7 @@ void GameStateManager::saveGame(const std::string& scriptId, const std::string& 
     }
 }
 
-void GameStateManager::loadGame() {
+void GameStateManager::loadGame(InventorySystem* inventory) {
     using json = nlohmann::json;
     
     std::ifstream file("assets/save_data.json");
@@ -92,6 +102,10 @@ void GameStateManager::loadGame() {
             for (auto& [key, value] : saveData["stats"].items()) {
                 stats[key] = value;
             }
+        }
+        
+        if (inventory && saveData.contains("inventory")) {
+            inventory->loadFromJson(saveData);
         }
         
         std::cout << "Game loaded successfully" << std::endl;

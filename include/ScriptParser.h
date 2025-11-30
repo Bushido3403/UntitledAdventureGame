@@ -14,9 +14,11 @@ struct Condition {
 };
 
 struct Effects {
-    std::string addFlag;  // Flag to set to true
-    std::string removeFlag;  // Flag to set to false
-    std::unordered_map<std::string, int> modifyStats;  // Stats to modify
+    std::string addFlag;
+    std::string removeFlag;
+    std::unordered_map<std::string, int> modifyStats;
+    std::string addItem;  // Add this
+    int addItemQuantity = 1;  // Add this
 };
 
 struct Choice {

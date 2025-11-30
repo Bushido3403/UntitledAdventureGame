@@ -6,6 +6,8 @@
 #include "DialogBox.h"
 #include "Button.h"
 #include "LayoutManager.h"
+#include "InventoryUI.h"
+#include "InventorySystem.h"
 
 class SceneManager;
 struct Scene;
@@ -22,6 +24,10 @@ public:
     DialogBox& getDialogBox() { return *dialogBox; }
     const sf::Vector2u& getWindowSize() const { return windowSize; }
     
+    void setInventorySystem(InventorySystem* inventory);
+    InventoryInteraction handleInventoryEvent(const sf::Event& event);
+    void updateInventory(const sf::Vector2i& mousePos);
+    
 private:
     void updateChoicePositions(const std::vector<std::unique_ptr<Button>>& buttons, const Scene* currentScene);
     
@@ -35,4 +41,6 @@ private:
     sf::RectangleShape statsBox;
     
     sf::Vector2u windowSize;
+    std::unique_ptr<InventoryUI> inventoryUI;
+    InventorySystem* inventorySystem = nullptr;
 };

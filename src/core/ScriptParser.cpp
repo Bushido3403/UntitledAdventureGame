@@ -94,6 +94,15 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                     }
                 }
                 
+                // Add these lines:
+                if (effJson.contains("addItem")) {
+                    eff.addItem = effJson["addItem"];
+                }
+                
+                if (effJson.contains("addItemQuantity")) {
+                    eff.addItemQuantity = effJson["addItemQuantity"];
+                }
+                
                 scene.effects = eff;
             }
 

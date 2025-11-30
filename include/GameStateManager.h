@@ -5,16 +5,18 @@
 
 struct Condition;
 struct Effects;
+class InventorySystem;  // Forward declaration
 
 class GameStateManager {
 public:
     GameStateManager();
     
     bool checkCondition(const Condition& condition) const;
-    void applyEffects(const Effects& effects);
+    void applyEffects(const Effects& effects, InventorySystem* inventory);
     
-    void saveGame(const std::string& scriptId, const std::string& sceneId);
-    void loadGame();
+    void saveGame(const std::string& scriptId, const std::string& sceneId, 
+                  const InventorySystem* inventory = nullptr);
+    void loadGame(InventorySystem* inventory = nullptr);
     
     const std::unordered_map<std::string, bool>& getFlags() const { return flags; }
     const std::unordered_map<std::string, int>& getStats() const { return stats; }
