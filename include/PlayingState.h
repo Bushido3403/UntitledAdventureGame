@@ -28,6 +28,8 @@ private:
     void createChoiceButtons();
     void updateChoicePositions();
     void loadScene(const std::string& sceneId);
+    void startTransition(const std::string& nextSceneId);
+    void updateTransition(float deltaTime);
 
     ResourceManager& resources;
     std::unique_ptr<SceneManager> sceneManager;
@@ -45,13 +47,25 @@ private:
     std::string pendingSceneId;
     std::function<void()> onScriptComplete;
 
-    // Add these member variables:
+    // Save system
     std::unordered_map<std::string, bool> flags;
     std::unordered_map<std::string, int> stats;
     
-    // Add these methods:
     bool checkCondition(const Condition& condition) const;
     void applyEffects(const Effects& effects);
     void saveGame();
     void loadGame();
+
+    // Transition system
+    enum class TransitionState {
+        None,
+        FadingOut,
+        FadingIn
+    };
+    
+    TransitionState transitionState = TransitionState::None;
+    float transitionAlpha = 0.f;
+    float transitionDuration = 0.5f;  // 0.5 seconds per fade
+    std::string nextSceneId;
+    sf::RectangleShape transitionOverlay;
 };

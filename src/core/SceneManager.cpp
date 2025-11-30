@@ -41,7 +41,7 @@ bool SceneManager::loadScene(const std::string& sceneId) {
             sf::Texture& texture = resources.getTexture(currentScene->background);
             graphicsSprite = std::make_unique<sf::Sprite>(texture);
         } catch (const std::out_of_range&) {
-            std::string texturePath = "assets/images/" + currentScene->background + ".jpg";
+            std::string texturePath = "assets/images/" + currentScene->background + ".jpeg";
             if (resources.loadTexture(currentScene->background, texturePath)) {
                 graphicsSprite = std::make_unique<sf::Sprite>(resources.getTexture(currentScene->background));
             } else {

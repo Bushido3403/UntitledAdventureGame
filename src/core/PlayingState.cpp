@@ -36,6 +36,10 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
     if (sceneManager->loadScript(scriptPath)) {
         loadScene(sceneManager->getScript().scenes[0].id);
     }
+    
+    // Initialize transition overlay
+    transitionOverlay.setFillColor(sf::Color(0, 0, 0, 0));
+    transitionOverlay.setSize(sf::Vector2f(800.f, 600.f));
 }
 
 bool PlayingState::checkCondition(const Condition& condition) const {
@@ -183,6 +187,52 @@ void PlayingState::loadScene(const std::string& sceneId) {
     updatePositions(fullWindowSize);
 }
 
+void PlayingState::startTransition(const std::string& sceneId) {
+    if (transitionState != TransitionState::None) {
+        return;  // Already transitioning
+    }
+    
+    nextSceneId = sceneId;
+    transitionState = TransitionState::FadingOut;
+    transitionAlpha = 0.f;
+}
+
+void PlayingState::updateTransition(float deltaTime) {
+    if (transitionState == TransitionState::None) {
+        return;
+    }
+    
+    float alphaSpeed = 255.f / transitionDuration;
+    
+    if (transitionState == TransitionState::FadingOut) {
+        transitionAlpha += alphaSpeed * deltaTime;
+        
+        if (transitionAlpha >= 255.f) {
+            transitionAlpha = 255.f;
+            
+            // Load the new scene while screen is black
+            loadScene(nextSceneId);
+            nextSceneId.clear();
+            
+            // Start fading in
+            transitionState = TransitionState::FadingIn;
+        }
+    }
+    else if (transitionState == TransitionState::FadingIn) {
+        transitionAlpha -= alphaSpeed * deltaTime;
+        
+        if (transitionAlpha <= 0.f) {
+            transitionAlpha = 0.f;
+            transitionState = TransitionState::None;
+        }
+    }
+    
+    // Update overlay color
+    sf::Color overlayColor = transitionOverlay.getFillColor();
+    overlayColor.a = static_cast<std::uint8_t>(std::clamp(transitionAlpha, 0.f, 255.f));
+    transitionOverlay.setFillColor(overlayColor);
+}
+
 void PlayingState::createChoiceButtons() {
     choiceButtons.clear();
     
@@ -211,10 +261,10 @@ void PlayingState::createChoiceButtons() {
             if (!nextScript.empty()) {
                 sceneManager->loadScript(nextScript);
                 if (!sceneManager->getScript().scenes.empty()) {
-                    loadScene(sceneManager->getScript().scenes[0].id);
+                    startTransition(sceneManager->getScript().scenes[0].id);
                 }
             } else {
-                pendingSceneId = nextScene;
+                startTransition(nextScene);
             }
         });
         
@@ -322,6 +372,11 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
     windowSize = sf::Vector2u(newWindowSize.x, 
                               newWindowSize.y - static_cast<unsigned int>(TITLEBAR_HEIGHT));
     
+    // Update transition overlay size
+    transitionOverlay.setSize(sf::Vector2f(static_cast<float>(newWindowSize.x), 
+                                           static_cast<float>(newWindowSize.y) - TITLEBAR_HEIGHT));
+    transitionOverlay.setPosition({0.f, TITLEBAR_HEIGHT});
+    
     auto metrics = layoutManager->calculate(newWindowSize, TITLEBAR_HEIGHT);
     
     background.setSize(sf::Vector2f(static_cast<float>(newWindowSize.x), 
@@ -363,6 +418,11 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
 }
 
 void PlayingState::handleEvent(const sf::Event& event) {
+    // Don't allow input during transitions
+    if (transitionState != TransitionState::None) {
+        return;
+    }
+    
     for (auto& button : choiceButtons) {
         button->handleEvent(event);
     }
@@ -385,26 +445,25 @@ void PlayingState::handleEvent(const sf::Event& event) {
             if (!choice.nextScript.empty()) {
                 sceneManager->loadScript(choice.nextScript);
                 if (!sceneManager->getScript().scenes.empty()) {
-                    loadScene(sceneManager->getScript().scenes[0].id);
+                    startTransition(sceneManager->getScript().scenes[0].id);
                 }
             } else {
-                loadScene(choice.nextScene);
+                startTransition(choice.nextScene);
             }
         }
     }
 }
 
 void PlayingState::update(float deltaTime, sf::RenderWindow& window) {
-    auto mousePos = sf::Mouse::getPosition(window);
+    updateTransition(deltaTime);
     
-    for (auto& button : choiceButtons) {
-        button->update(mousePos);
-    }
-    
-    if (!pendingSceneId.empty()) {
-        std::string sceneToLoad = pendingSceneId;
-        pendingSceneId.clear();
-        loadScene(sceneToLoad);
+    // Don't update buttons during transitions
+    if (transitionState == TransitionState::None) {
+        auto mousePos = sf::Mouse::getPosition(window);
+        
+        for (auto& button : choiceButtons) {
+            button->update(mousePos);
+        }
     }
 }
 
@@ -440,5 +499,10 @@ void PlayingState::draw(sf::RenderWindow& window) {
     
     for (auto& button : choiceButtons) {
         button->draw(window);
+    }
+    
+    // Draw transition overlay last (on top of everything)
+    if (transitionState != TransitionState::None) {
+        window.draw(transitionOverlay);
     }
 }
