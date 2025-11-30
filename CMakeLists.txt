@@ -49,6 +49,7 @@ set(CORE_SOURCES
   "${CMAKE_SOURCE_DIR}/src/core/ScriptParser.cpp"
   "${CMAKE_SOURCE_DIR}/src/core/PlayingState.cpp"
   "${CMAKE_SOURCE_DIR}/src/core/SceneManager.cpp"
+  "${CMAKE_SOURCE_DIR}/src/core/GameStateManager.cpp"
 )
 
 set(UI_SOURCES
@@ -58,6 +59,7 @@ set(UI_SOURCES
   "${CMAKE_SOURCE_DIR}/src/ui/SettingsState.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/DialogBox.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/LayoutManager.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/PlayingStateUI.cpp"
 )
 
 set(HEADERS
@@ -68,6 +70,8 @@ set(HEADERS
   "${CMAKE_SOURCE_DIR}/include/ScriptParser.h"
   "${CMAKE_SOURCE_DIR}/include/PlayingState.h"
   "${CMAKE_SOURCE_DIR}/include/SceneManager.h"
+  "${CMAKE_SOURCE_DIR}/include/GameStateManager.h"
+  "${CMAKE_SOURCE_DIR}/include/PlayingStateUI.h"
   "${CMAKE_SOURCE_DIR}/include/Button.h"
   "${CMAKE_SOURCE_DIR}/include/MainMenuState.h"
   "${CMAKE_SOURCE_DIR}/include/StartState.h"

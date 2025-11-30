@@ -39,6 +39,6 @@ private:
     // Transition system
     bool isTransitioning = false;
     float transitionAlpha = 0.f;
-    float transitionDuration = 3.0f;  // 3 seconds fade out
+    float transitionDuration = 1.0f;  // 3 seconds fade out
     sf::RectangleShape transitionOverlay;
 };
