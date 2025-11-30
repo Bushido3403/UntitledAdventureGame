@@ -152,6 +152,7 @@ void PlayingState::createChoiceButtons() {
 }
 
 void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
+    currentWindowSize = newWindowSize;  // Store for later use
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     
     transitionOverlay.setSize(sf::Vector2f(static_cast<float>(newWindowSize.x), 
@@ -163,13 +164,37 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
     ui->updateChoiceButtons(choiceButtons, currentScene);
 }
 
-void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex) {
+void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex, 
+                                   const sf::Vector2u& windowSize, float titlebarHeight) {
     confirmationType = type;
     pendingActionItemIndex = itemIndex;
-    // TODO: Create confirmation dialog UI overlay
+    
+    std::string message;
+    
+    if (type == ConfirmationType::ThrowOut) {
+        const auto& items = inventorySystem->getItems();
+        if (itemIndex >= 0 && itemIndex < static_cast<int>(items.size())) {
+            const ItemDefinition* def = inventorySystem->getItemDefinition(items[itemIndex].id);
+            if (def) {
+                message = "Throw out " + def->name + "?";
+            }
+        }
+    } else if (type == ConfirmationType::UseItem) {
+        const auto& items = inventorySystem->getItems();
+        if (itemIndex >= 0 && itemIndex < static_cast<int>(items.size())) {
+            const ItemDefinition* def = inventorySystem->getItemDefinition(items[itemIndex].id);
+            if (def) {
+                message = "Use " + def->name + "?";
+            }
+        }
+    }
+    
+    ui->getConfirmationDialog().show(message, windowSize, titlebarHeight);
 }
 
 void PlayingState::handleConfirmation(bool confirmed) {
+    ui->getConfirmationDialog().hide();
+    
     if (!confirmed) {
         confirmationType = ConfirmationType::None;
         pendingActionItemIndex = -1;
@@ -179,20 +204,19 @@ void PlayingState::handleConfirmation(bool confirmed) {
     const auto& items = inventorySystem->getItems();
     if (pendingActionItemIndex < 0 || pendingActionItemIndex >= static_cast<int>(items.size())) {
         confirmationType = ConfirmationType::None;
+        pendingActionItemIndex = -1;
         return;
     }
     
-    const auto& item = items[pendingActionItemIndex];
-    
     if (confirmationType == ConfirmationType::ThrowOut) {
-        inventorySystem->removeItemAtIndex(pendingActionItemIndex, item.quantity);
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, items[pendingActionItemIndex].quantity);
         gameState->saveGame(sceneManager->getScript().scriptId, 
                           sceneManager->getCurrentScene()->id,
                           inventorySystem.get());
     }
     else if (confirmationType == ConfirmationType::UseItem) {
         // TODO: Implement item usage logic
-        // Could trigger effects, consume item, etc.
+        // For now, just close the dialog
     }
     
     confirmationType = ConfirmationType::None;
@@ -220,11 +244,13 @@ void PlayingState::handleEvent(const sf::Event& event) {
     auto interaction = ui->handleInventoryEvent(event);
     
     if (interaction.action == InventoryAction::DeleteRequested) {
-        showConfirmationDialog(ConfirmationType::ThrowOut, interaction.itemIndex);
+        showConfirmationDialog(ConfirmationType::ThrowOut, interaction.itemIndex,
+                              currentWindowSize, CustomWindow::getTitlebarHeight());
         return;
     }
     else if (interaction.action == InventoryAction::ItemUsed) {
-        showConfirmationDialog(ConfirmationType::UseItem, interaction.itemIndex);
+        showConfirmationDialog(ConfirmationType::UseItem, interaction.itemIndex, 
+                              currentWindowSize, CustomWindow::getTitlebarHeight());
         return;
     }
     

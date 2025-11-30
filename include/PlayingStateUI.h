@@ -8,6 +8,7 @@
 #include "LayoutManager.h"
 #include "InventoryUI.h"
 #include "InventorySystem.h"
+#include "ConfirmationDialog.h"
 
 class SceneManager;
 struct Scene;
@@ -28,6 +29,9 @@ public:
     InventoryInteraction handleInventoryEvent(const sf::Event& event);
     void updateInventory(const sf::Vector2i& mousePos);
     
+    void drawConfirmationDialog(sf::RenderWindow& window);
+    ConfirmationDialog& getConfirmationDialog() { return *confirmationDialog; }
+    
 private:
     void updateChoicePositions(const std::vector<std::unique_ptr<Button>>& buttons, const Scene* currentScene);
     
@@ -43,4 +47,5 @@ private:
     sf::Vector2u windowSize;
     std::unique_ptr<InventoryUI> inventoryUI;
     InventorySystem* inventorySystem = nullptr;
+    std::unique_ptr<ConfirmationDialog> confirmationDialog;
 };

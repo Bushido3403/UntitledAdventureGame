@@ -37,7 +37,11 @@ private:
     enum class ConfirmationType { None, ThrowOut, UseItem };
     
     void showConfirmationDialog(ConfirmationType type, int itemIndex);
+    void showConfirmationDialog(ConfirmationType type, int itemIndex, 
+                                const sf::Vector2u& windowSize, float titlebarHeight);
     void handleConfirmation(bool confirmed);
+    void showConfirmation(ConfirmationType type, int itemIndex, 
+                          const sf::Vector2u& windowSize, float titlebarHeight);
     
     ResourceManager& resources;
     std::unique_ptr<SceneManager> sceneManager;
@@ -57,4 +61,6 @@ private:
     int pendingActionItemIndex = -1;
     
     std::function<void()> onScriptComplete;
+
+    sf::Vector2u currentWindowSize;
 };

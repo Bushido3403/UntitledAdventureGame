@@ -62,6 +62,7 @@ set(UI_SOURCES
   "${CMAKE_SOURCE_DIR}/src/ui/LayoutManager.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/PlayingStateUI.cpp"
   "${CMAKE_SOURCE_DIR}/src/ui/InventoryUI.cpp"
+  "${CMAKE_SOURCE_DIR}/src/ui/ConfirmationDialog.cpp"
 )
 
 set(HEADERS
@@ -82,6 +83,7 @@ set(HEADERS
   "${CMAKE_SOURCE_DIR}/include/LayoutManager.h"
   "${CMAKE_SOURCE_DIR}/include/InventorySystem.h"
   "${CMAKE_SOURCE_DIR}/include/InventoryUI.h"
+  "${CMAKE_SOURCE_DIR}/include/ConfirmationDialog.h"
 )
 
 # ---- Executable ----
