@@ -3,7 +3,7 @@
 #include "MainMenuState.h"
 
 MainMenuState::MainMenuState(ResourceManager& resources)
-    : resources(resources), // Store resources
+    : resources(resources),
       backgroundSprite(resources.getTexture("background")),
       logoSprite(resources.getTexture("logo")),
       titleSprite(resources.getTexture("title"))
@@ -16,6 +16,9 @@ MainMenuState::MainMenuState(ResourceManager& resources)
     
     settingsButton = std::make_unique<Button>(resources, &resources.getTexture("settings"), sf::Vector2f(0, 0));
     settingsButton->setScale({0.8f, 0.8f});
+    
+    // Initialize transition overlay
+    transitionOverlay.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void MainMenuState::updatePositions(const sf::Vector2u& windowSize)
@@ -37,12 +40,22 @@ void MainMenuState::updatePositions(const sf::Vector2u& windowSize)
     
     startButton->setPosition({windowSize.x / 2.f, windowSize.y / 3.f + 125.f});
     settingsButton->setPosition({windowSize.x / 2.f, windowSize.y / 3.f + 250.f});
+    
+    // Update transition overlay size
+    transitionOverlay.setSize(sf::Vector2f(static_cast<float>(windowSize.x), 
+                                           static_cast<float>(windowSize.y)));
+    transitionOverlay.setPosition({0.f, 0.f});
 }
 
 void MainMenuState::setOnStartClicked(std::function<void()> callback)
 {
     onStartClicked = callback;
-    startButton->setOnClick(callback);
+    startButton->setOnClick([this, callback]() {
+        if (!isTransitioning) {
+            isTransitioning = true;
+            transitionAlpha = 0.f;
+        }
+    });
 }
 
 void MainMenuState::setOnSettingsClicked(std::function<void()> callback)
@@ -53,15 +66,47 @@ void MainMenuState::setOnSettingsClicked(std::function<void()> callback)
 
 void MainMenuState::handleEvent(const sf::Event& event)
 {
+    // Don't allow input during transition
+    if (isTransitioning) {
+        return;
+    }
+    
     startButton->handleEvent(event);
     settingsButton->handleEvent(event);
 }
 
 void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 {
-    auto mousePos = sf::Mouse::getPosition(window);
-    startButton->update(mousePos);
-    settingsButton->update(mousePos);
+    // Update transition
+    if (isTransitioning) {
+        float alphaSpeed = 255.f / transitionDuration;
+        transitionAlpha += alphaSpeed * deltaTime;
+        
+        if (transitionAlpha >= 255.f) {
+            transitionAlpha = 255.f;
+            
+            // Trigger the actual state change
+            if (onStartClicked) {
+                onStartClicked();
+            }
+        }
+        
+        // Update overlay alpha
+        sf::Color overlayColor = transitionOverlay.getFillColor();
+        float clampedAlpha = transitionAlpha;
+        if (clampedAlpha < 0.f) {
+            clampedAlpha = 0.f;
+        } else if (clampedAlpha > 255.f) {
+            clampedAlpha = 255.f;
+        }
+        overlayColor.a = static_cast<std::uint8_t>(clampedAlpha);
+        transitionOverlay.setFillColor(overlayColor);
+    } else {
+        // Only update buttons when not transitioning
+        auto mousePos = sf::Mouse::getPosition(window);
+        startButton->update(mousePos);
+        settingsButton->update(mousePos);
+    }
 }
 
 void MainMenuState::draw(sf::RenderWindow& window)
@@ -71,4 +116,15 @@ void MainMenuState::draw(sf::RenderWindow& window)
     window.draw(titleSprite);
     startButton->draw(window);
     settingsButton->draw(window);
+    
+    // Draw transition overlay on top of everything
+    if (isTransitioning) {
+        window.draw(transitionOverlay);
+    }
+}
+
+void MainMenuState::resetTransition() {
+    isTransitioning = false;
+    transitionAlpha = 0.f;
+    transitionOverlay.setFillColor(sf::Color(0, 0, 0, 0));
 }

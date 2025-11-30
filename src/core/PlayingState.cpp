@@ -37,9 +37,13 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
         loadScene(sceneManager->getScript().scenes[0].id);
     }
     
-    // Initialize transition overlay
-    transitionOverlay.setFillColor(sf::Color(0, 0, 0, 0));
+    // Initialize transition overlay - START WITH BLACK SCREEN
+    transitionOverlay.setFillColor(sf::Color(0, 0, 0, 255));  // Fully black
     transitionOverlay.setSize(sf::Vector2f(800.f, 600.f));
+    
+    // Start fading in immediately
+    transitionState = TransitionState::FadingIn;
+    transitionAlpha = 255.f;  // Start at full black
 }
 
 bool PlayingState::checkCondition(const Condition& condition) const {
@@ -181,7 +185,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
                                                   resources.getFont("main"), 
                                                   dialogSize);
     
-    dialogBox->setText(wrappedText, currentScene->speaker, currentScene->speakerColor);  // Pass speaker color
+    dialogBox->setText(wrappedText, currentScene->speaker, currentScene->speakerColor);
     
     createChoiceButtons();
     updatePositions(fullWindowSize);
@@ -210,9 +214,23 @@ void PlayingState::updateTransition(float deltaTime) {
         if (transitionAlpha >= 255.f) {
             transitionAlpha = 255.f;
             
-            // Load the new scene while screen is black
-            loadScene(nextSceneId);
+            // Try to load the new scene while screen is black
+            // sceneManager->loadScene will call onScriptComplete if sceneId == "END"
+            // which will pop this state, so we need to be careful not to access anything after
+            std::string sceneToLoad = nextSceneId;
             nextSceneId.clear();
+            
+            if (sceneToLoad == "END") {
+                // Don't try to load or transition, just trigger the callback
+                if (onScriptComplete) {
+                    onScriptComplete();
+                }
+                // State is now popped, don't do anything else
+                return;
+            }
+            
+            // Normal scene load
+            loadScene(sceneToLoad);
             
             // Start fading in
             transitionState = TransitionState::FadingIn;

@@ -71,6 +71,12 @@ void GameEngine::popState() {
         stateStack.pop();
         if (!stateStack.empty()) {
             stateStack.top()->updatePositions(window->getSize());
+            
+            // Reset main menu transition state when returning to it
+            if (stateStack.top()->getType() == GameStateType::MainMenu) {
+                auto* mainMenu = static_cast<MainMenuState*>(stateStack.top().get());
+                mainMenu->resetTransition();
+            }
         }
     }
 }

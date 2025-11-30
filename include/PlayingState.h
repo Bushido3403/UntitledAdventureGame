@@ -65,7 +65,7 @@ private:
     
     TransitionState transitionState = TransitionState::None;
     float transitionAlpha = 0.f;
-    float transitionDuration = 0.5f;  // 0.5 seconds per fade
+    float transitionDuration = 0.25f;  // 0.5 seconds per fade
     std::string nextSceneId;
     sf::RectangleShape transitionOverlay;
 };
