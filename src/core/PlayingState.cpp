@@ -1,5 +1,6 @@
 #include "PlayingState.h"
 #include "CustomWindow.h"
+#include <iostream>
 
 PlayingState::PlayingState(ResourceManager& resources, const std::string& scriptPath)
     : resources(resources),
@@ -13,9 +14,43 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
     transitionOverlay.setFillColor(sf::Color(0, 0, 0, 255));
     transitionOverlay.setSize(sf::Vector2f(800.f, 600.f));
     
-    if (sceneManager->loadScript(scriptPath)) {
-        gameState->loadGame(inventorySystem.get());
-        loadScene(sceneManager->getScript().scenes[0].id);
+    // Load game state first
+    gameState->loadGame(inventorySystem.get());
+    
+    // Determine which script and scene to load
+    std::string scriptToLoad = scriptPath;
+    std::string sceneToLoad;
+    
+    if (gameState->hasSaveData()) {
+        // If we have save data, check if it matches the requested script
+        std::string savedScript = gameState->getCurrentScript();
+        
+        // Extract script ID from path (e.g., "assets/scripts/intro.json" -> "intro")
+        std::string requestedScriptId = scriptPath;
+        size_t lastSlash = requestedScriptId.find_last_of("/\\");
+        if (lastSlash != std::string::npos) {
+            requestedScriptId = requestedScriptId.substr(lastSlash + 1);
+        }
+        size_t lastDot = requestedScriptId.find_last_of(".");
+        if (lastDot != std::string::npos) {
+            requestedScriptId = requestedScriptId.substr(0, lastDot);
+        }
+        
+        // If saved script matches requested script, load from save
+        if (savedScript == requestedScriptId) {
+            sceneToLoad = gameState->getCurrentScene();
+            std::cout << "Continuing from saved scene: " << sceneToLoad << std::endl;
+        }
+    }
+    
+    // Load the script
+    if (sceneManager->loadScript(scriptToLoad)) {
+        // If we have a scene to load, use it; otherwise start from first scene
+        if (!sceneToLoad.empty()) {
+            loadScene(sceneToLoad);
+        } else {
+            loadScene(sceneManager->getScript().scenes[0].id);
+        }
     }
     
     transitionState = TransitionState::FadingIn;
@@ -35,11 +70,14 @@ void PlayingState::loadScene(const std::string& sceneId) {
     const Scene* currentScene = sceneManager->getCurrentScene();
     if (!currentScene) return;
     
+    // Apply effects if present
     if (currentScene->effects.has_value()) {
         gameState->applyEffects(currentScene->effects.value(), inventorySystem.get());
-        gameState->saveGame(sceneManager->getScript().scriptId, currentScene->id, 
-                          inventorySystem.get());
     }
+    
+    // Save game state on EVERY scene transition
+    gameState->saveGame(sceneManager->getScript().scriptId, currentScene->id, 
+                      inventorySystem.get());
     
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     sf::Vector2u fullWindowSize(ui->getWindowSize().x, 

@@ -21,7 +21,14 @@ public:
     const std::unordered_map<std::string, bool>& getFlags() const { return flags; }
     const std::unordered_map<std::string, int>& getStats() const { return stats; }
     
+    // Add these methods
+    std::string getCurrentScript() const { return currentScript; }
+    std::string getCurrentScene() const { return currentScene; }
+    bool hasSaveData() const { return !currentScript.empty(); }
+    
 private:
     std::unordered_map<std::string, bool> flags;
     std::unordered_map<std::string, int> stats;
+    std::string currentScript;
+    std::string currentScene;
 };

@@ -41,6 +41,10 @@ void GameStateManager::saveGame(const std::string& scriptId, const std::string& 
                                 const InventorySystem* inventory) {
     using json = nlohmann::json;
     
+    // Update current script/scene
+    currentScript = scriptId;
+    currentScene = sceneId;
+    
     json saveData;
     saveData["playerName"] = "";
     saveData["currentScript"] = scriptId;
@@ -66,7 +70,7 @@ void GameStateManager::saveGame(const std::string& scriptId, const std::string& 
     if (file.is_open()) {
         file << saveData.dump(2);
         file.close();
-        std::cout << "Game saved successfully" << std::endl;
+        std::cout << "Game saved: " << scriptId << " - " << sceneId << std::endl;
     } else {
         std::cerr << "Failed to save game" << std::endl;
     }
@@ -92,6 +96,14 @@ void GameStateManager::loadGame(InventorySystem* inventory) {
         json saveData;
         file >> saveData;
         
+        // Load current script/scene
+        if (saveData.contains("currentScript")) {
+            currentScript = saveData["currentScript"];
+        }
+        if (saveData.contains("currentScene")) {
+            currentScene = saveData["currentScene"];
+        }
+        
         if (saveData.contains("flags") && saveData["flags"].is_object()) {
             for (auto& [key, value] : saveData["flags"].items()) {
                 flags[key] = value;
@@ -108,7 +120,7 @@ void GameStateManager::loadGame(InventorySystem* inventory) {
             inventory->loadFromJson(saveData);
         }
         
-        std::cout << "Game loaded successfully" << std::endl;
+        std::cout << "Game loaded: " << currentScript << " - " << currentScene << std::endl;
     } catch (const json::exception& e) {
         std::cerr << "Failed to load save data: " << e.what() << std::endl;
         std::cout << "Starting fresh due to corrupted save" << std::endl;

@@ -1,14 +1,12 @@
 #include "PlayingStateUI.h"
 #include "CustomWindow.h"
 #include "SceneManager.h"
-#include "ConfirmationDialog.h"
 
 PlayingStateUI::PlayingStateUI(ResourceManager& resources)
     : resources(resources),
       dialogBox(std::make_unique<DialogBox>(resources.getFont("main"))),
       layoutManager(std::make_unique<LayoutManager>(sf::Vector2u(800, 600))),
       inventoryUI(std::make_unique<InventoryUI>(resources)),
-      confirmationDialog(std::make_unique<ConfirmationDialog>(resources.getFont("main"))),
       windowSize(800, 600)
 {
     background.setFillColor(sf::Color(20, 20, 30));
@@ -89,9 +87,6 @@ void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Sc
             metrics.scale.scaleY
         );
     }
-
-    // Update confirmation dialog position
-    confirmationDialog->updatePosition(newWindowSize, TITLEBAR_HEIGHT);
 }
 
 void PlayingStateUI::updateChoiceButtons(const std::vector<std::unique_ptr<Button>>& buttons, const Scene* currentScene) {
@@ -228,7 +223,4 @@ void PlayingStateUI::draw(sf::RenderWindow& window, const std::vector<std::uniqu
     for (auto& button : buttons) {
         button->draw(window);
     }
-    
-    // Draw confirmation dialog last (on top of everything)
-    confirmationDialog->draw(window);
 }

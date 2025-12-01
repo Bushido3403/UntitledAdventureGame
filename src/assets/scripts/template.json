@@ -1,0 +1,42 @@
+{
+    "scriptId": "unique_script_identifier",
+    "title": "Script Display Title",
+    "metadata": {
+      "chapter": 1,
+      "unlocks": ["next_script_id", "bonus_script_id"],
+      "estimatedTime": "10-15 minutes"
+    },
+    "scenes": [
+      {
+        "id": "scene_unique_id",
+        "background": "background_asset_name",
+        "text": "Scene dialogue text that will be displayed to the player.",
+        "speaker": "Character Name",
+        "speakerColor": "#RRGGBB",
+        "music": "music_track_name",
+        "choices": [
+          {
+            "text": "Choice text displayed to player, have up to 4 of these",
+            "nextScene": "target_scene_id",
+            "nextScript": "optional_next_script_id",
+            "condition": {
+              "flag": "required_flag_name",
+              "requiredValue": true
+            },
+            "consequence": "optional_consequence_label"
+          }
+        ],
+        "effects": {
+          "addFlag": "flag_to_set",
+          "removeFlag": "flag_to_unset",
+          "modifyStat": {
+            "strength": 5,
+            "wisdom": -2,
+            "charisma": 10
+          },
+          "addItem": "item_id",
+          "addItemQuantity": 3
+        }
+      }
+    ]
+  }
