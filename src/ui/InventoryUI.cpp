@@ -67,13 +67,14 @@ int InventoryUI::getCellAtPosition(const sf::Vector2f& pos) const {
     return -1;
 }
 
-void InventoryUI::updateScroll(float delta) {
+void InventoryUI::updateScroll(float delta, int totalItems) {
     scrollOffset += static_cast<int>(delta);
-    scrollOffset = std::max(0, std::min(scrollOffset, getMaxScroll()));
+    scrollOffset = std::max(0, std::min(scrollOffset, getMaxScroll(totalItems)));
 }
 
-int InventoryUI::getMaxScroll() const {
-    return 0;
+int InventoryUI::getMaxScroll(int totalItems) const {
+    int totalRows = (totalItems + columns - 1) / columns;
+    return std::max(0, totalRows - visibleRows);
 }
 
 InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const InventorySystem& inventory) {
@@ -85,7 +86,7 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
         
         int cellIndex = getCellAtPosition(mousePos);
         if (cellIndex >= 0) {
-            int itemIndex = scrollOffset + cellIndex;
+            int itemIndex = (scrollOffset * columns) + cellIndex;  // FIX: multiply by columns
             
             if (itemIndex < static_cast<int>(inventory.getItems().size())) {
                 if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
@@ -105,7 +106,7 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
                               static_cast<float>(mouseWheelScrolled->position.y));
         
         if (containerBounds.contains(mousePos)) {
-            updateScroll(-static_cast<int>(mouseWheelScrolled->delta));
+            updateScroll(mouseWheelScrolled->delta, static_cast<int>(inventory.getItems().size()));
         }
     }
     
@@ -119,7 +120,7 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
     showTooltip = false;
     
     if (hoveredCell >= 0) {
-        int itemIndex = scrollOffset + hoveredCell;
+        int itemIndex = (scrollOffset * columns) + hoveredCell;  // FIX: multiply by columns
         
         if (itemIndex < static_cast<int>(inventory.getItems().size())) {
             const auto& item = inventory.getItems()[itemIndex];
@@ -160,9 +161,8 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
     }
     
     int totalItems = static_cast<int>(inventory.getItems().size());
-    int totalRows = (totalItems + columns - 1) / columns;
-    int maxScroll = std::max(0, totalRows - visibleRows);
-    scrollOffset = std::min(scrollOffset, maxScroll);
+    int maxScroll = getMaxScroll(totalItems);
+    scrollOffset = std::clamp(scrollOffset, 0, maxScroll);
 }
 
 void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventory) {
@@ -170,7 +170,7 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
     
     for (size_t i = 0; i < grid.size(); ++i) {
         auto& cell = grid[i];
-        int itemIndex = scrollOffset + static_cast<int>(i);
+        int itemIndex = (scrollOffset * columns) + static_cast<int>(i);  // FIX: multiply by columns
         
         if (static_cast<int>(i) == hoveredCell && itemIndex < static_cast<int>(items.size())) {
             cell.background.setFillColor(sf::Color(70, 70, 80, 200));

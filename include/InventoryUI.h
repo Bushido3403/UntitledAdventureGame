@@ -38,8 +38,8 @@ private:
     
     void createGrid(const sf::FloatRect& containerBounds, float padding);
     int getCellAtPosition(const sf::Vector2f& pos) const;
-    void updateScroll(float delta);
-    int getMaxScroll() const;
+    void updateScroll(float delta, int totalItems);
+    int getMaxScroll(int totalItems) const;
     
     ResourceManager& resources;
     std::vector<GridCell> grid;

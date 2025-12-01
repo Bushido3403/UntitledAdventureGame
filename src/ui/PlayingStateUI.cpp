@@ -7,6 +7,7 @@ PlayingStateUI::PlayingStateUI(ResourceManager& resources)
       dialogBox(std::make_unique<DialogBox>(resources.getFont("main"))),
       layoutManager(std::make_unique<LayoutManager>(sf::Vector2u(800, 600))),
       inventoryUI(std::make_unique<InventoryUI>(resources)),
+      confirmationDialog(std::make_unique<ConfirmationDialog>(resources.getFont("main"))),
       windowSize(800, 600)
 {
     background.setFillColor(sf::Color(20, 20, 30));
@@ -222,5 +223,14 @@ void PlayingStateUI::draw(sf::RenderWindow& window, const std::vector<std::uniqu
     
     for (auto& button : buttons) {
         button->draw(window);
+    }
+    
+    // Draw confirmation dialog last (on top of everything)
+    drawConfirmationDialog(window);
+}
+
+void PlayingStateUI::drawConfirmationDialog(sf::RenderWindow& window) {
+    if (confirmationDialog) {
+        confirmationDialog->draw(window);
     }
 }
