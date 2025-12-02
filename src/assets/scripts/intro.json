@@ -671,7 +671,7 @@
         "choices": [
           {
             "text": "Look around",
-            "nextScene": "a1_s41_asgard_celebration"
+            "nextScene": "a1_s40b_asgard_day_after"
           }
         ]
       },
@@ -685,7 +685,7 @@
         "choices": [
           {
             "text": "Catch your breath",
-            "nextScene": "a1_s41_asgard_celebration"
+            "nextScene": "a1_s40b_asgard_day_after"
           }
         ]
       },

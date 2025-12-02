@@ -1,0 +1,23 @@
+{
+  "bronze_key": {
+    "name": "Bronze Key",
+    "description": "Opens big gates.",
+    "texture": "assets/items/bronze_key.png",
+    "stackable": true,
+    "maxStackSize": 1000
+  },
+  "asgard_sword": {
+    "name": "Asgard Sword",
+    "description": "A sword forged in the heart of Asgard.",
+    "texture": "assets/items/asgard_sword.png",
+    "stackable": true,
+    "maxStackSize": 1000
+  },
+  "ravens_feather": {
+    "name": "Raven's Feather",
+    "description": "A feather from a mystical raven. It is said to bring luck.",
+    "texture": "assets/items/ravens_feather.png",
+    "stackable": true,
+    "maxStackSize": 1000
+  }
+}

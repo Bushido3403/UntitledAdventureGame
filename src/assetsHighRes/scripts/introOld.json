@@ -1,0 +1,120 @@
+{
+    "scriptId": "introOld",
+    "title": "The Beginning",
+    "metadata": {
+      "chapter": 1,
+      "unlocks": ["chapter1_main"]
+    },
+    "scenes": [
+      {
+        "id": "scene_1",
+        "background": "bg_void_worldtree",
+        "text": "In the beginning, there was only void and fire. From the flames of Muspelheim and the ice of Niflheim, the Nine Realms were born.",
+        "speaker": "Narrator",
+        "speakerColor": "#FFD700",
+        "music": "intro_theme",
+        "choices": [
+          {
+            "text": "Continue",
+            "nextScene": "scene_2"
+          },
+          {
+            "text": "Skip Intro",
+            "nextScene": "END",
+            "condition": {
+              "flag": "completed_intro"
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene_2",
+        "background": "scene2",
+        "text": "But the age of gods is ending. Ragnarok approaches. The twilight of the gods. The prophecy speaks of a mortal who will tip the scales of fate. Will you be that mortal? The choice is yours.",
+        "speaker": "Narrator",
+        "speakerColor": "#FFD700",
+        "music": "ominous_theme",
+        "choices": [
+          {
+            "text": "Accept your destiny",
+            "nextScene": "scene_3_accept",
+            "consequence": "hero_path"
+          },
+          {
+            "text": "Reject this burden",
+            "nextScene": "scene_3_reject",
+            "consequence": "skeptic_path"
+          },
+          {
+            "text": "Ask for more information",
+            "nextScene": "scene_3_more_info"
+          },
+          {
+            "text": "Punch the narrator in the face",
+            "nextScene": "END",
+            "condition": {
+              "flag": "completed_intro"
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene_3_more_info",
+        "background": "scene3moreinfo",
+        "text": "The prophecy is ancient, passed down through generations. It speaks of a mortal who will rise during the twilight of the gods, shaping the fate of all realms. The choice you make now will determine your path.",
+        "speaker": "Narrator",
+        "speakerColor": "#FFD700",
+        "music": "mystic_theme",
+        "choices": [
+          {
+            "text": "Accept your destiny",
+            "nextScene": "scene_3_accept",
+            "consequence": "hero_path"
+          },
+          {
+            "text": "Reject this burden",
+            "nextScene": "scene_3_reject",
+            "consequence": "skeptic_path"
+          }
+        ]
+      },
+      {
+        "id": "scene_3_accept",
+        "background": "scene3accept",
+        "text": "You feel the weight of destiny settle upon your shoulders. Whatever lies ahead, you will face it. The journey begins now.",
+        "speaker": "Narrator",
+        "speakerColor": "#FFD700",
+        "music": "heroic_theme",
+        "effects": {
+          "addFlag": "completed_intro",
+          "modifyStat": {"wisdom": 2}
+        },
+        "choices": [
+          {
+            "text": "Begin your adventure",
+            "nextScene": "END"
+          }
+        ]
+      },
+      {
+        "id": "scene_3_reject",
+        "background": "scene3reject",
+        "text": "You turn away from the call of destiny. Perhaps fate will find another. Or perhaps this refusal is part of the prophecy itself.",
+        "speaker": "Narrator",
+        "speakerColor": "#FFD700",
+        "music": "melancholy_theme",
+        "effects": {
+          "removeFlag": "completed_intro",
+          "modifyStat": {"strength": 2},
+          "addItem": "health_potion",
+          "addItemQuantity": 3
+        },
+        "choices": [
+          {
+            "text": "Sleep all day. Start your adventure later.",
+            "nextScene": "END"
+          }
+        ]
+      }
+    ]
+  }
