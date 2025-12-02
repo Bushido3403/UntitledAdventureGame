@@ -34,8 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 - Window now initially opens at 1280×720 instead of 1920×1080.  
 - Window now starts at position (100, 100) on screen.  
-- A fullscreen-toggle UI option: pressing the new “[ ]” button switches between windowed and fullscreen modes (with state tracking, and restoring previous windowed size/position when exiting fullscreen).  
-- UI text/icon for the fullscreen toggle (rendered in cyan) alongside the close-button “X”.  
+- A fullscreen-toggle UI option: pressing the new "[ ]" button switches between windowed and fullscreen modes (with state tracking, and restoring previous windowed size/position when exiting fullscreen).  
+- UI text/icon for the fullscreen toggle (rendered in cyan) alongside the close-button "X".  
 - Improved title-bar UI layout updates on state changes (resizing, fullscreen toggling): background bar, title text, control buttons update their positions/size.  
 
 ### Changed
@@ -44,7 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Rendering loop modified: title bar, title text, fullscreen toggle text, and close-button/text drawn appropriately alongside background.  
 
 ### Removed
-- The explicit close-button rectangle previously drawn (with its own styling), replaced by a text-only “X” (and a new fullscreen toggle) for controls.  
+- The explicit close-button rectangle previously drawn (with its own styling), replaced by a text-only "X" (and a new fullscreen toggle) for controls.  
 
 ### Fixed
 - Window control logic refined for better consistency during fullscreen toggling and UI redraws (positions/size updating, framerate limit retention).  
@@ -68,7 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [V1.2]
 
 ### Added
-- A full internal “state-machine” architecture: abstract `GameState` base class plus concrete states `MainMenuState`, `StartState`, `SettingsState`.  
+- A full internal "state-machine" architecture: abstract `GameState` base class plus concrete states `MainMenuState`, `StartState`, `SettingsState`.  
 - UI framework classes: `Button`, `CustomWindow`, and a `ResourceManager` for loading/holding textures, fonts, music, etc.  
 - Subdirectories and separation of concerns: `src/core/`, `src/ui/`, `include/`, moving beyond a single `main.cpp`.  
 - Updated build configuration (`CMakeLists.txt`) to compile all source files, include headers, and link `SFML::Graphics` and `SFML::Audio`.  
@@ -82,16 +82,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Added
 - In the settings menu: a music-volume slider UI (slider bar + handle) allowing adjustable background music volume.  
-- In `SettingsState`: UI elements for “Music Volume” label and a dynamic volume-value display (e.g. “42%”).  
+- In `SettingsState`: UI elements for "Music Volume" label and a dynamic volume-value display (e.g. "42%").  
 - Logic to handle mouse interactions: dragging on the slider bar or handle adjusts volume, updates the display, and sets the volume of the `title` music resource.  
 - Layout and resizing support: when the window size changes, the volume slider and related text reposition/scale correctly according to current window size.  
 
 ### Changed
 - Modified `SettingsState` constructor (removed the old window parameter) and updated its interface to rely only on a shared `ResourceManager`.  
-- Refactored settings-state drawing: replaced a placeholder “Settings Menu (Coming Soon)” text with full UI components (title, volume label + value, slider bar + handle, back text).   
+- Refactored settings-state drawing: replaced a placeholder "Settings Menu (Coming Soon)" text with full UI components (title, volume label + value, slider bar + handle, back text).   
 
 ### Removed
-- Placeholder text UI from settings, the old “Coming Soon” placeholder is replaced by real settings UI.  
+- Placeholder text UI from settings, the old "Coming Soon" placeholder is replaced by real settings UI.  
 
 ## [V1.4]
 
@@ -135,7 +135,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   - Updated source/header collection to use `${CMAKE_SOURCE_DIR}` paths and added `source_group` for cleaner IDE organization.
   - Updated the Windows build to conditionally attach `app.rc` and to copy `src/assets` into an `assets` folder next to the built executable.
 - LICENSE:
-  - Replaced the template dual-license text with a single MIT license under “Untitled Adventure Game License” and added an SFML third-party license notice.
+  - Replaced the template dual-license text with a single MIT license under "Untitled Adventure Game License" and added an SFML third-party license notice.
 - README:
   - Rewrote from a generic CMake SFML project template into a game-specific README with description, feature list, simplified VS Code build steps, and development prerequisites.
 
@@ -155,7 +155,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   - Added `nlohmann/json` as a dependency via `FetchContent_Declare(json)` and `FetchContent_MakeAvailable(json)`.
   - Linked the game target against `nlohmann_json::nlohmann_json`.
 - Game flow / state wiring:
-  - Main menu “Start” callback now pushes a `PlayingState` using `assets/scripts/intro.json` instead of the placeholder `StartState`.
+  - Main menu "Start" callback now pushes a `PlayingState` using `assets/scripts/intro.json` instead of the placeholder `StartState`.
   - `GameEngine::setupStateCallbacks` extended to recognize `GameStateType::Playing` and hook the `PlayingState`’s completion callback to `popState()`.
 
 ## [V1.8]
@@ -193,11 +193,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   - `update` delegating hover logic to `Button::update` and `draw` delegating rendering to `Button::draw`.
 - `MainMenuState` updated to construct buttons with texture pointers (`&resources.getTexture("...")`) to match the new `Button` API.
 - `GameEngine` now explicitly configures title music (set volume to 100, looping enabled, play call) and prints music status for debugging.
-- `StartState` placeholder text copy tweaked from “Game Starting... (Placeholder)” to “Game Starting...” for a more polished message.
+- `StartState` placeholder text copy tweaked from "Game Starting... (Placeholder)" to "Game Starting..." for a more polished message.
 
 ### Removed
 - Old text-only choice hover and click detection logic in `PlayingState` that iterated `choiceTexts` and manually checked text bounds.
-- Explicit “(Placeholder)” wording in the start screen message.
+- Explicit "(Placeholder)" wording in the start screen message.
 
 ### Fixed
 - Choice positioning now correctly operates on `choiceButtons` instead of `choiceTexts`, preventing mismatches between visual elements and their logical hit areas.
@@ -287,7 +287,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Changed
 - When loading a scene, `PlayingState` now passes `currentScene->speakerColor` to `DialogBox::setText`, so the speaker’s text color reflects the JSON data.  
 - Update in scene-loading and layout-update code ensures the dialog is re-rendered with proper speaker color when the window or layout changes.  
-- In the JSON script (e.g. `intro.json`), speaker color value changed for the “Narrator” to a different hex code.  
+- In the JSON script (e.g. `intro.json`), speaker color value changed for the "Narrator" to a different hex code.  
 
 ### Removed
 - The default usage of `DialogBox::setText(...)` without speaker color remains available, but the old fallback default color logic inside parser was replaced by explicit color parsing (default: white).  
@@ -317,3 +317,190 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 - Build-time inclusion and linking of the `cpr` HTTP client library.
+
+## [V2.8]
+
+### Added
+- Initial full changelog file (`CHANGELOG.md`) with past release history imported.  
+- New `changelog.css`, `changelog.js`, and `changelog.html` under `/changelog` for auto-generated or styled changelog view (plus updates to `index.html`, `styles.css`, README to integrate/changelog link).  
+
+### Changed
+- Project documentation structure updated: README + project root layout now includes changelog directory and assets. 
+
+## [V2.9]
+
+### Added
+- Script-flag system: added `flags` and `stats` storage to `PlayingState`, along with methods to check conditions and apply effects.  
+- Extended scripting support: in `ScriptParser`, added `Condition`, `Effects`, flag-based branching, optional stat modifications, and speakerColor + effects support for scenes.  
+- New save/load support for flags and stats (save_data.json now includes flags & stats).  
+- Choice-button logic: skip choices whose condition fails; reindexed button labels properly after filtering invalid choices.  
+
+### Changed
+- Resource loading path for background image switched from `.jpg` to `.jpeg`.  
+- Build configuration update: removed `WIN32` flag in `add_executable(...)` call in CMakeLists.  
+
+### Removed
+- Removal of the old `menuBackground.jpg` reference in favor of `.jpeg`.  
+
+### Fixed
+- Script-flag logic now correctly evaluates conditions and applies effects (flags/stats) when scenes change or choices are made.  
+- Fixed save-game file path to use `assets/save_data.json`.  
+
+## [V2.10]
+
+### Added
+- Scene-transition support: added `TransitionState`, `transitionOverlay`, `startTransition(...)`, and `updateTransition(...)` in `PlayingState`.  
+- Fade-out / fade-in overlay effect to visually transition between scenes (using a semi-transparent overlay painted over the window).  
+- Automatic scene switching: on load or when a choice triggers a new scene, transitions now handle switching via overlay rather than abrupt jumps.  
+- Window-resize handling for overlay: transition overlay now resizes/repositions properly when window size changes.  
+
+### Changed
+- Refactored choice-button logic to route scene changes through transition system instead of direct `loadScene(...)` calls.  
+- Updated `update(...)`, `handleEvent(...)`, and `createChoiceButtons()` logic to respect transition states (no choice input during transitions, deferred scene loading until after fade-out).  
+- Adjusted layout update: `updatePositions(...)` now includes overlay resizing/ repositioning in response to window size changes.  
+
+### Removed
+- Removed direct immediate scene load on choice selection - replaced by transition-based loading.  
+- Removed old logic that bypassed overlay and loaded scenes immediately (e.g. direct calls to `loadScene(...)` inside choice handlers).  
+
+### Fixed
+- Prevented user input / choice handling during transitions to avoid inconsistent state or crashes while fading.  
+- Fixed scene-load timing: scenes now load only after fade-out, avoiding visual glitches or abrupt screen changes.  
+
+## [V2.11]
+
+### Added
+- Long intro fade-in sequence: the game now begins with a full-black overlay that gradually fades into the first scene, improving presentation and atmosphere.
+- Added `resetTransition()` in `MainMenuState` to properly reset fade state when returning to the menu.
+
+### Changed
+- Adjusted transition timing in `PlayingState`: fade duration reduced from 0.5s to 0.25s for smoother scene flow.
+- Updated `MainMenuState` to route drawing, updates, and event handling through the transition system so menu elements behave correctly during fades.
+
+### Fixed
+- Fixed an issue where game content briefly appeared before the intro fade-in completed.
+- Ensured returning from a play session to the main menu fully resets the fade overlay, preventing the menu from appearing dim or partially faded.
+
+## [V3.0]
+
+### Added
+- `GameStateManager` class to centralize narrative state: flag checks, effect application, and save/load of flags and stats from `assets/save_data.json`.
+- `PlayingStateUI` class to own dialog box, layout manager, background/box shapes, and choice-button positioning and drawing.
+- CMake entries for `GameStateManager` and `PlayingStateUI` in `CORE_SOURCES`, `UI_SOURCES`, and `HEADERS`.
+
+### Changed
+- `PlayingState` refactored to delegate:
+  - Script/scene loading to `SceneManager`.
+  - UI layout, dialog rendering, and choice placement to `PlayingStateUI`.
+  - Flag/stat logic and save/load behavior to `GameStateManager`.
+- `PlayingState` header simplified: removed direct ownership of dialog/layout/box shapes in favor of higher-level collaborators (`PlayingStateUI`, `GameStateManager`).
+- Transition data cleaned up in `PlayingState`: `transitionDuration` turned into a `const` and related members reorganized.
+
+### Removed
+- Inline save/load, flag, and stat-handling logic from `PlayingState`.
+- Direct UI layout and rectangle-shape management from `PlayingState` (now handled inside `PlayingStateUI`).
+
+### Fixed
+- Clearer separation of concerns reduces the risk of inconsistent state between flags/stats, UI layout, and scene data during transitions and saves.
+
+## [V3.1]
+
+### Added
+- Inventory system: introduced `InventorySystem` to manage item definitions and track player inventory (items, quantities, stackable items, etc.).  
+- Inventory UI: added `InventoryUI` to present inventory items visually, allow item listing, display tooltips (item name/description), and handle inventory layout / scrolling / interaction.  
+- Inventory logic hooks: updated `GameStateManager`, `SceneManager`, `ScriptParser`, and `PlayingStateUI` to support item-related effects (e.g. adding items through script effects).  
+- CMake build updates: added `InventorySystem.cpp` and `InventoryUI.cpp` to `CORE_SOURCES` and `UI_SOURCES`, and `InventorySystem.h` / `InventoryUI.h` to `HEADERS`.  
+
+### Changed
+- Refactored `PlayingState` to include a unique pointer to `InventorySystem` (in addition to previous state/UI managers), and updated include directives accordingly.  
+- Extended script effect definitions (`Effects`) in `ScriptParser` to support item addition (e.g. `addItem`, `addItemQuantity`) besides flags/stats modifications.  
+- Updated UI layout logic so that inventory UI coexists with dialog/choice UI (inventory pane, tooltips, etc.) when inventory is open.  
+
+### Fixed
+- Basic inventory functionality working: adding/removing items, stacking, loading item definitions, and reflecting inventory changes in UI.  
+- Save/load integration: inventory data persists in save files (alongside flags and stats), preventing loss of items on reload.
+
+## [V3.2]
+
+### Added
+- Save/load support enhanced: inventory, flags, and stats are now correctly persisted to `assets/save_data.json` and reloaded on game start.  
+- Stat-mod UI: implemented UI elements to display player stats and any modifications (e.g. after effects) within the game interface.  
+- Item tooltips: when hovering or selecting items in inventory UI, detailed tooltips (item name, description, quantity, stats/effects if relevant) are shown.  
+
+### Changed
+- Modified `SaveLoadManager` (or equivalent save/load routines) to include inventory, flags, and stats in serialized game data.  
+- Updated UI layout logic so inventory UI and stat-mod UI integrate cleanly without overlapping dialog/choice boxes - proper layering and layout adjustments done.  
+
+### Fixed
+- Fixed bugs in save/load that previously caused inventory or stat data to be lost between sessions.  
+- Corrected tooltip logic: item tooltips now display correct data and update properly when inventory or stats change.  
+
+## [V3.3]
+
+### Added
+- Intro screen artwork and scene: new visual assets and a dedicated intro scene before main menu.  
+- Background / atmospheric music for main menu re-enabled - adds ambient/main-menu soundtrack when on menu screen.
+
+### Changed
+- Entry flow updated: game now starts with intro scene (with art), then transitions to main menu with music.  
+- Adjusted main menu UI and background layout to accommodate new intro-to-menu transition and artwork.
+
+### Fixed
+- Resolved prior bug where main menu music did not trigger - music now reliably starts when reaching main menu.  
+- Fixed potential mismatch between menu UI and background art (layout, scaling, or display issues) when using new intro artwork and scene.
+
+## [V3.4]
+
+### Added
+- New art assets: multiple background images (forest edge, village backstreet, village square burning, void scenes, etc.) added under `assets/images`.  
+- Expanded scene library: new scenes using the added background assets, enabling a broader variety of visuals and narrative paths.  
+
+### Changed
+- Updated asset loading logic to include the new background images and ensure proper path resolution in `SceneManager` / `GameStateManager`.  
+- Adjusted UI layout and scaling to accommodate backgrounds with different aspect ratios/resolutions - dialog boxes, choice buttons, and overlays now dynamically scale/position based on background dimensions.  
+
+### Removed
+- Removed outdated placeholder or test images (if any) in favor of the new finalized background assets.  
+
+### Fixed
+- Corrected mismatches between background asset names/paths and code references - prevents missing-texture or crash-on-load issues when switching scenes.  
+- Fixed save-load interplay to ensure that scene transitions referencing the new assets preserve flag/stat/inventory state correctly across sessions.  
+
+## [V3.5]
+
+### Added
+- Scrollable inventory UI: added scrolling support to inventory view so large inventories can be navigated with mouse wheel or scroll offsets.  
+- `ConfirmationDialog` added to `PlayingStateUI`, enabling confirm-type dialogs overlaid on the UI (e.g. when confirming item use or other choices).  
+
+### Changed
+- Modified `InventoryUI` internals: `updateScroll(...)`, `getMaxScroll(...)`, and grid-cell indexing logic updated to properly calculate item indices and scroll offsets (fixed incorrect indexing previously).  
+- Updated `PlayingStateUI` initialization to include the new `InventoryUI` and `ConfirmationDialog` objects, integrating inventory display and confirmation dialog support into the main UI flow.  
+
+### Fixed
+- Fixed bug where inventory grid-cell indexing was wrong ( item selection / tooltip / click / draw mismatches resolved ).  
+- Fixed scroll-limit and tooltip display logic so inventory UI behaves correctly for variable item counts without out-of-bounds or visual glitches.
+
+## [V3.6]
+
+### Added
+- New Midgard forest and gate background images: `bg_midgard_forest_crossroads`, `bg_midgard_forest_dirt1/2/3`, `bg_midgard_forest_gate`, `bg_midgard_forest_gate_open`, and `bg_midgard_village_square_ashes`.
+- New `bronze_key.png` item sprite and corresponding `bronze_key` item entry in `items.json`.
+- Extended intro script branch:
+  - Bull-fight failure and aftermath scenes (`a1_s12_bull_failure`, `a1_s13_burned_village_wake`).
+  - Forest crossroads hub (`a1_s20_forest_crossroads` / `a1_s29_forest_crossroads`) with four path options.
+  - Three puzzle-path chains (`a1_s22/23`, `a1_s24/25`, `a1_s26–28`) including a choice that rewards the bronze key.
+  - Gate approach, locked gate, and unlock scenes (`a1_s21`, `a1_s21b`, `a1_s30`, `a1_s31`, `a1_s32`) that use the bronze key to open the way forward.
+
+### Changed
+- Updated existing choice text in the burning-village sequence (e.g. "Frolic away from the chaos.") and rerouted some choices to the new forest / failure branches instead of older placeholders (e.g. replacing `BATTLE_BULL` with `a1_s12_bull_failure`).
+- Adjusted a "Keep moving into the forest" branch to lead into the new `a1_s20_forest_crossroads` scene.
+- Refined `items.json` entry: renamed `key_bronze` → `bronze_key`, updated description to "Opens big gates.", and pointed the texture path at `assets/items/bronze_key.png`.
+- Added script `effects` blocks to grant and later consume the bronze key (via `addItem: "bronze_key"` and `addItemQuantity` ±1) during the puzzle/gate sequence.
+
+### Removed
+- Old `ancient_scroll` and `gold_coin` item definitions from `items.json`.
+- Previous health-potion reward `effects` on the bull-intro choice block (replaced by the new forest progression path).
+
+### Fixed
+- Aligned item IDs and textures between `items.json` and script effects so bronze-key acquisition/usage works consistently with the inventory system.
+- Cleaned up punctuation and minor text inconsistencies in intro choices (e.g. ellipsis formatting).

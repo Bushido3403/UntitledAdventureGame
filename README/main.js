@@ -12,6 +12,7 @@ const SCROLL_OFFSET_PX = 120;
 const COPY_RESET_MS = 900;
 
 // ===== DATA: Page content (inline JSON-style object) =====
+
 const PAGE_DATA = {
   "project": {
     "title": "Untitled Adventure Game",
@@ -30,7 +31,8 @@ const PAGE_DATA = {
     "badges": [
       "Custom window system",
       "State-based architecture",
-      "Resource & settings management"
+      "Resource & settings management",
+      "Inventory & save system"
     ],
     "snapshotLabel": "Build snapshot",
     "snapshotBadge": "CMake · Git · SFML",
@@ -47,7 +49,7 @@ const PAGE_DATA = {
       },
       {
         "label": "Build system",
-        "value": "CMake \u2265 3.28",
+        "value": "CMake ≥ 3.28",
         "note": "VS Code friendly"
       },
       {
@@ -89,6 +91,14 @@ const PAGE_DATA = {
         {
           "strong": "Resource Management",
           "text": "Centralized loading and caching of textures, fonts, sounds, and music through SFML"
+        },
+        {
+          "strong": "Inventory System",
+          "text": "Grid-based inventory with tooltips and item management"
+        },
+        {
+          "strong": "Save System",
+          "text": "JSON-based game state persistence with flag tracking"
         }
       ],
       "chips": [
@@ -96,7 +106,9 @@ const PAGE_DATA = {
         "Draggable titlebar",
         "Fullscreen toggle",
         "Volume sliders",
-        "Texture & sound caching"
+        "Texture & sound caching",
+        "Grid inventory",
+        "JSON save system"
       ]
     },
     {
@@ -111,6 +123,12 @@ const PAGE_DATA = {
       ]
     },
     {
+      "id": "gallery",
+      "navLabel": "Gallery",
+      "title": "Gallery",
+      "type": "gallery"
+    },
+    {
       "id": "prereqs",
       "navLabel": "Prerequisites",
       "title": "Prerequisites for development",
@@ -119,7 +137,7 @@ const PAGE_DATA = {
         "C++17 compatible compiler",
         "CMake 3.28 or higher",
         "Git/GitHub",
-        "A burning love for massochism",
+        "A burning love for masochism",
         "Significantly higher qualifications than a CS-135 class"
       ]
     },
@@ -138,7 +156,7 @@ const PAGE_DATA = {
   ],
   "fileMap": {
     "introParagraphs": [
-      "Welcome to a tour of the project\u2019s file system. The whole thing is organized into four main folders, each with its own job:"
+      "Welcome to a tour of the project's file system. The whole thing is organized into four main folders, each with its own job:"
     ],
     "folderOverview": [
       {
@@ -147,7 +165,7 @@ const PAGE_DATA = {
       },
       {
         "name": "src/core",
-        "description": "The \u201cengine room.\u201d These are the core .cpp files that keep the game running: the Game Engine, Scene Manager, Resource Manager, Script Parser, and other foundational systems."
+        "description": "The \"engine room.\" These are the core .cpp files that keep the game running: the Game Engine, Scene Manager, Resource Manager, Script Parser, and other foundational systems."
       },
       {
         "name": "src/ui",
@@ -158,7 +176,7 @@ const PAGE_DATA = {
         "description": "Fonts, images, sound effects, and scene scripts. Each category has its own subfolder so things stay neat instead of turning into a junk drawer."
       }
     ],
-    "afterOverviewText": "That\u2019s a high-level map. Below is the full breakdown of every file.",
+    "afterOverviewText": "That's a high-level map. Below is the full breakdown of every file.",
     "groups": [
       {
         "id": "include",
@@ -170,6 +188,12 @@ const PAGE_DATA = {
             "name": "Button.h",
             "href": "include/Button.h",
             "copyPath": "include/Button.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "ConfirmationDialog.h",
+            "href": "include/ConfirmationDialog.h",
+            "copyPath": "include/ConfirmationDialog.h"
           },
           {
             "pathPrefix": "include/",
@@ -197,6 +221,24 @@ const PAGE_DATA = {
           },
           {
             "pathPrefix": "include/",
+            "name": "GameStateManager.h",
+            "href": "include/GameStateManager.h",
+            "copyPath": "include/GameStateManager.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "InventorySystem.h",
+            "href": "include/InventorySystem.h",
+            "copyPath": "include/InventorySystem.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "InventoryUI.h",
+            "href": "include/InventoryUI.h",
+            "copyPath": "include/InventoryUI.h"
+          },
+          {
+            "pathPrefix": "include/",
             "name": "LayoutManager.h",
             "href": "include/LayoutManager.h",
             "copyPath": "include/LayoutManager.h"
@@ -212,6 +254,12 @@ const PAGE_DATA = {
             "name": "PlayingState.h",
             "href": "include/PlayingState.h",
             "copyPath": "include/PlayingState.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "PlayingStateUI.h",
+            "href": "include/PlayingStateUI.h",
+            "copyPath": "include/PlayingStateUI.h"
           },
           {
             "pathPrefix": "include/",
@@ -277,6 +325,18 @@ const PAGE_DATA = {
           },
           {
             "pathPrefix": "src/core/",
+            "name": "GameStateManager.cpp",
+            "href": "src/core/GameStateManager.cpp",
+            "copyPath": "src/core/GameStateManager.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "InventorySystem.cpp",
+            "href": "src/core/InventorySystem.cpp",
+            "copyPath": "src/core/InventorySystem.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
             "name": "PlayingState.cpp",
             "href": "src/core/PlayingState.cpp",
             "copyPath": "src/core/PlayingState.cpp"
@@ -320,9 +380,21 @@ const PAGE_DATA = {
           },
           {
             "pathPrefix": "src/ui/",
+            "name": "ConfirmationDialog.cpp",
+            "href": "src/ui/ConfirmationDialog.cpp",
+            "copyPath": "src/ui/ConfirmationDialog.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
             "name": "DialogBox.cpp",
             "href": "src/ui/DialogBox.cpp",
             "copyPath": "src/ui/DialogBox.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "InventoryUI.cpp",
+            "href": "src/ui/InventoryUI.cpp",
+            "copyPath": "src/ui/InventoryUI.cpp"
           },
           {
             "pathPrefix": "src/ui/",
@@ -335,6 +407,12 @@ const PAGE_DATA = {
             "name": "MainMenuState.cpp",
             "href": "src/ui/MainMenuState.cpp",
             "copyPath": "src/ui/MainMenuState.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "PlayingStateUI.cpp",
+            "href": "src/ui/PlayingStateUI.cpp",
+            "copyPath": "src/ui/PlayingStateUI.cpp"
           },
           {
             "pathPrefix": "src/ui/",
@@ -364,6 +442,13 @@ const PAGE_DATA = {
             "pathPrefix": "src/assets/",
             "name": "images/",
             "note": "image files including logo.ico"
+          },
+          {
+            "pathPrefix": "src/assets/items/",
+            "name": "items.json",
+            "href": "src/assets/items/items.json",
+            "copyPath": "src/assets/items/items.json",
+            "note": "Item definitions"
           },
           {
             "pathPrefix": "src/assets/scripts/",
@@ -476,23 +561,31 @@ const PAGE_DATA = {
         "items": [
           {
             "name": "GameEngine",
-            "description": "Main game loop and state management"
+            "description": "Main game loop and state management. Owns the custom window and state stack (main menu, settings, gameplay, etc.). Routes SFML events to the active state and handles fullscreen/resize updates. Centralizes resource loading (fonts, textures, sounds, music) and music playback."
           },
           {
             "name": "CustomWindow",
-            "description": "Custom window implementation with titlebar"
+            "description": "Custom window implementation with titlebar. Replaces the OS border with a draggable titlebar and custom close/fullscreen buttons. Manages borderless fullscreen toggling while preserving previous windowed size/position. Hides the system cursor and renders a textured in‑game cursor every frame."
           },
           {
             "name": "ResourceManager",
-            "description": "Asset loading and caching system"
+            "description": "Asset loading and caching system. Loads textures, fonts, sound buffers, and streaming music on demand by string ID. Stores all resources in maps to avoid duplicate loads and share them across states. Provides simple get* accessors, logging errors when assets fail to load."
           },
           {
             "name": "ScriptParser",
-            "description": "JSON script parsing for game scenes"
+            "description": "JSON script parsing for game scenes. Reads narrative scripts (scenes, choices, metadata) from JSON via nlohmann::json. Supports conditional choices, stat/flag effects, and item rewards from script. Exposes helpers to find scenes by ID for the SceneManager."
           },
           {
             "name": "SceneManager",
-            "description": "Scene loading and management"
+            "description": "Scene loading and management. Owns the currently loaded script and active scene pointer. Loads per‑scene background graphics, with fallback attempts for JPEG/PNG. Handles \"END\" sentinel scenes and notifies listeners when a script completes."
+          },
+          {
+            "name": "GameStateManager",
+            "description": "Game state persistence and flag management. Tracks story flags, player stats, current script, and current scene in memory. Applies script‑driven effects (set/clear flags, modify stats, grant items). Saves/loads full game state (including inventory) to/from assets/save_data.json."
+          },
+          {
+            "name": "InventorySystem",
+            "description": "Item management and inventory logic. Loads item definitions from assets/items/items.json and preloads their textures. Handles stackable items, max stack sizes, adds/removes items by index. Serializes and deserializes the player's inventory into the save file."
           }
         ]
       },
@@ -501,15 +594,27 @@ const PAGE_DATA = {
         "items": [
           {
             "name": "Button",
-            "description": "Interactive button widget"
+            "description": "Interactive button widget. Handles hover and click states with visual feedback (color changes). Supports both texture-based and text-only buttons. Plays a shared click sound effect when activated."
           },
           {
             "name": "DialogBox",
-            "description": "Text display with speaker names"
+            "description": "Text display with speaker names. Supports hex color parsing for speaker name styling. Automatically wraps dialog text to fit a configurable width. Provides access to text bounds for layout-aware positioning."
           },
           {
             "name": "LayoutManager",
-            "description": "Responsive layout calculations"
+            "description": "Responsive layout calculations. Computes positions/sizes for dialog, graphics, and stats regions based on window size. Maintains minimum dialog height and 16:9 aspect ratio for graphics area. Provides scaled character sizes for consistent typography across resolutions."
+          },
+          {
+            "name": "ConfirmationDialog",
+            "description": "Modal confirmation dialog widget. Draws a dimmed fullscreen overlay to block background interaction. Wraps long confirmation messages and centers them within the dialog box. Renders inline colored key hints (\"Y\" green, \"N\" red) for clarity."
+          },
+          {
+            "name": "InventoryUI",
+            "description": "Visual inventory grid with tooltips and interaction. Builds a scrollable grid of item slots with hover highlighting. Shows item tooltips with name, description, and smart edge-avoidance. Renders item quantity overlays and scales icons to fit each cell."
+          },
+          {
+            "name": "PlayingStateUI",
+            "description": "Layout and rendering for the playing state screen. Manages dialog area, graphics box, stats area, and inventory panel positioning. Dynamically lays out choice buttons in one or two columns depending on count. Auto-resizes/wraps dialog text to avoid overlapping the choice buttons."
           }
         ]
       },
@@ -518,19 +623,19 @@ const PAGE_DATA = {
         "items": [
           {
             "name": "MainMenuState",
-            "description": "Main menu screen"
+            "description": "Main menu screen. Displays background, logo, and title textures sized to the current window. Hosts \"Start\" and \"Settings\" buttons wired into the GameEngine callbacks. Plays a fade‑to‑black transition when starting a new game."
           },
           {
             "name": "StartState",
-            "description": "Game start placeholder"
+            "description": "Game start placeholder. Shows a simple \"Game Starting...\" message centered in the window. Listens for ESC to return to the main menu via a callback. Re-centers UI text whenever the window is resized."
           },
           {
             "name": "SettingsState",
-            "description": "Volume and settings control"
+            "description": "Volume and settings control. Renders a title, volume label, and a horizontal slider for music volume. Supports clicking and dragging the slider handle to adjust SFML music volume. Updates the numeric volume text and slider handle position in real time."
           },
           {
             "name": "PlayingState",
-            "description": "Active gameplay screen"
+            "description": "Active gameplay screen. Owns SceneManager, GameStateManager, InventorySystem, and PlayingStateUI. Handles scene transitions with fade in/out and script completion callbacks. Builds and updates choice buttons, inventory actions, and confirmation dialogs."
           }
         ]
       },
@@ -539,7 +644,15 @@ const PAGE_DATA = {
         "items": [
           {
             "name": "GameState",
-            "description": "Abstract base class for all game states"
+            "description": "Abstract base class for all game states. Provides a common interface: handleEvent, update, draw, updatePositions. Exposes a getType() enum so GameEngine can route callbacks by state. Enables stacking/changing states through std::unique_ptr<GameState>."
+          },
+          {
+            "name": "GameScript / Scene / Choice / Effects / Condition",
+            "description": "Represent parsed JSON script data: scenes, choices, metadata, and effects. Condition encodes flag requirements for unlocking specific choices. Effects describe mutations to flags, stats, and inventory when a scene resolves."
+          },
+          {
+            "name": "InventoryItem / ItemDefinition",
+            "description": "InventoryItem tracks an item id and current quantity in the player's inventory. ItemDefinition stores per‑item stats: name, description, stackable, max stack size, etc. Loaded once from assets/items/items.json and reused across the game."
           }
         ]
       }
@@ -684,6 +797,9 @@ function buildSections(sections, data) {
       case "fileMap":
         renderDocMapSection(section, container, data.fileMap);
         break;
+      case "gallery":
+        renderGallerySection(section, container);
+        break;
       case "fileDescriptions":
         renderFileDescriptionsSection(
           section,
@@ -757,6 +873,54 @@ function renderBulletSection(section, container) {
     ul.appendChild(li);
   });
   container.appendChild(ul);
+}
+
+function renderGallerySection(section, container) {
+  container.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = section.title || "Gallery";
+  container.appendChild(h2);
+
+  const p = document.createElement("p");
+  p.textContent = "Click any image to view it in full size.";
+  container.appendChild(p);
+
+  const grid = document.createElement("div");
+  grid.className = "gallery-grid";
+
+  const images = [
+    { src: "gallery/1.png", caption: "Main Menu" },
+    { src: "gallery/2.png", caption: "Settings Screen" },
+    { src: "gallery/3.png", caption: "Game Introduction" },
+    { src: "gallery/4.png", caption: "Gameplay Screen" },
+    { src: "gallery/6.png", caption: "Inventory System" },
+    { src: "gallery/7.png", caption: "Item Tooltips" }
+  ];
+
+  images.forEach((img, index) => {
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+    item.dataset.index = index;
+
+    const picture = document.createElement("img");
+    picture.src = img.src;
+    picture.alt = img.caption;
+    picture.loading = "lazy";
+
+    const caption = document.createElement("div");
+    caption.className = "gallery-item-caption";
+    caption.textContent = img.caption;
+
+    item.appendChild(picture);
+    item.appendChild(caption);
+    grid.appendChild(item);
+
+    item.addEventListener("click", () => {
+      openLightbox(index, images);
+    });
+  });
+
+  container.appendChild(grid);
 }
 
 function renderDocMapSection(section, container, fileMap) {
@@ -1097,4 +1261,119 @@ function setupCopyButtons() {
         });
     });
   });
+}
+
+// ===== Lightbox =====
+
+let currentLightboxIndex = 0;
+let lightboxImages = [];
+
+function openLightbox(index, images) {
+  currentLightboxIndex = index;
+  lightboxImages = images;
+
+  let lightbox = document.getElementById("lightbox");
+  if (!lightbox) {
+    lightbox = createLightbox();
+  }
+
+  updateLightboxContent();
+  lightbox.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function createLightbox() {
+  const lightbox = document.createElement("div");
+  lightbox.id = "lightbox";
+  lightbox.className = "lightbox";
+
+  const content = document.createElement("div");
+  content.className = "lightbox-content";
+
+  const imageWrapper = document.createElement("div");
+  imageWrapper.className = "lightbox-image-wrapper";
+
+  const img = document.createElement("img");
+  img.className = "lightbox-image";
+  img.id = "lightboxImage";
+
+  const caption = document.createElement("div");
+  caption.className = "lightbox-caption";
+  caption.id = "lightboxCaption";
+
+  imageWrapper.appendChild(img);
+  content.appendChild(imageWrapper);
+  content.appendChild(caption);
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "lightbox-close";
+  closeBtn.innerHTML = "×";
+  closeBtn.setAttribute("aria-label", "Close lightbox");
+  closeBtn.addEventListener("click", closeLightbox);
+
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "lightbox-nav prev";
+  prevBtn.innerHTML = "‹";
+  prevBtn.setAttribute("aria-label", "Previous image");
+  prevBtn.addEventListener("click", () => navigateLightbox(-1));
+
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "lightbox-nav next";
+  nextBtn.innerHTML = "›";
+  nextBtn.setAttribute("aria-label", "Next image");
+  nextBtn.addEventListener("click", () => navigateLightbox(1));
+
+  lightbox.appendChild(content);
+  lightbox.appendChild(closeBtn);
+  lightbox.appendChild(prevBtn);
+  lightbox.appendChild(nextBtn);
+
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", handleLightboxKeys);
+
+  document.body.appendChild(lightbox);
+  return lightbox;
+}
+
+function updateLightboxContent() {
+  const img = document.getElementById("lightboxImage");
+  const caption = document.getElementById("lightboxCaption");
+
+  if (img && caption && lightboxImages[currentLightboxIndex]) {
+    const current = lightboxImages[currentLightboxIndex];
+    img.src = current.src;
+    img.alt = current.caption;
+    caption.textContent = `${current.caption} (${currentLightboxIndex + 1}/${lightboxImages.length})`;
+  }
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+}
+
+function navigateLightbox(direction) {
+  currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+  updateLightboxContent();
+}
+
+function handleLightboxKeys(e) {
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox || !lightbox.classList.contains("active")) return;
+
+  if (e.key === "Escape") {
+    closeLightbox();
+  } else if (e.key === "ArrowLeft") {
+    navigateLightbox(-1);
+  } else if (e.key === "ArrowRight") {
+    navigateLightbox(1);
+  }
 }

@@ -139,11 +139,11 @@
             "nextScene": "a1_s10_run_away"
           },
           {
-            "text": "Walk down calmly and try to reason with the flaming bull.",
+            "text": "Walk down and try to reason with the flaming bull.",
             "nextScene": "a1_s08_diplomacy"
           },
           {
-            "text": "If everything's already on fire... help the bull finish the job.",
+            "text": "If everything's already on fire, help the bull.",
             "nextScene": "a1_s09_help_bull"
           }
         ]

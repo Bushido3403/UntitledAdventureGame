@@ -87,7 +87,7 @@ set(HEADERS
 )
 
 # ---- Executable ----
-add_executable(game
+add_executable(game WIN32
   ${CORE_SOURCES}
   ${UI_SOURCES}
   ${HEADERS}
