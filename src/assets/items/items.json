@@ -1,17 +1,16 @@
 {
-    "health_potion": {
-      "name": "Health Potion",
-      "description": "Restores 50 HP",
-      "texture": "assets/items/health_potion.png",
-      "stackable": true,
-      "maxStackSize": 1
-    },
-    "bronze_key": {
-      "name": "Bronze Key",
-      "description": "Opens big gates.",
-      "texture": "assets/items/bronze_key.png",
-      "stackable": false,
-      "maxStackSize": 1,
-      "usable": false
-    }
+"bronze_key": {
+  "name": "Bronze Key",
+  "description": "Opens big gates.",
+  "texture": "assets/items/bronze_key.png",
+  "stackable": false,
+  "maxStackSize": 1
+},
+"asgard_sword": {
+  "name": "Asgard Sword",
+  "description": "A sword forged in the heart of Asgard.",
+  "texture": "assets/items/asgard_sword.png",
+  "stackable": false,
+  "maxStackSize": 1
+}
 }

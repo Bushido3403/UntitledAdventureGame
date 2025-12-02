@@ -1,15 +1,15 @@
 {
-    "scriptId": "intro",
-    "title": "Act I — The Awakening",
-    "metadata": {
-      "chapter": 1,
-      "unlocks": []
-    },
-    "scenes": [
+  "scriptId": "intro",
+  "title": "Act I - The Awakening",
+  "metadata": {
+    "chapter": 1,
+    "unlocks": []
+  },
+  "scenes": [
       {
         "id": "a1_s01_mythic_void",
         "background": "bg_void_worldtree",
-        "text": "You dream of a tree older than worlds. Its roots coil through endless dark, drinking from seas of forgotten stars. Its branches pierce nine skies, dripping with light and ash. This is Yggdrasil, the World Tree. Tonight, it is dying. One root is burning, licked by the fires of Muspelheim. Another is splintered and frozen in Jotunheim. In Midgard, the trunk groans like an old god trying not to scream. Cracks spider along the bark, and through them you glimpse realms bleeding into each other, mountains floating where there should be sea, snow falling through a summer sky. You have never seen this tree before. And yet, somehow, it feels like it is seeing you.",
+        "text": "You dream of a tree older than worlds. Its roots curl through endless dark, drinking from forgotten stars. Its branches pierce nine skies, dripping with light and ash. This is Yggdrasil, the World Tree. Tonight, it is dying. One root burns in Muspelheim. Another is splintered and frozen in Jotunheim. In Midgard, the trunk groans like an old god trying not to scream. You have never seen this tree before. And yet, it feels like it is seeing you.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_drone",
@@ -23,7 +23,7 @@
       {
         "id": "a1_s02_prophecy_vision",
         "background": "bg_void_worldtree_glow",
-        "text": "A whisper crawls along the bark, a voice woven from wind and memory. \"When branches bleed and roots run dry,\" it murmurs, \"the Nine Realms will tilt toward ruin. Gods will grasp. Giants will rise. Fire and frost will flood the middle world.\" Images flicker in the tree's leaves:\n- A serpent choking an ocean.\n- A wolf swallowing the sun.\n- A bridge of rainbow light shattering like glass. Then you see something stranger: A single figure, small as a splinter against the vastness of Yggdrasil, standing where no mortal should stand. A mortal with no crown, no legend, no songs, just stubbornness and a shadow that leans toward all nine realms at once. The voice curls closer, wrapping around you like cold breath. \"A mortal of no renown will tip the scales,\" it says. The figure in the leaves turns. For a heartbeat, you realize: It is looking back at you.",
+        "text": "A whisper crawls along the bark, a voice woven from wind and memory. \"When branches bleed and roots run dry, the Nine Realms tilt toward ruin. Gods will grasp. Giants will rise. Fire and frost will flood Midgard.\" Images flicker in the leaves: a serpent choking an ocean, a wolf swallowing the sun, a rainbow bridge shattering. Then you see a lone mortal, small as a splinter, where no mortal should stand. \"A mortal of no renown will tip the scales,\" the voice says. The figure turns and seems to look back at you.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_strings",
@@ -37,7 +37,7 @@
       {
         "id": "a1_s03_call_to_action",
         "background": "bg_void_stars",
-        "text": "The world tree fades into darkness, but the voice remains. \"Listen carefully, mortal. The realms slip. Ragnarok stirs before its time. Something, someone, is pushing the story forward.\" You float weightless, surrounded by overlapping echoes: steel on steel, gods arguing, giants laughing, villagers praying. They swirl around you like storm clouds looking for somewhere to strike. ",
+        "text": "The World Tree fades into darkness, but the voice remains. \"Listen, mortal. The realms slip. Ragnarok stirs before its time. Something is pushing the story forward.\" You float weightless, surrounded by echoes: steel on steel, gods arguing, giants laughing, villagers praying. They swirl around you like a storm looking for somewhere to strike.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_heartbeat",
@@ -51,7 +51,7 @@
       {
         "id": "a1_s04_call_to_action",
         "background": "bg_void_stars",
-        "text": "\"The gods forged a prophecy,\" the voice continues. \"They think it belongs to them. But prophecies wriggle. They find their own paths. And now it has found you.\" A faint circle of light appears at your feet, like the suggestion of a doorway. Below it, you see blurred shapes: rooftops, forests, a flicker of fire. \"Step forward,\" the voice says. \"Take your place in the story. There will be pain. There will be terror. There may be glory. Or...\" The light at your feet dims slightly, as if offering you one last out. \"You can turn away. Pretend you never heard me.\"",
+        "text": "\"The gods forged a prophecy,\" the voice says. \"They think it belongs to them. But prophecies wriggle. They find their own paths. Now it has found you.\" A pale circle of light appears at your feet, hinting at a doorway. Below it, you glimpse rooftops, trees, a flicker of fire. \"Step forward. Take your place in the story. There will be pain, terror, maybe glory. Or...\" The light dims slightly. \"You can turn away. Pretend you never heard me.\"",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_resolution",
@@ -69,7 +69,7 @@
       {
         "id": "a1_s04_accept_fall",
         "background": "bg_void_cracking",
-        "text": "You step into the waiting light. For a moment you feel weightless, like your body is an afterthought. The voice chuckles, distant and amused. \"Brave,\" it says. \"Or reckless. The difference is usually written afterward.\" The circle beneath you cracks like thin ice, and the void rushes up in streaks of red, blue, and green as you fall.",
+        "text": "You step into the waiting light. For a moment you feel weightless, your body an afterthought. The voice chuckles, distant. \"Brave,\" it says. \"Or reckless. The difference is usually written afterward.\" The circle beneath you cracks like thin ice, and the void rushes up in streaks of red, blue, and green as you fall.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_swell",
@@ -83,7 +83,7 @@
       {
         "id": "a1_s05_reject_snark",
         "background": "bg_void_dim",
-        "text": "You cross your arms and refuse. \"No,\" you say. \"I didn't sign any prophecy. Find another mortal.\" Silence stretches. Then the voice sighs. \"Interesting,\" it says. \"A mortal who rejects destiny before seeing it. You will be... difficult.\" A circle of light still forms beneath you, bright and insistent.",
+        "text": "You cross your arms and refuse. \"No,\" you say. \"I didn't sign any prophecy. Find another mortal.\" Silence stretches. Then the voice sighs. \"Interesting. A mortal who rejects destiny before seeing it. You will be... difficult.\" A circle of light still forms beneath you, bright and insistent.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_dissonant",
@@ -97,7 +97,7 @@
       {
         "id": "a1_s05b_reject_fall",
         "background": "bg_void_dim_fall",
-        "text": "\"Unfortunately,\" the voice adds, \"choosing not to choose is still a choice. And the realms are fresh out of time.\" The floor you never agreed to stand on explodes into light, and gravity remembers you exist. You tumble through the dark, dragged toward whatever waits below.",
+        "text": "\"Unfortunately,\" the voice adds, \"choosing not to choose is still a choice. And the realms are out of time.\" The floor you never agreed to stand on explodes into light, and gravity remembers you exist. You tumble through the dark toward whatever waits below.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_mythic_dissonant",
@@ -111,7 +111,7 @@
       {
         "id": "a1_s06_summon_fall",
         "background": "bg_midgard_skytear",
-        "text": "Falling turns to impact. Your back slams into solid ground and sound hits you all at once. Smoke claws at your throat. Cold wind bites your face. Your fingers dig into rough, damp grass as you push yourself upright and gasp for air. You feel ok, just a little bruised.",
+        "text": "Falling turns to impact. Your back slams into solid ground and sound hits you at once. Smoke claws at your throat. Cold wind bites your face. Your fingers dig into damp grass as you push yourself upright and gasp for air. You feel shaken and bruised, but alive.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_village_under_siege",
@@ -125,7 +125,7 @@
       {
         "id": "a1_s06b_summon_view",
         "background": "bg_midgard_skytear_view",
-        "text": "Below you lies a village in Midgard, clustered around a crooked well and a small wooden hall. Overhead, the night sky is torn open by a jagged wound of red light, spilling flame like molten rain. A bull-shaped beast of living lava charges through the streets, tossing carts aside as villagers scream and roofs catch fire. You stand on the hill, watching a creature from Muspelheim rampage through the village below. The voice from the void is gone. This part is up to you.",
+        "text": "Below you lies a village in Midgard, clustered around a crooked well and a small wooden hall. Overhead, the night sky is torn by a jagged wound of red light, spilling fire like molten rain. A bull-shaped beast of living lava charges through the streets, tossing carts aside as villagers scream and roofs burn. You stand on a hill, watching a creature from Muspelheim rampage below. The voice from the void is gone. This part is up to you.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_village_under_siege",
@@ -151,7 +151,7 @@
       {
         "id": "a1_s07_save_villagers",
         "background": "bg_midgard_hill_path",
-        "text": "You sprint down the hillside, grass slapping your boots, smoke stinging your eyes. \"Get away from the square!\" you shout. A child trips; you grab their arm and shove them toward the trees. The Muspel-bull lowers its head toward villagers struggling with a water cart. You grab a fallen spear and plant your feet between them and the charging beast.",
+        "text": "You sprint down the hillside, grass slapping your boots, smoke stinging your eyes. \"Get away from the square!\" you shout. A child trips; you grab their arm and shove them toward the trees. The Muspel-bull lowers its head toward villagers wrestling with a water cart. You grab a fallen spear and plant your feet between them and the charging beast.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_village_under_siege_fast",
@@ -165,7 +165,7 @@
       {
         "id": "a1_s08_diplomacy",
         "background": "bg_midgard_village_edge",
-        "text": "You walk down the hill with your hands raised, coughing through the smoke. \"Easy,\" you call. \"Mighty... bull... thing. Maybe you're lost? Maybe we can talk about this?\" Villagers stare at you like you've lost your mind as the Muspel-bull turns its furnace eyes fully on you and snorts, lava cracking along its shoulders.",
+        "text": "You walk down the hill with your hands raised, coughing through the smoke. \"Easy,\" you call. \"Mighty... bull... thing. Maybe you're lost? Maybe we can talk about this?\" Villagers stare at you like you've lost your mind as the Muspel-bull turns its furnace eyes on you and snorts, lava cracking along its shoulders.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_village_under_siege_quiet",
@@ -249,7 +249,7 @@
       {
         "id": "a1_s12_bull_failure",
         "background": "bg_midgard_village_square_burning",
-        "text": "The Muspel-bull hits you like a collapsing house. Heat and force smash the air from your lungs. For a moment you're nothing but pain and light. You register distant screams, the crack of breaking beams, the roar of fire eating roofs. Then even that fades. You are not a hero. Not tonight.",
+        "text": "The Muspel-bull hits you like a collapsing house. Heat and force smash the air from your lungs. For a moment you're nothing but pain and light. You register distant screams, the crack of beams, the roar of fire eating roofs. Then even that fades. You are not a hero. Not tonight.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_boss_bull_intro",
@@ -303,7 +303,7 @@
       {
         "id": "a1_s21_paved_gate_approach",
         "background": "bg_midgard_forest_gate",
-        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle, no obvious lock—just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
+        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle, no obvious lock-just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -353,7 +353,7 @@
       {
         "id": "a1_s23_dirt_path_1_result",
         "background": "bg_midgard_forest_dirt1",
-        "text": "The stone hums under your touch, lines of light crawling along the surviving runes. For a heartbeat you expect an answer, a voice, a gift—anything. Then the shimmer collapses with a soft crackle. The runes go dark. Whatever power lived here is spent. All that's left is damp moss and old carvings that don't care about you.",
+        "text": "The stone hums under your touch, lines of light crawling along the surviving runes. For a heartbeat you expect an answer, a voice, a gift-anything. Then the shimmer collapses with a soft crackle. The runes go dark. Whatever power lived here is spent. All that's left is damp moss and old carvings that don't care about you.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -389,7 +389,7 @@
       {
         "id": "a1_s25_dirt_path_2_result",
         "background": "bg_midgard_forest_dirt2",
-        "text": "The clacking charms slow, then stop. For a moment you think you catch words in a language you almost recognize—names, maybe, or warnings. Then a branch snaps, the sound sharp and final, and everything goes still. No visions. No gate opening. Just you, a dead tree, and the growing sense that this path has given you all it's going to.",
+        "text": "The clacking charms slow, then stop. For a moment you think you catch words in a language you almost recognize-names, maybe, or warnings. Then a branch snaps, the sound sharp and final, and everything goes still.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_whispers",
@@ -471,7 +471,7 @@
       {
         "id": "a1_s30_paved_gate_approach",
         "background": "bg_midgard_forest_gate",
-        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle—just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
+        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle-just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -494,11 +494,177 @@
             "text": "Step through the gate...",
             "nextScene": "a1_s32_forest_path_beyond"
           }
-        ],
+        ]
+      },
+      {
+        "id": "a1_s32_forest_path_beyond",
+        "background": "bg_asgard_empty_approach",
+        "text": "You step through the gate and the forest vanishes. Golden stone spreads in all directions, lined with silent halls and high arches. This must be Asgard, but it feels abandoned. No gods, no guards, just wind and the echo of your footsteps.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_asgard_empty",
+        "choices": [
+          {
+            "text": "Call out",
+            "nextScene": "a1_s33_asgard_raven"
+          }
+        ]
+      },
+      {
+        "id": "a1_s33_asgard_raven",
+        "background": "bg_asgard_empty_plaza_raven",
+        "text": "Your shout bounces off the empty halls. For a moment, Asgard stays silent. Then a harsh caw cuts the air. A black raven perches on a cracked pillar, head tilted like it's judging you. \"THE END IS NIGH!\" it squawks, then bursts into a cloud of dust.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_asgard_ominous",
+        "choices": [
+          {
+            "text": "Approach the pillar",
+            "nextScene": "a1_s34_asgard_sword"
+          }
+        ]
+      },
+      {
+        "id": "a1_s34_asgard_sword",
+        "background": "bg_asgard_empty_plaza_sword",
+        "text": "Where the raven stood, a sword rests on the pillar. Its blade glows with pale, shifting light. When you grip the hilt, runes crawl along the metal and tighten like a promise. The sword feels right in your hand, like it has been waiting.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_asgard_relic",
         "effects": {
-          "addItem": "bronze_key",
-          "addItemQuantity": -1
-        }
+          "addItem": "asgard_sword",
+          "addItemQuantity": 1
+        },
+        "choices": [
+          {
+            "text": "Head deeper",
+            "nextScene": "a1_s35_asgard_jotun_intro"
+          }
+        ]
+      },
+      {
+        "id": "a1_s35_asgard_jotun_intro",
+        "background": "bg_asgard_jotun_approach",
+        "text": "You follow a frost-rimmed street toward a shattered hall. Three ice giants stand at the broken gate, taller than the walls, skin like carved glacier. One drags a torn banner through the snow. Asgard is empty because they are here. The sword hums, eager for trouble.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_asgard_battle_build",
+        "choices": [
+          {
+            "text": "Raise the sword",
+            "nextScene": "a1_s36_asgard_jotun_choices"
+          }
+        ]
+      },
+      {
+        "id": "a1_s36_asgard_jotun_choices",
+        "background": "bg_asgard_jotun_battle",
+        "text": "Frost swirls around your boots. The nearest jotun laughs, a low grinding sound. \"A mortal,\" it rumbles. \"With a toy.\" Power thrums along the sword. It doesn't care that you're outmatched; it just wants a decision. How are you going to start this fight?",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_asgard_battle_main",
+        "choices": [
+          {
+            "text": "Shockwave through the ground",
+            "nextScene": "a1_s38_asgard_jotun_shockwave"
+          },
+          {
+            "text": "Use the swords magic to draw runes.",
+            "nextScene": "a1_s39_asgard_jotun_runes"
+          },
+          {
+            "text": "Headbutt a giant's knee",
+            "nextScene": "a1_s37_asgard_jotun_failure"
+          },
+          {
+            "text": "Call prophecy, fire the beam",
+            "nextScene": "a1_s40_asgard_jotun_beam"
+          }
+        ]
+      },
+      {
+        "id": "a1_s37_asgard_jotun_failure",
+        "background": "bg_asgard_jotun_stomp",
+        "text": "You charge the nearest giant and leap, aiming a heroic headbutt at its knee while waving the sword. Your skull hits ice. The jotun looks down, unimpressed, then lifts its foot. There is a brief, crunching sound before you lose conciousness. The realms slide into ruin without you.",
+        "speaker": "Narrator",
+        "speakerColor": "#FF8080",
+        "music": "mus_world_ended",
+        "choices": [
+          {
+            "text": "Good luck next time.",
+            "nextScene": "a1_s43_end_scene"
+          }
+        ]
+      },
+      {
+        "id": "a1_s38_asgard_jotun_shockwave",
+        "background": "bg_asgard_jotun_shattered",
+        "text": "You slam the blade into the stone. Light tears through the ground in a widening ring. Frost shatters under the shockwave, racing toward the giants. Their legs crack, splinter, and explode into drifting ice. The jotnar topple and burst apart, reduced to glittering shards that melt in the air.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0FFE0",
+        "music": "mus_asgard_battle_climax",
+        "choices": [
+          {
+            "text": "Look around",
+            "nextScene": "a1_s41_asgard_celebration"
+          }
+        ]
+      },
+      {
+        "id": "a1_s39_asgard_jotun_runes",
+        "background": "bg_asgard_jotun_runes",
+        "text": "You carve quick arcs in the air. Runes blaze to life around the giants, forming a spinning cage of light. Frost steams where the sigils touch their skin. The cage snaps shut with a ringing crack, crushing the jotnar inward until they burst into snow and dust the wind steals away.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0FFE0",
+        "music": "mus_asgard_battle_climax",
+        "choices": [
+          {
+            "text": "Catch your breath",
+            "nextScene": "a1_s41_asgard_celebration"
+          }
+        ]
+      },
+      {
+        "id": "a1_s40_asgard_jotun_beam",
+        "background": "bg_asgard_jotun_beam",
+        "text": "You raise the sword and shout the first words of the prophecy you remember. The blade answers with a column of searing light that punches through frost and shadow. The giants freeze mid-step, outlined in white. Cracks race through them. A heartbeat later, they shatter like brittle glass.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0FFE0",
+        "music": "mus_asgard_battle_climax",
+        "choices": [
+          {
+            "text": "Stand in the silence",
+            "nextScene": "a1_s41_asgard_celebration"
+          }
+        ]
+      },
+      {
+        "id": "a1_s41_asgard_celebration",
+        "background": "bg_asgard_celebration",
+        "text": "Silence hangs over the ruined gate. Then, as if someone flipped reality back on, Asgard breathes. Color floods the halls. Doors slam open. Gods and warriors flicker into the plaza, shouting in shock and relief. Someone cheers you. Someone else shoves a heavy drink into your hand.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0FFE0",
+        "music": "mus_asgard_celebration",
+        "choices": [
+          {
+            "text": "Celebrate your victory!",
+            "nextScene": "a1_s43_end_scene"
+          }
+        ]
+      },
+      {
+        "id": "a1_s43_end_scene",
+        "background": "bg_black",
+        "text": "Thank you for playing!",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_silence",
+        "choices": [
+          {
+            "text": "The End",
+            "nextScene": "END"
+          }
+        ]
       }
     ]
   }

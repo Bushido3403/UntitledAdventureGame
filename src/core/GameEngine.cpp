@@ -141,8 +141,10 @@ void GameEngine::setupStateCallbacks(GameState* state) {
         case GameStateType::Playing: {
             auto* playingState = static_cast<PlayingState*>(state);
             
-            playingState->setOnScriptComplete([this]() {
-                popState();
+            playingState->setOnScriptComplete([this, playingState]() {
+                // Clear save data when the script ends
+                playingState->getGameStateManager().clearSave();
+                popState(); // returns to main menu
             });
             break;
         }

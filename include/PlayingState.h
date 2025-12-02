@@ -21,6 +21,7 @@ public:
     GameStateType getType() const override { return GameStateType::Playing; }
     
     void setOnScriptComplete(std::function<void()> callback);
+    GameStateManager& getGameStateManager() { return *gameState; }
     
 private:
     void loadScene(const std::string& sceneId);

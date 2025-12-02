@@ -26,6 +26,8 @@ public:
     std::string getCurrentScene() const { return currentScene; }
     bool hasSaveData() const { return !currentScript.empty(); }
     
+    void clearSave();
+
 private:
     std::unordered_map<std::string, bool> flags;
     std::unordered_map<std::string, int> stats;

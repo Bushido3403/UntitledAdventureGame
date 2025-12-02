@@ -126,3 +126,21 @@ void GameStateManager::loadGame(InventorySystem* inventory) {
         std::cout << "Starting fresh due to corrupted save" << std::endl;
     }
 }
+
+void GameStateManager::clearSave() {
+    // Reset in-memory state
+    flags.clear();
+    stats.clear();
+    currentScript.clear();
+    currentScene.clear();
+
+    // Overwrite / delete save file
+    std::ofstream file("assets/save_data.json", std::ios::trunc);
+    if (file.is_open()) {
+        file << "{}";  // or just leave empty, your loadGame already handles empty file
+        file.close();
+        std::cout << "Save data cleared" << std::endl;
+    } else {
+        std::cerr << "Failed to clear save data file" << std::endl;
+    }
+}

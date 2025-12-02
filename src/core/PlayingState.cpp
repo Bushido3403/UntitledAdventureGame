@@ -268,7 +268,7 @@ void PlayingState::handleConfirmation(bool confirmed) {
                           inventorySystem.get());
     }
     else if (confirmationType == ConfirmationType::UseItem) {
-        inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
+        // inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
         gameState->saveGame(sceneManager->getScript().scriptId, 
                           sceneManager->getCurrentScene()->id,
                           inventorySystem.get());
