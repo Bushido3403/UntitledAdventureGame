@@ -7,7 +7,7 @@ Storyline heavily based on Norse mythology.
 
 Untitled Adventure Game is my C++ game featuring a custom window system with a draggable titlebar, fullscreen support, and an intuitive menu system. It's been built for my CS 135 class under Prof. Damien Ennis using a cumulation of documents from the web from sources such as StackOverflow, the SFML documentation, and various C++ programming tutorials. (I have done my best to link these docs where applicable in my source code.)
 
-👉 **Full Documentation (Live Site):** [untitledgame.nodifyr.io](https://untitledgame.nodifyr.io)
+👉 **Full Documentation (Live Site):** <a href="https://untitledgame.nodifyr.io" target="_blank">untitledgame.nodifyr.io</a>
 
 ## Features I'm Proud Of
 
