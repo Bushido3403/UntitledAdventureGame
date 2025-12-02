@@ -7,7 +7,7 @@ This guide walks through the exact steps required to get the project compiling f
 # 1. Install Prerequisites
 
 ## ✔️ Install Git (and add to PATH)
-Download: https://git-scm.com  
+Download: [https://git-scm.com ](https://git-scm.com/install/windows) 
 During installation: **Enable “Add Git to PATH.”**
 
 Verify in a fresh terminal:

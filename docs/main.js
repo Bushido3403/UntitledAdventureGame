@@ -1,195 +1,688 @@
-// ===== CONFIG: Data Sources & UX behavior =====
+// ===== CONFIG: Data & UX behavior =====
+// All content lives in PAGE_DATA below. To reuse this template,
+// replace the PAGE_DATA object with your own data (same shape).
 
-const README_URL = 'README.md';
-const CHANGELOG_URL = 'CHANGELOG.md';
-
+// How far down the page (in px) before the back-to-top button appears
 const BACK_TO_TOP_THRESHOLD = 260;
+
+// Scroll offset used when detecting the "active" section for the side nav
 const SCROLL_OFFSET_PX = 120;
+
+// How long (ms) the "Copied!" label stays before reverting
 const COPY_RESET_MS = 900;
+
+// ===== DATA: Page content (inline JSON-style object) =====
+
+const PAGE_DATA = {
+  "project": {
+    "title": "Untitled Adventure Game",
+    "subtitle": "2D text-oriented | C++ · SFML 3.x",
+    "pill": "Norse-inspired story",
+    "topChip": "Single-page project overview"
+  },
+  "hero": {
+    "heading": "Untitled Adventure Game",
+    "tagline": "A 2D text-oriented adventure game built with C++ and SFML 3.x. Storyline heavily based on Norse mythology.",
+    "metaTags": [
+      "Language: C++17",
+      "Framework: SFML 3.x",
+      "Class: CS 135 – Prof. Damien Ennis"
+    ],
+    "badges": [
+      "Custom window system",
+      "State-based architecture",
+      "Resource & settings management",
+      "Inventory & save system"
+    ],
+    "snapshotLabel": "Build snapshot",
+    "snapshotBadge": "CMake · Git · SFML",
+    "grid": [
+      {
+        "label": "Core tech",
+        "value": "C++17 · SFML 3.x",
+        "note": "Windowing, input, audio, and rendering"
+      },
+      {
+        "label": "Architecture",
+        "value": "State-driven",
+        "note": "Multiple screens & game states"
+      },
+      {
+        "label": "Build system",
+        "value": "CMake ≥ 3.28",
+        "note": "VS Code friendly"
+      },
+      {
+        "label": "Project flavor",
+        "value": "Norse mythology",
+        "note": "Text-oriented adventure vibe"
+      }
+    ]
+  },
+  "navigationTitle": "On this page",
+  "sections": [
+    {
+      "id": "about",
+      "navLabel": "About",
+      "title": "About",
+      "type": "paragraphs",
+      "body": [
+        "Untitled Adventure Game is my C++ game featuring a custom window system with a draggable titlebar, fullscreen support, and an intuitive menu system. It's been built for my CS 135 class under Prof. Damien Ennis using a cumulation of documents from the web from sources such as StackOverflow, the SFML documentation, and various C++ programming tutorials."
+      ]
+    },
+    {
+      "id": "helpful-links",
+      "navLabel": "Helpful Links",
+      "title": "Helpful Links",
+      "type": "helpfulLinks"
+    },
+    {
+      "id": "features",
+      "navLabel": "Features I'm Proud Of",
+      "title": "Features I'm Proud Of",
+      "type": "features",
+      "items": [
+        {
+          "strong": "Custom Window System",
+          "text": "Borderless window with custom titlebar, drag support, and fullscreen toggle"
+        },
+        {
+          "strong": "State Management",
+          "text": "Clean state-based architecture supporting multiple game screens"
+        },
+        {
+          "strong": "Settings System",
+          "text": "Adjustable music volume with a visual slider interface"
+        },
+        {
+          "strong": "Resource Management",
+          "text": "Centralized loading and caching of textures, fonts, sounds, and music through SFML"
+        },
+        {
+          "strong": "Inventory System",
+          "text": "Grid-based inventory with tooltips and item management"
+        },
+        {
+          "strong": "Save System",
+          "text": "JSON-based game state persistence with flag tracking"
+        }
+      ],
+      "chips": [
+        "Borderless window",
+        "Draggable titlebar",
+        "Fullscreen toggle",
+        "Volume sliders",
+        "Texture & sound caching",
+        "Grid inventory",
+        "JSON save system"
+      ]
+    },
+    {
+      "id": "building",
+      "navLabel": "Building",
+      "title": "Building",
+      "type": "building"
+    },
+    {
+      "id": "gallery",
+      "navLabel": "Gallery",
+      "title": "Gallery",
+      "type": "gallery"
+    },
+    {
+      "id": "prereqs",
+      "navLabel": "Prerequisites",
+      "title": "Prerequisites for development",
+      "type": "bullets",
+      "items": [
+        "C++17 compatible compiler",
+        "CMake 3.28 or higher",
+        "Git/GitHub",
+        "A burning love for masochism",
+        "Significantly higher qualifications than a CS-135 class"
+      ]
+    },
+    {
+      "id": "docmap",
+      "navLabel": "Document Map",
+      "title": "Document Map",
+      "type": "fileMap"
+    },
+    {
+      "id": "file-descriptions",
+      "navLabel": "File Descriptions",
+      "title": "File Descriptions",
+      "type": "fileDescriptions"
+    },
+    {
+      "id": "fun-fact",
+      "navLabel": "Fun Fact",
+      "title": "🎮 Fun Fact",
+      "type": "funFact",
+      "body": [
+        "It IS in fact possible to lose the game. There are 3 different endings in total.",
+        "Hint: right click to drop items!"
+      ]
+    }
+  ],
+  "fileMap": {
+    "introParagraphs": [
+      "Welcome to a tour of the project's file system. The whole thing is organized into four main folders, each with its own job:"
+    ],
+    "folderOverview": [
+      {
+        "name": "include",
+        "description": "All the header files. Every .h that defines the structure for its matching .cpp."
+      },
+      {
+        "name": "src/core",
+        "description": "The \"engine room.\" These are the core .cpp files that keep the game running: the Game Engine, Scene Manager, Resource Manager, Script Parser, and other foundational systems."
+      },
+      {
+        "name": "src/ui",
+        "description": "Everything related to the user interface lives here: buttons, dialog boxes, layout logic, menus, settings screens, all the stuff the player actually clicks on."
+      },
+      {
+        "name": "src/assets",
+        "description": "Fonts, images, sound effects, and scene scripts. Each category has its own subfolder so things stay neat instead of turning into a junk drawer."
+      }
+    ],
+    "afterOverviewText": "That's a high-level map. Below is the full breakdown of every file.",
+    "groups": [
+      {
+        "id": "include",
+        "title": "include/",
+        "tag": "Header interfaces",
+        "items": [
+          {
+            "pathPrefix": "include/",
+            "name": "Button.h",
+            "href": "include/Button.h",
+            "copyPath": "include/Button.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "ConfirmationDialog.h",
+            "href": "include/ConfirmationDialog.h",
+            "copyPath": "include/ConfirmationDialog.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "CustomWindow.h",
+            "href": "include/CustomWindow.h",
+            "copyPath": "include/CustomWindow.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "DialogBox.h",
+            "href": "include/DialogBox.h",
+            "copyPath": "include/DialogBox.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "GameEngine.h",
+            "href": "include/GameEngine.h",
+            "copyPath": "include/GameEngine.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "GameState.h",
+            "href": "include/GameState.h",
+            "copyPath": "include/GameState.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "GameStateManager.h",
+            "href": "include/GameStateManager.h",
+            "copyPath": "include/GameStateManager.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "InventorySystem.h",
+            "href": "include/InventorySystem.h",
+            "copyPath": "include/InventorySystem.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "InventoryUI.h",
+            "href": "include/InventoryUI.h",
+            "copyPath": "include/InventoryUI.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "LayoutManager.h",
+            "href": "include/LayoutManager.h",
+            "copyPath": "include/LayoutManager.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "MainMenuState.h",
+            "href": "include/MainMenuState.h",
+            "copyPath": "include/MainMenuState.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "PlayingState.h",
+            "href": "include/PlayingState.h",
+            "copyPath": "include/PlayingState.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "PlayingStateUI.h",
+            "href": "include/PlayingStateUI.h",
+            "copyPath": "include/PlayingStateUI.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "ResourceManager.h",
+            "href": "include/ResourceManager.h",
+            "copyPath": "include/ResourceManager.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "SceneManager.h",
+            "href": "include/SceneManager.h",
+            "copyPath": "include/SceneManager.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "ScriptParser.h",
+            "href": "include/ScriptParser.h",
+            "copyPath": "include/ScriptParser.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "SettingsState.h",
+            "href": "include/SettingsState.h",
+            "copyPath": "include/SettingsState.h"
+          },
+          {
+            "pathPrefix": "include/",
+            "name": "StartState.h",
+            "href": "include/StartState.h",
+            "copyPath": "include/StartState.h"
+          }
+        ]
+      },
+      {
+        "id": "src-root",
+        "title": "src/",
+        "tag": "Entry point",
+        "items": [
+          {
+            "pathPrefix": "src/",
+            "name": "main.cpp",
+            "href": "src/main.cpp",
+            "copyPath": "src/main.cpp"
+          }
+        ]
+      },
+      {
+        "id": "src-core",
+        "title": "src/core/",
+        "tag": "Engine & systems",
+        "items": [
+          {
+            "pathPrefix": "src/core/",
+            "name": "CustomWindow.cpp",
+            "href": "src/core/CustomWindow.cpp",
+            "copyPath": "src/core/CustomWindow.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "GameEngine.cpp",
+            "href": "src/core/GameEngine.cpp",
+            "copyPath": "src/core/GameEngine.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "GameStateManager.cpp",
+            "href": "src/core/GameStateManager.cpp",
+            "copyPath": "src/core/GameStateManager.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "InventorySystem.cpp",
+            "href": "src/core/InventorySystem.cpp",
+            "copyPath": "src/core/InventorySystem.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "PlayingState.cpp",
+            "href": "src/core/PlayingState.cpp",
+            "copyPath": "src/core/PlayingState.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "ResourceManager.cpp",
+            "href": "src/core/ResourceManager.cpp",
+            "copyPath": "src/core/ResourceManager.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "SceneManager.cpp",
+            "href": "src/core/SceneManager.cpp",
+            "copyPath": "src/core/SceneManager.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "ScriptParser.cpp",
+            "href": "src/core/ScriptParser.cpp",
+            "copyPath": "src/core/ScriptParser.cpp"
+          },
+          {
+            "pathPrefix": "src/core/",
+            "name": "save_data.json",
+            "href": "src/core/save_data.json",
+            "copyPath": "src/core/save_data.json"
+          }
+        ]
+      },
+      {
+        "id": "src-ui",
+        "title": "src/ui/",
+        "tag": "User interface",
+        "items": [
+          {
+            "pathPrefix": "src/ui/",
+            "name": "Button.cpp",
+            "href": "src/ui/Button.cpp",
+            "copyPath": "src/ui/Button.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "ConfirmationDialog.cpp",
+            "href": "src/ui/ConfirmationDialog.cpp",
+            "copyPath": "src/ui/ConfirmationDialog.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "DialogBox.cpp",
+            "href": "src/ui/DialogBox.cpp",
+            "copyPath": "src/ui/DialogBox.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "InventoryUI.cpp",
+            "href": "src/ui/InventoryUI.cpp",
+            "copyPath": "src/ui/InventoryUI.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "LayoutManager.cpp",
+            "href": "src/ui/LayoutManager.cpp",
+            "copyPath": "src/ui/LayoutManager.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "MainMenuState.cpp",
+            "href": "src/ui/MainMenuState.cpp",
+            "copyPath": "src/ui/MainMenuState.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "PlayingStateUI.cpp",
+            "href": "src/ui/PlayingStateUI.cpp",
+            "copyPath": "src/ui/PlayingStateUI.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "SettingsState.cpp",
+            "href": "src/ui/SettingsState.cpp",
+            "copyPath": "src/ui/SettingsState.cpp"
+          },
+          {
+            "pathPrefix": "src/ui/",
+            "name": "StartState.cpp",
+            "href": "src/ui/StartState.cpp",
+            "copyPath": "src/ui/StartState.cpp"
+          }
+        ]
+      },
+      {
+        "id": "src-assets",
+        "title": "src/assets/",
+        "tag": "Game content",
+        "items": [
+          {
+            "pathPrefix": "src/assets/",
+            "name": "fonts/",
+            "note": "font files"
+          },
+          {
+            "pathPrefix": "src/assets/",
+            "name": "images/",
+            "note": "image files including logo.ico"
+          },
+          {
+            "pathPrefix": "src/assets/items/",
+            "name": "items.json",
+            "href": "src/assets/items/items.json",
+            "copyPath": "src/assets/items/items.json",
+            "note": "Item definitions"
+          },
+          {
+            "pathPrefix": "src/assets/scripts/",
+            "name": "intro.json",
+            "href": "src/assets/scripts/intro.json",
+            "copyPath": "src/assets/scripts/intro.json"
+          },
+          {
+            "pathPrefix": "src/assets/",
+            "name": "sfx/",
+            "note": "sound effect files"
+          }
+        ]
+      },
+      {
+        "id": "root",
+        "title": "Root directory",
+        "tag": "Project configuration",
+        "items": [
+          {
+            "pathPrefix": "./",
+            "name": "CMakeLists.txt",
+            "href": "CMakeLists.txt",
+            "copyPath": "CMakeLists.txt",
+            "note": "Build configuration"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "README.md",
+            "href": "README.md",
+            "copyPath": "README.md",
+            "note": "Project documentation"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "install.md",
+            "href": "install.md",
+            "copyPath": "install.md",
+            "note": "For building from source"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "LICENSE.md",
+            "href": "LICENSE.md",
+            "copyPath": "LICENSE.md",
+            "note": "License information"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "DOCMAP.md",
+            "href": "DOCMAP.md",
+            "copyPath": "DOCMAP.md",
+            "note": "You are here!"
+          },
+          {
+            "pathPrefix": "./",
+            "name": ".gitignore",
+            "href": ".gitignore",
+            "copyPath": ".gitignore",
+            "note": "Git ignore rules"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "app.rc",
+            "href": "app.rc",
+            "copyPath": "app.rc",
+            "note": "Windows resource file (icon and version info)"
+          },
+          {
+            "pathPrefix": "./",
+            "name": "Untitled Adventure Game.lnk",
+            "href": "Untitled Adventure Game.lnk",
+            "copyPath": "Untitled Adventure Game.lnk",
+            "note": "Shortcut file to .exe once built"
+          }
+        ]
+      },
+      {
+        "id": "build-dir",
+        "title": "Build directory",
+        "tag": "Generated output",
+        "items": [
+          {
+            "pathPrefix": "./",
+            "name": "build/",
+            "note": "CMake build output (excluded from git)"
+          }
+        ]
+      },
+      {
+        "id": "config",
+        "title": "Configuration",
+        "tag": "Editor & CI",
+        "items": [
+          {
+            "pathPrefix": "./",
+            "name": ".vscode/settings.json",
+            "href": ".vscode/settings.json",
+            "copyPath": ".vscode/settings.json",
+            "note": "VS Code settings"
+          },
+          {
+            "pathPrefix": "./",
+            "name": ".github/workflows/",
+            "href": ".github/workflows/",
+            "copyPath": ".github/workflows/",
+            "note": "GitHub Actions workflows"
+          }
+        ]
+      }
+    ]
+  },
+  "fileDescriptions": {
+    "categories": [
+      {
+        "title": "Core System Files",
+        "items": [
+          {
+            "name": "GameEngine",
+            "description": "Main game loop and state management. Owns the custom window and state stack (main menu, settings, gameplay, etc.). Routes SFML events to the active state and handles fullscreen/resize updates. Centralizes resource loading (fonts, textures, sounds, music) and music playback."
+          },
+          {
+            "name": "CustomWindow",
+            "description": "Custom window implementation with titlebar. Replaces the OS border with a draggable titlebar and custom close/fullscreen buttons. Manages borderless fullscreen toggling while preserving previous windowed size/position. Hides the system cursor and renders a textured in‑game cursor every frame."
+          },
+          {
+            "name": "ResourceManager",
+            "description": "Asset loading and caching system. Loads textures, fonts, sound buffers, and streaming music on demand by string ID. Stores all resources in maps to avoid duplicate loads and share them across states. Provides simple get* accessors, logging errors when assets fail to load."
+          },
+          {
+            "name": "ScriptParser",
+            "description": "JSON script parsing for game scenes. Reads narrative scripts (scenes, choices, metadata) from JSON via nlohmann::json. Supports conditional choices, stat/flag effects, and item rewards from script. Exposes helpers to find scenes by ID for the SceneManager."
+          },
+          {
+            "name": "SceneManager",
+            "description": "Scene loading and management. Owns the currently loaded script and active scene pointer. Loads per‑scene background graphics, with fallback attempts for JPEG/PNG. Handles \"END\" sentinel scenes and notifies listeners when a script completes."
+          },
+          {
+            "name": "GameStateManager",
+            "description": "Game state persistence and flag management. Tracks story flags, player stats, current script, and current scene in memory. Applies script‑driven effects (set/clear flags, modify stats, grant items). Saves/loads full game state (including inventory) to/from assets/save_data.json."
+          },
+          {
+            "name": "InventorySystem",
+            "description": "Item management and inventory logic. Loads item definitions from assets/items/items.json and preloads their textures. Handles stackable items, max stack sizes, adds/removes items by index. Serializes and deserializes the player's inventory into the save file."
+          }
+        ]
+      },
+      {
+        "title": "UI Components",
+        "items": [
+          {
+            "name": "Button",
+            "description": "Interactive button widget. Handles hover and click states with visual feedback (color changes). Supports both texture-based and text-only buttons. Plays a shared click sound effect when activated."
+          },
+          {
+            "name": "DialogBox",
+            "description": "Text display with speaker names. Supports hex color parsing for speaker name styling. Automatically wraps dialog text to fit a configurable width. Provides access to text bounds for layout-aware positioning."
+          },
+          {
+            "name": "LayoutManager",
+            "description": "Responsive layout calculations. Computes positions/sizes for dialog, graphics, and stats regions based on window size. Maintains minimum dialog height and 16:9 aspect ratio for graphics area. Provides scaled character sizes for consistent typography across resolutions."
+          },
+          {
+            "name": "ConfirmationDialog",
+            "description": "Modal confirmation dialog widget. Draws a dimmed fullscreen overlay to block background interaction. Wraps long confirmation messages and centers them within the dialog box. Renders inline colored key hints (\"Y\" green, \"N\" red) for clarity."
+          },
+          {
+            "name": "InventoryUI",
+            "description": "Visual inventory grid with tooltips and interaction. Builds a scrollable grid of item slots with hover highlighting. Shows item tooltips with name, description, and smart edge-avoidance. Renders item quantity overlays and scales icons to fit each cell."
+          },
+          {
+            "name": "PlayingStateUI",
+            "description": "Layout and rendering for the playing state screen. Manages dialog area, graphics box, stats area, and inventory panel positioning. Dynamically lays out choice buttons in one or two columns depending on count. Auto-resizes/wraps dialog text to avoid overlapping the choice buttons."
+          }
+        ]
+      },
+      {
+        "title": "Game States",
+        "items": [
+          {
+            "name": "MainMenuState",
+            "description": "Main menu screen. Displays background, logo, and title textures sized to the current window. Hosts \"Start\" and \"Settings\" buttons wired into the GameEngine callbacks. Plays a fade‑to‑black transition when starting a new game."
+          },
+          {
+            "name": "StartState",
+            "description": "Game start placeholder. Shows a simple \"Game Starting...\" message centered in the window. Listens for ESC to return to the main menu via a callback. Re-centers UI text whenever the window is resized."
+          },
+          {
+            "name": "SettingsState",
+            "description": "Volume and settings control. Renders a title, volume label, and a horizontal slider for music volume. Supports clicking and dragging the slider handle to adjust SFML music volume. Updates the numeric volume text and slider handle position in real time."
+          },
+          {
+            "name": "PlayingState",
+            "description": "Active gameplay screen. Owns SceneManager, GameStateManager, InventorySystem, and PlayingStateUI. Handles scene transitions with fade in/out and script completion callbacks. Builds and updates choice buttons, inventory actions, and confirmation dialogs."
+          }
+        ]
+      },
+      {
+        "title": "Data Structures",
+        "items": [
+          {
+            "name": "GameState",
+            "description": "Abstract base class for all game states. Provides a common interface: handleEvent, update, draw, updatePositions. Exposes a getType() enum so GameEngine can route callbacks by state. Enables stacking/changing states through std::unique_ptr<GameState>."
+          },
+          {
+            "name": "GameScript / Scene / Choice / Effects / Condition",
+            "description": "Represent parsed JSON script data: scenes, choices, metadata, and effects. Condition encodes flag requirements for unlocking specific choices. Effects describe mutations to flags, stats, and inventory when a scene resolves."
+          },
+          {
+            "name": "InventoryItem / ItemDefinition",
+            "description": "InventoryItem tracks an item id and current quantity in the player's inventory. ItemDefinition stores per‑item stats: name, description, stackable, max stack size, etc. Loaded once from assets/items/items.json and reused across the game."
+          }
+        ]
+      }
+    ]
+  }
+};
 
 // ===== Entry point =====
 
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    const readmeText = await fetch(README_URL).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.text();
-    });
-    const data = parseReadmeToPageData(readmeText);
-    initPage(data);
-  } catch (err) {
-    console.error('Failed to load README.md:', err);
-    document.getElementById('hero').innerHTML = `
-      <div style="color: var(--color-text); padding: 2rem;">
-        <h1>Error Loading Content</h1>
-        <p>Could not load README.md. Please ensure the file exists in the root directory.</p>
-        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Error: ${err.message}</p>
-      </div>
-    `;
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  initPage(PAGE_DATA);
 });
-
-// ===== Parse README.md into PAGE_DATA structure =====
-
-function parseReadmeToPageData(markdown) {
-  const lines = markdown.split('\n');
-  const data = {
-    project: {},
-    hero: {},
-    navigationTitle: "On this page",
-    sections: [],
-    fileMap: { groups: [] },
-    fileDescriptions: { categories: [] }
-  };
-
-  let currentSection = null;
-  let currentList = [];
-  let inCodeBlock = false;
-  let projectTitleFound = false;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    
-    // Handle code blocks
-    if (line.startsWith('```')) {
-      inCodeBlock = !inCodeBlock;
-      continue;
-    }
-    if (inCodeBlock) continue;
-
-    // Extract project title (first H1 only, skip bold markdown H1s)
-    if (line.startsWith('# ') && !projectTitleFound && !line.includes('***')) {
-      data.project.title = line.slice(2).trim();
-      data.hero.heading = data.project.title;
-      projectTitleFound = true;
-      continue;
-    }
-
-    // Extract sections based on H2 headers (or H1 with bold markers for special sections)
-    if (line.startsWith('## ') || (line.startsWith('# ***') && line.endsWith('***'))) {
-      if (currentSection) {
-        finalizeSection(currentSection, currentList, data);
-      }
-      
-      let title = line.startsWith('## ') 
-        ? line.slice(3).trim() 
-        : line.replace(/^# \*\*\*/, '').replace(/\*\*\*$/, '').trim();
-      
-      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      
-      currentSection = {
-        id,
-        navLabel: title,
-        title,
-        type: 'paragraphs',
-        body: []
-      };
-      currentList = [];
-      continue;
-    }
-
-    // Handle H3 headers (subsections within a section)
-    if (line.startsWith('### ') && currentSection) {
-      if (currentList.length > 0) {
-        currentSection.body.push(''); // Add spacing
-      }
-      const subheading = line.slice(4).trim();
-      currentSection.body.push(`**${subheading}**`);
-      continue;
-    }
-
-    // Handle H4 headers (for file map sections)
-    if (line.startsWith('#### ') && currentSection) {
-      const subheading = line.slice(5).trim();
-      currentSection.body.push(`***${subheading}***`); // Triple asterisk for H4
-      continue;
-    }
-
-    // Handle list items
-    if (line.match(/^[-*]\s+/) && currentSection) {
-      const item = line.replace(/^[-*]\s+/, '').trim();
-      currentList.push(item);
-      currentSection.type = 'bullets';
-      continue;
-    }
-
-    // Handle paragraphs
-    if (line.trim() && !line.startsWith('#') && currentSection) {
-      // Check for bold text patterns in Features section
-      const boldMatch = line.match(/^\*\*(.*?)\*\*:\s*(.*)/);
-      if (boldMatch && currentSection.id === 'features-i-m-proud-of') {
-        currentList.push({ strong: boldMatch[1], text: boldMatch[2] });
-        currentSection.type = 'features';
-      } else {
-        currentSection.body.push(line.trim());
-      }
-    }
-  }
-
-  // Finalize last section
-  if (currentSection) {
-    finalizeSection(currentSection, currentList, data);
-  }
-
-  // Set defaults from parsed content or fallbacks
-  data.project.subtitle = "2D text-oriented | C++ · SFML 3.x";
-  data.project.pill = "Norse-inspired story";
-  data.project.topChip = "Single-page project overview";
-  
-  data.hero.tagline = "A 2D text-oriented adventure game built with C++ and SFML 3.x.";
-  data.hero.metaTags = ["Language: C++17", "Framework: SFML 3.x"];
-  data.hero.badges = ["Custom window system", "State-based architecture"];
-  data.hero.snapshotLabel = "Build snapshot";
-  data.hero.snapshotBadge = "CMake · Git · SFML";
-  data.hero.grid = [
-    { label: "Core tech", value: "C++17 · SFML 3.x", note: "Windowing, input, audio" },
-    { label: "Architecture", value: "State-driven", note: "Multiple game states" }
-  ];
-
-  return data;
-}
-
-function finalizeSection(section, listItems, data) {
-  if (section.type === 'bullets' && listItems.length > 0) {
-    section.items = listItems;
-    delete section.body;
-  } else if (section.type === 'features' && listItems.length > 0) {
-    section.items = listItems;
-    delete section.body;
-  }
-  
-  // Special handling for known sections
-  if (section.id.includes('gallery')) {
-    section.type = 'gallery';
-  } else if (section.id.includes('document-map') || section.id.includes('file-map')) {
-    section.type = 'fileMap';
-  } else if (section.id.includes('file-description')) {
-    section.type = 'fileDescriptions';
-  } else if (section.id.includes('fun-fact')) {
-    section.type = 'funFact';
-  }
-  
-  data.sections.push(section);
-}
-
-// Helper function to convert markdown text to HTML with link support
-function parseMarkdownText(text) {
-  let html = text;
-  
-  // Parse markdown links [text](url)
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-  
-  // Parse bold **text**
-  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  
-  // Parse inline code `text`
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-  
-  // Parse italics *text*
-  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  
-  return html;
-}
 
 function initPage(data) {
   if (!data) return;
@@ -204,7 +697,7 @@ function initPage(data) {
   setupCopyButtons();
 }
 
-// ===== Keep all existing functions below unchanged =====
+// ===== Header + hero =====
 
 function setProjectHeader(project) {
   if (!project) return;
@@ -215,11 +708,24 @@ function setProjectHeader(project) {
   const pillEl = document.getElementById("projectPill");
   const topChipEl = document.getElementById("topChip");
 
-  if (titleEl && project.title) titleEl.textContent = project.title;
-  if (subtitleEl && project.subtitle) subtitleEl.textContent = project.subtitle;
-  if (pillTextEl && project.pill) pillTextEl.textContent = project.pill;
-  else if (pillEl) pillEl.style.display = 'none';
-  if (topChipEl && project.topChip) topChipEl.textContent = project.topChip;
+  if (titleEl && project.title) {
+    titleEl.textContent = project.title;
+    document.title = `${project.title} – Doc Map`;
+  }
+
+  if (subtitleEl && project.subtitle) {
+    subtitleEl.textContent = project.subtitle;
+  }
+
+  if (pillTextEl && project.pill) {
+    pillTextEl.textContent = project.pill;
+  } else if (pillEl) {
+    pillEl.style.display = "none";
+  }
+
+  if (topChipEl && project.topChip) {
+    topChipEl.textContent = project.topChip;
+  }
 }
 
 function buildHero(hero) {
@@ -233,7 +739,11 @@ function buildHero(hero) {
       <div class="hero-grid-item">
         <div class="hero-grid-label">${item.label || ""}</div>
         <div class="hero-grid-value">${item.value || ""}</div>
-        ${item.note ? `<div class="hero-grid-note">${item.note}</div>` : ""}
+        ${
+          item.note
+            ? `<div class="hero-grid-note">${item.note}</div>`
+            : ""
+        }
       </div>
     `
     )
@@ -283,6 +793,8 @@ function buildHero(hero) {
   `;
 }
 
+// ===== Sections =====
+
 function buildSections(sections, data) {
   if (!Array.isArray(sections)) return;
 
@@ -291,27 +803,35 @@ function buildSections(sections, data) {
     if (!container) return;
 
     switch (section.type) {
-      case 'paragraphs':
+      case "paragraphs":
         renderParagraphSection(section, container);
         break;
-      case 'features':
+      case "helpfulLinks":
+        renderHelpfulLinksSection(section, container);
+        break;
+      case "features":
         renderFeaturesSection(section, container);
         break;
-      case 'bullets':
+      case "building":
+        renderBuildingSection(section, container);
+        break;
+      case "bullets":
         renderBulletSection(section, container);
         break;
-      case 'gallery':
-        renderGallerySection(section, container);
-        break;
-      case 'fileMap':
+      case "fileMap":
         renderDocMapSection(section, container, data.fileMap);
         break;
-      case 'fileDescriptions':
+      case "gallery":
+        renderGallerySection(section, container);
+        break;
+      case "fileDescriptions":
         renderFileDescriptionsSection(section, container, data.fileDescriptions);
         break;
-      case 'funFact':
+      case "funFact":
         renderFunFactSection(section, container);
         break;
+      default:
+        renderParagraphSection(section, container);
     }
   });
 }
@@ -323,22 +843,27 @@ function renderParagraphSection(section, container) {
   container.appendChild(h2);
 
   (section.body || []).forEach((text) => {
-    if (text.startsWith('***') && text.endsWith('***')) {
-      // Render as H4
-      const h4 = document.createElement("h4");
-      h4.textContent = text.replace(/\*\*\*/g, '');
-      container.appendChild(h4);
-    } else if (text.startsWith('**') && text.endsWith('**')) {
-      // Render as H3
-      const h3 = document.createElement("h3");
-      h3.textContent = text.replace(/\*\*/g, '');
-      container.appendChild(h3);
-    } else {
-      const p = document.createElement("p");
-      p.innerHTML = parseMarkdownText(text);
-      container.appendChild(p);
-    }
+    const p = document.createElement("p");
+    p.textContent = text;
+    container.appendChild(p);
   });
+}
+
+function renderHelpfulLinksSection(section, container) {
+  container.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = section.title || "Helpful Links";
+  container.appendChild(h2);
+
+  const p = document.createElement("p");
+  p.innerHTML = `👉 <strong>Full Documentation (Live Site):</strong> You are here!<br>
+<em style="color: var(--color-text-muted); font-size: 0.88rem;">Note: GitHub README links always open in the same tab by default — use Ctrl/Cmd-click or middle-click to open in a new tab.</em>`;
+  container.appendChild(p);
+
+  const linkP = document.createElement("p");
+  linkP.innerHTML = `➡️ <strong><a href="https://github.com/Bushido3403/UntitledAdventureGame/releases/latest" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent);">Latest Windows Build Download (Win11 x64)</a></strong><br>
+<span style="color: var(--color-text-muted); font-size: 0.88rem;">Contains the compiled <code>.exe</code> and required files.</span>`;
+  container.appendChild(linkP);
 }
 
 function renderFeaturesSection(section, container) {
@@ -350,29 +875,42 @@ function renderFeaturesSection(section, container) {
   const ul = document.createElement("ul");
   (section.items || []).forEach((item) => {
     const li = document.createElement("li");
-    if (item.strong) {
-      const strong = document.createElement("strong");
-      strong.textContent = item.strong;
-      li.appendChild(strong);
-      li.appendChild(document.createTextNode(": " + (item.text || "")));
-    } else {
-      li.textContent = item;
-    }
+    const strong = document.createElement("strong");
+    strong.textContent = item.strong || "";
+    li.appendChild(strong);
+    li.appendChild(
+      document.createTextNode(
+        item.text ? `: ${item.text}` : ""
+      )
+    );
     ul.appendChild(li);
   });
   container.appendChild(ul);
 
   if (section.chips && section.chips.length) {
-    const chipRow = document.createElement("div");
-    chipRow.className = "pill-row";
+    const row = document.createElement("div");
+    row.className = "pill-row";
     section.chips.forEach((chip) => {
-      const span = document.createElement("span");
-      span.className = "pill";
-      span.textContent = chip;
-      chipRow.appendChild(span);
+      const pill = document.createElement("span");
+      pill.className = "pill";
+      pill.textContent = chip;
+      row.appendChild(pill);
     });
-    container.appendChild(chipRow);
+    container.appendChild(row);
   }
+}
+
+function renderBuildingSection(section, container) {
+  container.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = section.title || "Building";
+  container.appendChild(h2);
+
+  const ul = document.createElement("ul");
+  const li = document.createElement("li");
+  li.innerHTML = `See <a href="install.md" style="color: var(--color-accent);">install.md</a> for building from source`;
+  ul.appendChild(li);
+  container.appendChild(ul);
 }
 
 function renderBulletSection(section, container) {
@@ -384,7 +922,7 @@ function renderBulletSection(section, container) {
   const ul = document.createElement("ul");
   (section.items || []).forEach((text) => {
     const li = document.createElement("li");
-    li.innerHTML = parseMarkdownText(text);
+    li.textContent = text;
     ul.appendChild(li);
   });
   container.appendChild(ul);
@@ -415,19 +953,34 @@ function renderGallerySection(section, container) {
   images.forEach((img, index) => {
     const item = document.createElement("div");
     item.className = "gallery-item";
-    item.innerHTML = `
-      <img src="${img.src}" alt="${img.caption}" loading="lazy">
-      <div class="gallery-item-caption">${img.caption}</div>
-    `;
-    item.addEventListener('click', () => openLightbox(index, images));
+    item.dataset.index = index;
+
+    const picture = document.createElement("img");
+    picture.src = img.src;
+    picture.alt = img.caption;
+    picture.loading = "lazy";
+
+    const caption = document.createElement("div");
+    caption.className = "gallery-item-caption";
+    caption.textContent = img.caption;
+
+    item.appendChild(picture);
+    item.appendChild(caption);
     grid.appendChild(item);
+
+    item.addEventListener("click", () => {
+      openLightbox(index, images);
+    });
   });
 
   container.appendChild(grid);
 }
 
 function renderDocMapSection(section, container, fileMap) {
+  if (!fileMap) return;
   container.innerHTML = "";
+
+  // Header with search
   const header = document.createElement("div");
   header.className = "file-map-header";
 
@@ -445,173 +998,306 @@ function renderDocMapSection(section, container, fileMap) {
   searchInput.id = "fileSearchInput";
   searchInput.type = "search";
   searchInput.placeholder = "Filter files by name or folder...";
+  searchInput.setAttribute("aria-label", "Filter file map");
 
   search.appendChild(searchIcon);
   search.appendChild(searchInput);
+
   header.appendChild(h2);
   header.appendChild(search);
   container.appendChild(header);
 
-  // Render body content (General Overview + File Map sections)
-  (section.body || []).forEach((text) => {
-    if (text.startsWith('***') && text.endsWith('***')) {
-      const h4 = document.createElement("h4");
-      h4.textContent = text.replace(/\*\*\*/g, '');
-      container.appendChild(h4);
-    } else if (text.startsWith('**') && text.endsWith('**')) {
-      const h3 = document.createElement("h3");
-      h3.textContent = text.replace(/\*\*/g, '');
-      container.appendChild(h3);
-    } else {
-      const p = document.createElement("p");
-      p.innerHTML = parseMarkdownText(text);
-      container.appendChild(p);
-    }
+  // Intro paragraphs
+  (fileMap.introParagraphs || []).forEach((text) => {
+    const p = document.createElement("p");
+    p.textContent = text;
+    container.appendChild(p);
   });
 
-  // Render file list items
-  if (section.items && section.items.length > 0) {
+  // Folder overview
+  if (fileMap.folderOverview && fileMap.folderOverview.length) {
     const ul = document.createElement("ul");
-    section.items.forEach((item) => {
+    fileMap.folderOverview.forEach((folder) => {
       const li = document.createElement("li");
-      li.innerHTML = parseMarkdownText(item);
+      const strong = document.createElement("strong");
+      strong.textContent = folder.name;
+      li.appendChild(strong);
+      if (folder.description) {
+        li.appendChild(document.createTextNode(` - ${folder.description}`));
+      }
       ul.appendChild(li);
     });
     container.appendChild(ul);
   }
+
+  if (fileMap.afterOverviewText) {
+    const p = document.createElement("p");
+    p.textContent = fileMap.afterOverviewText;
+    container.appendChild(p);
+  }
+
+  // File groups
+  (fileMap.groups || []).forEach((group) => {
+    const sectionDiv = document.createElement("div");
+    sectionDiv.className = "file-section";
+
+    const headerDiv = document.createElement("div");
+    headerDiv.className = "file-section-header";
+
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "file-section-title";
+    titleDiv.textContent = group.title || "";
+
+    const tagDiv = document.createElement("div");
+    tagDiv.className = "file-section-tag";
+    tagDiv.textContent = group.tag || "";
+
+    headerDiv.appendChild(titleDiv);
+    headerDiv.appendChild(tagDiv);
+    sectionDiv.appendChild(headerDiv);
+
+    const list = document.createElement("ul");
+    list.className = "file-list";
+
+    (group.items || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.className = "file-item";
+      const fullPath = (item.pathPrefix || "") + (item.name || "");
+      li.dataset.file = fullPath.toLowerCase();
+
+      const mainDiv = document.createElement("div");
+      mainDiv.className = "file-main";
+
+      const prefixSpan = document.createElement("span");
+      prefixSpan.className = "file-path-prefix";
+      prefixSpan.textContent = item.pathPrefix || "";
+
+      const nameDiv = document.createElement("div");
+      nameDiv.className = "file-name";
+
+      if (item.href) {
+        const link = document.createElement("a");
+        link.href = item.href;
+        link.textContent = item.name || "";
+        nameDiv.appendChild(link);
+      } else {
+        nameDiv.textContent = item.name || "";
+      }
+
+      if (item.note) {
+        const noteSpan = document.createElement("span");
+        noteSpan.className = "file-note";
+        noteSpan.textContent = `– ${item.note}`;
+        nameDiv.appendChild(noteSpan);
+      }
+
+      mainDiv.appendChild(prefixSpan);
+      mainDiv.appendChild(nameDiv);
+      li.appendChild(mainDiv);
+
+      if (item.copyPath) {
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.type = "button";
+        copyBtn.dataset.path = item.copyPath;
+        copyBtn.innerHTML = `<span class="copy-btn-icon">📋</span> Copy`;
+        li.appendChild(copyBtn);
+      }
+
+      list.appendChild(li);
+    });
+
+    sectionDiv.appendChild(list);
+    container.appendChild(sectionDiv);
+  });
 }
 
 function renderFileDescriptionsSection(section, container, fileDescriptions) {
+  if (!fileDescriptions) return;
   container.innerHTML = "";
+
   const h2 = document.createElement("h2");
   h2.textContent = section.title || "File Descriptions";
   container.appendChild(h2);
 
-  // Render body content with markdown parsing
-  (section.body || []).forEach((text) => {
-    if (text.startsWith('***') && text.endsWith('***')) {
-      const h4 = document.createElement("h4");
-      h4.textContent = text.replace(/\*\*\*/g, '');
-      container.appendChild(h4);
-    } else if (text.startsWith('**') && text.endsWith('**')) {
-      const h3 = document.createElement("h3");
-      h3.textContent = text.replace(/\*\*/g, '');
-      container.appendChild(h3);
-    } else {
-      const p = document.createElement("p");
-      p.innerHTML = parseMarkdownText(text);
-      container.appendChild(p);
-    }
-  });
+  (fileDescriptions.categories || []).forEach((category) => {
+    const h3 = document.createElement("h3");
+    h3.textContent = category.title || "";
+    container.appendChild(h3);
 
-  // Render bullet items
-  if (section.items && section.items.length > 0) {
     const ul = document.createElement("ul");
-    section.items.forEach((item) => {
+    (category.items || []).forEach((item) => {
       const li = document.createElement("li");
-      li.innerHTML = parseMarkdownText(item);
+      const strong = document.createElement("strong");
+      strong.textContent = item.name || "";
+      li.appendChild(strong);
+      if (item.description) {
+        li.appendChild(document.createTextNode(` - ${item.description}`));
+      }
       ul.appendChild(li);
     });
     container.appendChild(ul);
-  }
+  });
 }
 
 function renderFunFactSection(section, container) {
   container.innerHTML = "";
   const h2 = document.createElement("h2");
-  h2.textContent = section.title || "Fun Fact";
+  h2.textContent = section.title || "";
   container.appendChild(h2);
 
   (section.body || []).forEach((text) => {
     const p = document.createElement("p");
-    p.innerHTML = parseMarkdownText(text);
+    p.textContent = text;
     container.appendChild(p);
   });
 }
 
-function buildSideNav(sections, navTitle) {
-  const nav = document.getElementById("sideNav");
-  if (!nav) return;
+// ===== Side nav =====
 
-  nav.innerHTML = `
-    <div class="side-nav-title">${navTitle || "On this page"}</div>
-    <ul>
-      ${sections.map(s => `
-        <li><a href="#${s.id}">${s.navLabel || s.title}</a></li>
-      `).join('')}
-    </ul>
-  `;
+function buildSideNav(sections, navTitle) {
+  const navEl = document.getElementById("sideNav");
+  if (!navEl || !Array.isArray(sections)) return;
+
+  const navSections = sections.filter(
+    (s) => s.includeInNav !== false
+  );
+  if (!navSections.length) {
+    navEl.style.display = "none";
+    return;
+  }
+
+  navEl.innerHTML = "";
+
+  const titleDiv = document.createElement("div");
+  titleDiv.className = "side-nav-title";
+  titleDiv.textContent = navTitle || "On this page";
+  navEl.appendChild(titleDiv);
+
+  const list = document.createElement("ul");
+  navSections.forEach((sec) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${sec.id}`;
+    a.textContent = sec.navLabel || sec.title || sec.id;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+
+  navEl.appendChild(list);
 }
 
+// ===== Back-to-top =====
+
 function setupBackToTop() {
-  const btn = document.getElementById("backToTop");
-  if (!btn) return;
+  const button = document.getElementById("backToTop");
+  if (!button) return;
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > BACK_TO_TOP_THRESHOLD) {
-      btn.classList.add("visible");
+      button.classList.add("visible");
     } else {
-      btn.classList.remove("visible");
+      button.classList.remove("visible");
     }
   });
 
-  btn.addEventListener("click", () => {
+  button.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
+// ===== Scroll spy for side nav =====
+
 function setupScrollSpy(sections) {
-  const links = document.querySelectorAll(".side-nav a");
-  if (!links.length) return;
+  if (!Array.isArray(sections)) return;
 
-  window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach((section) => {
-      const el = document.getElementById(section.id);
-      if (el && el.getBoundingClientRect().top < SCROLL_OFFSET_PX) {
-        current = section.id;
+  const navLinks = Array.from(
+    document.querySelectorAll(".side-nav a[href^='#']")
+  );
+  if (!navLinks.length) return;
+
+  const trackedSections = sections
+    .filter((s) => s.includeInNav !== false)
+    .map((s) => document.getElementById(s.id))
+    .filter(Boolean);
+
+  function updateActiveNav() {
+    const fromTop = window.scrollY + SCROLL_OFFSET_PX;
+    let currentId = null;
+
+    trackedSections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      if (fromTop >= sectionTop && fromTop < sectionTop + sectionHeight) {
+        currentId = section.id;
       }
     });
 
-    links.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === `#${current}`) {
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === `#${currentId}`) {
         link.classList.add("active");
+      } else {
+        link.classList.remove("active");
       }
     });
-  });
+  }
+
+  updateActiveNav();
+  window.addEventListener("scroll", updateActiveNav);
 }
+
+// ===== File search =====
 
 function setupFileSearch() {
-  const input = document.getElementById("fileSearchInput");
-  if (!input) return;
+  const searchInput = document.getElementById("fileSearchInput");
+  if (!searchInput) return;
 
-  input.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll(".file-item").forEach((item) => {
-      const text = item.textContent.toLowerCase();
-      item.classList.toggle("hidden-by-filter", !text.includes(query));
-    });
-  });
-}
+  const items = Array.from(
+    document.querySelectorAll(".file-item")
+  );
 
-function setupCopyButtons() {
-  document.querySelectorAll(".copy-btn").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const path = btn.dataset.path;
-      try {
-        await navigator.clipboard.writeText(path);
-        const original = btn.innerHTML;
-        btn.innerHTML = '<span class="copy-btn-icon">✓</span> Copied!';
-        setTimeout(() => {
-          btn.innerHTML = original;
-        }, COPY_RESET_MS);
-      } catch (err) {
-        console.error("Copy failed:", err);
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    items.forEach((item) => {
+      const filePath = item.dataset.file || "";
+      if (!query || filePath.includes(query)) {
+        item.classList.remove("hidden-by-filter");
+      } else {
+        item.classList.add("hidden-by-filter");
       }
     });
   });
 }
+
+// ===== Copy buttons =====
+
+function setupCopyButtons() {
+  const buttons = Array.from(
+    document.querySelectorAll(".copy-btn")
+  );
+  if (!buttons.length || !navigator.clipboard) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const path = btn.dataset.path;
+      if (!path) return;
+
+      navigator.clipboard.writeText(path).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = `<span class="copy-btn-icon">✓</span> Copied!`;
+        btn.style.color = "var(--color-accent)";
+
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.style.color = "";
+        }, COPY_RESET_MS);
+      });
+    });
+  });
+}
+
+// ===== Lightbox =====
 
 let currentLightboxIndex = 0;
 let lightboxImages = [];
@@ -619,60 +1305,93 @@ let lightboxImages = [];
 function openLightbox(index, images) {
   currentLightboxIndex = index;
   lightboxImages = images;
-  
-  let lightbox = document.getElementById('lightbox');
+
+  let lightbox = document.getElementById("lightbox");
   if (!lightbox) {
     lightbox = createLightbox();
   }
-  
+
   updateLightboxContent();
-  lightbox.classList.add('active');
-  document.addEventListener('keydown', handleLightboxKeys);
+  lightbox.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
 function createLightbox() {
-  const lightbox = document.createElement('div');
-  lightbox.id = 'lightbox';
-  lightbox.className = 'lightbox';
-  lightbox.innerHTML = `
-    <button class="lightbox-close" aria-label="Close lightbox">×</button>
-    <button class="lightbox-nav prev" aria-label="Previous image">‹</button>
-    <button class="lightbox-nav next" aria-label="Next image">›</button>
-    <div class="lightbox-content">
-      <div class="lightbox-image-wrapper">
-        <img class="lightbox-image" src="" alt="">
-      </div>
-      <div class="lightbox-caption"></div>
-    </div>
-  `;
-  
-  document.body.appendChild(lightbox);
-  
-  lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-  lightbox.querySelector('.prev').addEventListener('click', () => navigateLightbox(-1));
-  lightbox.querySelector('.next').addEventListener('click', () => navigateLightbox(1));
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
+  const lightbox = document.createElement("div");
+  lightbox.id = "lightbox";
+  lightbox.className = "lightbox";
+
+  const content = document.createElement("div");
+  content.className = "lightbox-content";
+
+  const imageWrapper = document.createElement("div");
+  imageWrapper.className = "lightbox-image-wrapper";
+
+  const img = document.createElement("img");
+  img.className = "lightbox-image";
+  img.id = "lightboxImage";
+
+  const caption = document.createElement("div");
+  caption.className = "lightbox-caption";
+  caption.id = "lightboxCaption";
+
+  imageWrapper.appendChild(img);
+  content.appendChild(imageWrapper);
+  content.appendChild(caption);
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "lightbox-close";
+  closeBtn.innerHTML = "×";
+  closeBtn.setAttribute("aria-label", "Close lightbox");
+  closeBtn.addEventListener("click", closeLightbox);
+
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "lightbox-nav prev";
+  prevBtn.innerHTML = "‹";
+  prevBtn.setAttribute("aria-label", "Previous image");
+  prevBtn.addEventListener("click", () => navigateLightbox(-1));
+
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "lightbox-nav next";
+  nextBtn.innerHTML = "›";
+  nextBtn.setAttribute("aria-label", "Next image");
+  nextBtn.addEventListener("click", () => navigateLightbox(1));
+
+  lightbox.appendChild(content);
+  lightbox.appendChild(closeBtn);
+  lightbox.appendChild(prevBtn);
+  lightbox.appendChild(nextBtn);
+
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
   });
-  
+
+  document.addEventListener("keydown", handleLightboxKeys);
+
+  document.body.appendChild(lightbox);
   return lightbox;
 }
 
 function updateLightboxContent() {
-  const lightbox = document.getElementById('lightbox');
-  const img = lightbox.querySelector('.lightbox-image');
-  const caption = lightbox.querySelector('.lightbox-caption');
-  const current = lightboxImages[currentLightboxIndex];
-  
-  img.src = current.src;
-  img.alt = current.caption;
-  caption.textContent = current.caption;
+  const img = document.getElementById("lightboxImage");
+  const caption = document.getElementById("lightboxCaption");
+
+  if (img && caption && lightboxImages[currentLightboxIndex]) {
+    const current = lightboxImages[currentLightboxIndex];
+    img.src = current.src;
+    img.alt = current.caption;
+    caption.textContent = `${current.caption} (${currentLightboxIndex + 1}/${lightboxImages.length})`;
+  }
 }
 
 function closeLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  lightbox.classList.remove('active');
-  document.removeEventListener('keydown', handleLightboxKeys);
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+  }
 }
 
 function navigateLightbox(direction) {
@@ -681,7 +1400,14 @@ function navigateLightbox(direction) {
 }
 
 function handleLightboxKeys(e) {
-  if (e.key === 'Escape') closeLightbox();
-  else if (e.key === 'ArrowLeft') navigateLightbox(-1);
-  else if (e.key === 'ArrowRight') navigateLightbox(1);
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox || !lightbox.classList.contains("active")) return;
+
+  if (e.key === "Escape") {
+    closeLightbox();
+  } else if (e.key === "ArrowLeft") {
+    navigateLightbox(-1);
+  } else if (e.key === "ArrowRight") {
+    navigateLightbox(1);
+  }
 }

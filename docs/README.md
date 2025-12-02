@@ -26,9 +26,7 @@ Contains the compiled `.exe` and required files.
 
 ## Building
 
-- Install CMake Tools extension on VS Code
-- Press the build button in the toolbar .-.
-- (If this doesn't work then uh.... "It worked fine on my PC" xD)
+- See install.md for building from source
 
 ### Prerequisites for development
 
@@ -123,6 +121,7 @@ That's a high-level map. Below is the full breakdown of every file.
 #### Root Directory Files:
 - [`CMakeLists.txt`](CMakeLists.txt) - Build configuration
 - [`README.md`](README.md) - Project documentation
+- [`install.md`](install.md) - For building from source
 - [`LICENSE.md`](LICENSE.md) - License information
 - [`DOCMAP.md`](DOCMAP.md) - You are here!
 - [`.gitignore`](.gitignore) - Git ignore rules
