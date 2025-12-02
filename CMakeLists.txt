@@ -125,5 +125,21 @@ add_custom_target(copy_assets ALL
 )
 add_dependencies(game copy_assets)
 
+if (WIN32)
+  # Create certificate if needed
+  add_custom_target(create_certificate
+    COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/scripts/create-certificate.ps1"
+    COMMENT "Creating self-signed certificate"
+  )
+  
+  # Sign the executable after build
+  add_custom_command(TARGET game POST_BUILD
+    COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/scripts/sign-executable.ps1" -ExePath "$<TARGET_FILE:game>"
+    COMMENT "Signing executable with self-signed certificate"
+  )
+  
+  add_dependencies(game create_certificate)
+endif()
+
 # ---- Nice source groups for IDEs ----
 source_group(TREE "${CMAKE_SOURCE_DIR}" FILES ${CORE_SOURCES} ${UI_SOURCES} ${HEADERS})

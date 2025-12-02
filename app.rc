@@ -15,13 +15,15 @@ BEGIN
   BEGIN
     BLOCK "040904B0"      // US English, Unicode
     BEGIN
+      VALUE "CompanyName", "Kyle Buchanan"
+      VALUE "LegalCopyright", "Copyright (C) 2025 Kyle Buchanan"
       VALUE "COMPSCI-135", "Kyle Buchanan"
       VALUE "FileDescription", "Untitled Adventure Game"
-      VALUE "FileVersion", "1.0.0.0"
+      VALUE "FileVersion", "3.7"
       VALUE "InternalName", "UntitledAdventureGame"
       VALUE "OriginalFilename", "UntitledAdventureGame.exe"
       VALUE "ProductName", "Untitled Adventure Game"
-      VALUE "ProductVersion", "1.0"
+      VALUE "ProductVersion", "3.7"
     END
   END
   BLOCK "VarFileInfo"

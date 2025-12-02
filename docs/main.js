@@ -856,8 +856,7 @@ function renderHelpfulLinksSection(section, container) {
   container.appendChild(h2);
 
   const p = document.createElement("p");
-  p.innerHTML = `👉 <strong>Full Documentation (Live Site):</strong> You are here!<br>
-<em style="color: var(--color-text-muted); font-size: 0.88rem;">Note: GitHub README links always open in the same tab - middle-click to open in a new tab.</em>`;
+  p.innerHTML = `👉 <strong>Full Documentation (Live Site):</strong> You are here!<br>`;
   container.appendChild(p);
 
   const linkP = document.createElement("p");
