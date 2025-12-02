@@ -62,6 +62,12 @@ void GameStateManager::applyEffects(const Effects& effects, InventorySystem* inv
             inventory->addItem(itemId, quantity);
         }
     }
+
+    for (const auto& [itemId, quantity] : effects.removeItems) {
+        if (inventory) {
+            inventory->removeItem(itemId, quantity, this);
+        }
+    }
 }
 
 void GameStateManager::saveGame(const std::string& scriptId, const std::string& sceneId,

@@ -18,7 +18,8 @@ struct Effects {
     std::string addFlag;
     std::string removeFlag;
     std::unordered_map<std::string, int> modifyStats;
-    std::vector<std::pair<std::string, int>> addItems;  // Changed: now supports multiple items
+    std::vector<std::pair<std::string, int>> addItems;
+    std::vector<std::pair<std::string, int>> removeItems;  // NEW
 };
 
 struct Choice {

@@ -106,7 +106,17 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                         }
                     }
                 }
-                
+
+                if (effJson.contains("removeItems") && effJson["removeItems"].is_array()) {
+                    for (const auto& itemJson : effJson["removeItems"]) {
+                        std::string itemId = itemJson.value("id", "");
+                        int quantity = itemJson.value("quantity", 1);
+                        if (!itemId.empty()) {
+                            eff.removeItems.push_back({itemId, quantity});
+                        }
+                    }
+                }
+                                
                 scene.effects = eff;
             }
 

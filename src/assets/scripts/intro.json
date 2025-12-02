@@ -403,7 +403,7 @@
       {
         "id": "a1_s26_dirt_path_3_puzzle",
         "background": "bg_midgard_forest_dirt3",
-        "text": "The third dirt path skirts the thickest trees until it opens into a small clearing. At its center stands a waist-high stone plinth, cracked but still solid, with a shallow bronze bowl set into the top. Inside the bowl lie three objects: a river pebble, a charred twig, and a feather black as midnight. Faint runes around the bowl read: \"Choose what remains when all else is taken.\"",
+        "text": "The third dirt path skirts the thickest trees until it opens into a small clearing. At its center stands a waist-high stone plinth, cracked but still solid, with a shallow bronze bowl set into the top. Inside the bowl lie three objects: a river pebble, a charred twig, and a raven's feather black as midnight. Faint runes around the bowl read: \"Choose what remains when all else is taken.\"",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -417,7 +417,7 @@
             "nextScene": "a1_s27_dirt_path_3_no_key"
           },
           {
-            "text": "Take the black feather.",
+            "text": "Take the raven's feather.",
             "nextScene": "a1_s28_dirt_path_3_key_result"
           }
         ]
@@ -425,7 +425,7 @@
       {
         "id": "a1_s27_dirt_path_3_no_key",
         "background": "bg_midgard_forest_dirt3",
-        "text": "Nothing happens.",
+        "text": "Nothing happens. You put the item back. The bowl remains, waiting. The other two items sit untouched, inert. It seems the choice you made was not the right one. Perhaps another item would have yielded a different result.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -504,10 +504,19 @@
       {
         "id": "a1_s31_gate_unlock",
         "background": "bg_midgard_forest_gate_open",
-        "text": "You fit the bronze key into the gate's central depression. It turns smoothly, as if it was made for this lock. You see what appears to be Asgard on the other side.",
+        "text": "You fit the bronze key into the gate's central depression. It turns smoothly, as if it was made for this lock. The key dissolves into golden light as the gate swings open. You see what appears to be Asgard on the other side.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery_resolve",
+        "effects": {
+          "removeFlag": "has_bronze_key",
+          "removeItems": [
+            {
+              "id": "bronze_key",
+              "quantity": 1
+            }
+          ]
+        },
         "choices": [
           {
             "text": "Step through the gate...",
@@ -697,7 +706,7 @@
       {
         "id": "a1_s40b_asgard_day_after",
         "background": "bg_asgard_morning",
-        "text": "Morning light creeps across Asgard's broken gate. The giants are gone. Your body aches in places you didn't know existed. The realm feels quiet. Word is spreading: a new hero saved the halls.",
+        "text": "Morning light creeps across Asgard's broken gate. The giants are gone. Your body aches in places you didn't know existed. The realm feels quiet yet ominous. Word is spreading: a new hero saved the halls.",
         "speaker": "Narrator",
         "speakerColor": "#E0FFE0",
         "music": "mus_asgard_soft",
@@ -705,6 +714,24 @@
           {
             "text": "Find a drink",
             "nextScene": "a1_s41_asgard_bar"
+          },
+          {
+            "text": "Explore Asgard some more",
+            "nextScene": "coming_soon_asgard_explore"
+          }
+        ]
+      },
+      {
+        "id": "coming_soon_asgard_explore",
+        "background": "coming_soon",
+        "text": "More adventures in Asgard coming soon!",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_silence",
+        "choices": [
+          {
+            "text": "Guess I'll look for a drink then.",
+            "nextScene": "a1_s40b_asgard_day_after"
           }
         ]
       },
