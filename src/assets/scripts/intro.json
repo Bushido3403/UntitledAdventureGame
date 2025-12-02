@@ -235,7 +235,7 @@
       {
         "id": "a1_s11_bull_fight_intro",
         "background": "bg_midgard_village_square_burning",
-        "text": "The Muspel-bull thunders toward you, each step shaking the ground and spraying sparks. You tighten your grip on your makeshift weapon. Villagers scatter to doorways, watching with wide, terrified eyes. The bull lowers its head, lava dripping from its horns. The world narrows to its blazing eyes and your refusal to be trampled in your first ten minutes here.",
+        "text": "The Muspel-bull thunders toward you, each step shaking the ground and spraying sparks. You tighten your grip on the spear you found. Villagers scatter to doorways, watching with wide, terrified eyes. The bull lowers its head, lava dripping from its horns. The world narrows to its blazing eyes and your refusal to be trampled in your first ten minutes here.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_boss_bull_intro",
@@ -277,7 +277,7 @@
       {
         "id": "a1_s20_forest_crossroads",
         "background": "bg_midgard_forest_crossroads",
-        "text": "The village road narrows to a forest path, then spills you into a clearing where the trees pull back like a ring of silent onlookers. Four roads branch off from here. One is paved with pale stone, worn smooth by long-forgotten feet, leading toward a distant shadow of carved rock that might be a gate. The other three are dirt tracks disappearing into thicker, darker woods.",
+        "text": "The village road narrows to a forest path, then spills you into a clearing where the trees pull back like a ring of silent onlookers. Four roads branch off from here. One is paved with pale stone, leading toward a distant shadow of carved rock that might be a gate. The other three are dirt tracks disappearing into thicker, darker woods. You hear a raven cawing somewhere above. It might be important.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_tense_sneak",
@@ -439,7 +439,7 @@
       {
         "id": "a1_s28_dirt_path_3_key_result",
         "background": "bg_midgard_forest_dirt3",
-        "text": "As your fingers close around your chosen object, the bowl shudders. Metal groans and curls in on itself like a dying leaf. When it uncurls again, the pebble, twig, and feather are gone. In their place lies a small bronze key etched with the same interlocking circles you saw on the distant gate. It's warm in your palm, as if it's been waiting for you specifically.",
+        "text": "As your fingers close around your chosen object, the bowl shudders. Metal groans and curls in on itself like a dying leaf. When it uncurls again, the remaining items are gone. In their place lies a small bronze key etched with the same interlocking circles you saw on the distant gate. It's warm in your palm, as if it's been waiting for you specifically.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_forest_mystery",
@@ -450,9 +450,17 @@
           }
         ],
         "effects": {
-          "addItem": "bronze_key",
-          "addItemQuantity": 1,
-          "addFlag" : "has_bronze_key"
+          "addFlag": "has_bronze_key",
+          "addItems": [
+            {
+              "id": "bronze_key",
+              "quantity": 1
+            },
+            {
+              "id": "ravens_feather",
+              "quantity": 1
+            }
+          ]
         }
       },
       {
@@ -543,9 +551,13 @@
         "speakerColor": "#E0E0FF",
         "music": "mus_asgard_relic",
         "effects": {
-          "addItem": "asgard_sword",
-          "addItemQuantity": 1,
-          "addFlag" : "has_asgard_sword"
+          "addFlag": "has_asgard_sword",
+          "addItems": [
+            {
+              "id": "asgard_sword",
+              "quantity": 1
+            }
+          ]
         },
         "choices": [
           {
@@ -678,20 +690,34 @@
         "choices": [
           {
             "text": "Stand in the silence",
-            "nextScene": "a1_s41_asgard_celebration"
+            "nextScene": "a1_s40b_asgard_day_after"
           }
         ]
       },
       {
-        "id": "a1_s41_asgard_celebration",
-        "background": "bg_asgard_celebration",
-        "text": "Silence hangs over the ruined gate. Then, as if someone flipped reality back on, Asgard breathes. Color floods the halls. Doors slam open. Gods and warriors flicker into the plaza, shouting in shock and relief. Someone cheers you. Someone else shoves a heavy drink into your hand.",
+        "id": "a1_s40b_asgard_day_after",
+        "background": "bg_asgard_morning",
+        "text": "Morning light creeps across Asgard's broken gate. The giants are gone. Your body aches in places you didn't know existed. The realm feels quiet. Word is spreading: a new hero saved the halls.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0FFE0",
+        "music": "mus_asgard_soft",
+        "choices": [
+          {
+            "text": "Find a drink",
+            "nextScene": "a1_s41_asgard_bar"
+          }
+        ]
+      },
+      {
+        "id": "a1_s41_asgard_bar",
+        "background": "bg_asgard_mead_hall",
+        "text": "The mead hall glows warm against the cold morning. Inside, gods and warriors sit hunched over drinks. When you enter, the noise drops, then explodes. Cheers, raised mugs, thumps on the back. But you still feel there is something off. The voice from the void calls out to you- \"Your journey is not done.\"",
         "speaker": "Narrator",
         "speakerColor": "#E0FFE0",
         "music": "mus_asgard_celebration",
         "choices": [
           {
-            "text": "Celebrate your victory!",
+            "text": "Raise your mug",
             "nextScene": "a1_s43_end_scene"
           }
         ]

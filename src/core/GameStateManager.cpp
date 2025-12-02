@@ -57,8 +57,10 @@ void GameStateManager::applyEffects(const Effects& effects, InventorySystem* inv
         stats[statName] += modifier;
     }
     
-    if (!effects.addItem.empty()) {
-        inventory->addItem(effects.addItem, effects.addItemQuantity);
+    for (const auto& [itemId, quantity] : effects.addItems) {
+        if (inventory) {
+            inventory->addItem(itemId, quantity);
+        }
     }
 }
 

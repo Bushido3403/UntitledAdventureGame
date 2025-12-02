@@ -97,13 +97,14 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                     }
                 }
                 
-                // Add these lines:
-                if (effJson.contains("addItem")) {
-                    eff.addItem = effJson["addItem"];
-                }
-                
-                if (effJson.contains("addItemQuantity")) {
-                    eff.addItemQuantity = effJson["addItemQuantity"];
+                if (effJson.contains("addItems") && effJson["addItems"].is_array()) {
+                    for (const auto& itemJson : effJson["addItems"]) {
+                        std::string itemId = itemJson.value("id", "");
+                        int quantity = itemJson.value("quantity", 1);
+                        if (!itemId.empty()) {
+                            eff.addItems.push_back({itemId, quantity});
+                        }
+                    }
                 }
                 
                 scene.effects = eff;
