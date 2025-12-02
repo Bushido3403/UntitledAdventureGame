@@ -755,6 +755,11 @@
     .back-to-top span {
       display: none;
     }
+  
+    /* Hide top chip on mobile */
+    .top-chip {
+      display: none;
+    }
   }
   /* Gallery */
 
