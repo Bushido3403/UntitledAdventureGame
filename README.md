@@ -26,7 +26,7 @@ Contains the compiled `.exe` and required files.
 
 ## Building
 
-- See install.md in source code for building from source.
+- See [install.md](https://github.com/Bushido3403/UntitledAdventureGame/blob/master/install.md) for building from source.
 
 ### Prerequisites for development
 
