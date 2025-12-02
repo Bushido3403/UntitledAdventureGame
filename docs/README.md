@@ -9,7 +9,7 @@ Untitled Adventure Game is my C++ game featuring a custom window system with a d
 
 ## Helpful Links
 
-👉 **Full Documentation (Live Site):** [untitledgame.nodifyr.io](https://untitledgame.nodifyr.io)  
+👉 **Full Documentation (Live Site):** You are here! 
 *Note: GitHub README links always open in the same tab by default — use Ctrl/Cmd-click or middle-click to open in a new tab.*
 
 ➡️ **[Latest Windows Build Download (Win11 x64)](https://github.com/Bushido3403/UntitledAdventureGame/releases/latest)**  

@@ -11,7 +11,10 @@ const COPY_RESET_MS = 900;
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const readmeText = await fetch(README_URL).then(r => r.text());
+    const readmeText = await fetch(README_URL).then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.text();
+    });
     const data = parseReadmeToPageData(readmeText);
     initPage(data);
   } catch (err) {
@@ -20,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div style="color: var(--color-text); padding: 2rem;">
         <h1>Error Loading Content</h1>
         <p>Could not load README.md. Please ensure the file exists in the root directory.</p>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Error: ${err.message}</p>
       </div>
     `;
   }
@@ -41,6 +45,7 @@ function parseReadmeToPageData(markdown) {
   let currentSection = null;
   let currentList = [];
   let inCodeBlock = false;
+  let projectTitleFound = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -52,20 +57,24 @@ function parseReadmeToPageData(markdown) {
     }
     if (inCodeBlock) continue;
 
-    // Extract project title (first H1)
-    if (line.startsWith('# ') && !data.project.title) {
+    // Extract project title (first H1 only, skip bold markdown H1s)
+    if (line.startsWith('# ') && !projectTitleFound && !line.includes('***')) {
       data.project.title = line.slice(2).trim();
       data.hero.heading = data.project.title;
+      projectTitleFound = true;
       continue;
     }
 
-    // Extract sections based on H2 headers
-    if (line.startsWith('## ')) {
+    // Extract sections based on H2 headers (or H1 with bold markers for special sections)
+    if (line.startsWith('## ') || (line.startsWith('# ***') && line.endsWith('***'))) {
       if (currentSection) {
         finalizeSection(currentSection, currentList, data);
       }
       
-      const title = line.slice(3).trim();
+      let title = line.startsWith('## ') 
+        ? line.slice(3).trim() 
+        : line.replace(/^# \*\*\*/, '').replace(/\*\*\*$/, '').trim();
+      
       const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       
       currentSection = {
@@ -79,6 +88,23 @@ function parseReadmeToPageData(markdown) {
       continue;
     }
 
+    // Handle H3 headers (subsections within a section)
+    if (line.startsWith('### ') && currentSection) {
+      if (currentList.length > 0) {
+        currentSection.body.push(''); // Add spacing
+      }
+      const subheading = line.slice(4).trim();
+      currentSection.body.push(`**${subheading}**`);
+      continue;
+    }
+
+    // Handle H4 headers (for file map sections)
+    if (line.startsWith('#### ') && currentSection) {
+      const subheading = line.slice(5).trim();
+      currentSection.body.push(`***${subheading}***`); // Triple asterisk for H4
+      continue;
+    }
+
     // Handle list items
     if (line.match(/^[-*]\s+/) && currentSection) {
       const item = line.replace(/^[-*]\s+/, '').trim();
@@ -89,7 +115,14 @@ function parseReadmeToPageData(markdown) {
 
     // Handle paragraphs
     if (line.trim() && !line.startsWith('#') && currentSection) {
-      currentSection.body.push(line.trim());
+      // Check for bold text patterns in Features section
+      const boldMatch = line.match(/^\*\*(.*?)\*\*:\s*(.*)/);
+      if (boldMatch && currentSection.id === 'features-i-m-proud-of') {
+        currentList.push({ strong: boldMatch[1], text: boldMatch[2] });
+        currentSection.type = 'features';
+      } else {
+        currentSection.body.push(line.trim());
+      }
     }
   }
 
@@ -98,7 +131,7 @@ function parseReadmeToPageData(markdown) {
     finalizeSection(currentSection, currentList, data);
   }
 
-  // Set defaults
+  // Set defaults from parsed content or fallbacks
   data.project.subtitle = "2D text-oriented | C++ · SFML 3.x";
   data.project.pill = "Norse-inspired story";
   data.project.topChip = "Single-page project overview";
@@ -117,7 +150,10 @@ function parseReadmeToPageData(markdown) {
 }
 
 function finalizeSection(section, listItems, data) {
-  if (section.type === 'bullets') {
+  if (section.type === 'bullets' && listItems.length > 0) {
+    section.items = listItems;
+    delete section.body;
+  } else if (section.type === 'features' && listItems.length > 0) {
     section.items = listItems;
     delete section.body;
   }
@@ -125,20 +161,34 @@ function finalizeSection(section, listItems, data) {
   // Special handling for known sections
   if (section.id.includes('gallery')) {
     section.type = 'gallery';
-  } else if (section.id.includes('file') || section.id.includes('document')) {
+  } else if (section.id.includes('document-map') || section.id.includes('file-map')) {
     section.type = 'fileMap';
-  } else if (section.id.includes('feature')) {
-    section.type = 'features';
-    section.items = listItems.map(item => {
-      const match = item.match(/\*\*(.*?)\*\*:\s*(.*)/);
-      if (match) {
-        return { strong: match[1], text: match[2] };
-      }
-      return { strong: item.split(':')[0], text: item.split(':')[1] || '' };
-    });
+  } else if (section.id.includes('file-description')) {
+    section.type = 'fileDescriptions';
+  } else if (section.id.includes('fun-fact')) {
+    section.type = 'funFact';
   }
   
   data.sections.push(section);
+}
+
+// Helper function to convert markdown text to HTML with link support
+function parseMarkdownText(text) {
+  let html = text;
+  
+  // Parse markdown links [text](url)
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  
+  // Parse bold **text**
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  
+  // Parse inline code `text`
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  
+  // Parse italics *text*
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  
+  return html;
 }
 
 function initPage(data) {
@@ -273,9 +323,21 @@ function renderParagraphSection(section, container) {
   container.appendChild(h2);
 
   (section.body || []).forEach((text) => {
-    const p = document.createElement("p");
-    p.textContent = text;
-    container.appendChild(p);
+    if (text.startsWith('***') && text.endsWith('***')) {
+      // Render as H4
+      const h4 = document.createElement("h4");
+      h4.textContent = text.replace(/\*\*\*/g, '');
+      container.appendChild(h4);
+    } else if (text.startsWith('**') && text.endsWith('**')) {
+      // Render as H3
+      const h3 = document.createElement("h3");
+      h3.textContent = text.replace(/\*\*/g, '');
+      container.appendChild(h3);
+    } else {
+      const p = document.createElement("p");
+      p.innerHTML = parseMarkdownText(text);
+      container.appendChild(p);
+    }
   });
 }
 
@@ -322,7 +384,7 @@ function renderBulletSection(section, container) {
   const ul = document.createElement("ul");
   (section.items || []).forEach((text) => {
     const li = document.createElement("li");
-    li.textContent = text;
+    li.innerHTML = parseMarkdownText(text);
     ul.appendChild(li);
   });
   container.appendChild(ul);
@@ -390,9 +452,33 @@ function renderDocMapSection(section, container, fileMap) {
   header.appendChild(search);
   container.appendChild(header);
 
-  const intro = document.createElement("p");
-  intro.textContent = "Below is the complete file structure of this project.";
-  container.appendChild(intro);
+  // Render body content (General Overview + File Map sections)
+  (section.body || []).forEach((text) => {
+    if (text.startsWith('***') && text.endsWith('***')) {
+      const h4 = document.createElement("h4");
+      h4.textContent = text.replace(/\*\*\*/g, '');
+      container.appendChild(h4);
+    } else if (text.startsWith('**') && text.endsWith('**')) {
+      const h3 = document.createElement("h3");
+      h3.textContent = text.replace(/\*\*/g, '');
+      container.appendChild(h3);
+    } else {
+      const p = document.createElement("p");
+      p.innerHTML = parseMarkdownText(text);
+      container.appendChild(p);
+    }
+  });
+
+  // Render file list items
+  if (section.items && section.items.length > 0) {
+    const ul = document.createElement("ul");
+    section.items.forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = parseMarkdownText(item);
+      ul.appendChild(li);
+    });
+    container.appendChild(ul);
+  }
 }
 
 function renderFileDescriptionsSection(section, container, fileDescriptions) {
@@ -400,6 +486,34 @@ function renderFileDescriptionsSection(section, container, fileDescriptions) {
   const h2 = document.createElement("h2");
   h2.textContent = section.title || "File Descriptions";
   container.appendChild(h2);
+
+  // Render body content with markdown parsing
+  (section.body || []).forEach((text) => {
+    if (text.startsWith('***') && text.endsWith('***')) {
+      const h4 = document.createElement("h4");
+      h4.textContent = text.replace(/\*\*\*/g, '');
+      container.appendChild(h4);
+    } else if (text.startsWith('**') && text.endsWith('**')) {
+      const h3 = document.createElement("h3");
+      h3.textContent = text.replace(/\*\*/g, '');
+      container.appendChild(h3);
+    } else {
+      const p = document.createElement("p");
+      p.innerHTML = parseMarkdownText(text);
+      container.appendChild(p);
+    }
+  });
+
+  // Render bullet items
+  if (section.items && section.items.length > 0) {
+    const ul = document.createElement("ul");
+    section.items.forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = parseMarkdownText(item);
+      ul.appendChild(li);
+    });
+    container.appendChild(ul);
+  }
 }
 
 function renderFunFactSection(section, container) {
@@ -410,7 +524,7 @@ function renderFunFactSection(section, container) {
 
   (section.body || []).forEach((text) => {
     const p = document.createElement("p");
-    p.textContent = text;
+    p.innerHTML = parseMarkdownText(text);
     container.appendChild(p);
   });
 }
