@@ -69,6 +69,9 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                     if (condJson.contains("flag")) {
                         cond.flag = condJson["flag"];
                     }
+                    if (condJson.contains("flagsNot")) {
+                        cond.flagsNot = condJson["flagsNot"];
+                    }
                     choice.condition = cond;
                 }
 

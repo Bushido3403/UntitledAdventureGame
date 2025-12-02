@@ -9,8 +9,9 @@
 
 // Add these structs before the Choice struct
 struct Condition {
-    std::string flag;  // Flag name to check
-    bool requiredValue = true;  // Default: flag must be true
+    std::string flag;  // Flag name to check (must be true)
+    std::string flagsNot;  // Flag name to check (must be false/absent)
+    bool requiredValue = true;  // For 'flag' field only
 };
 
 struct Effects {

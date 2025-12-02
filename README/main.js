@@ -152,6 +152,16 @@ const PAGE_DATA = {
       "navLabel": "File Descriptions",
       "title": "File Descriptions",
       "type": "fileDescriptions"
+    },
+    {
+      "id": "fun-fact",
+      "navLabel": "Fun Fact",
+      "title": "🎮 Fun Fact",
+      "type": "funFact",
+      "body": [
+        "It IS in fact possible to lose the game. There are 3 different endings in total.",
+        "Hint: right click to drop items!"
+      ]
     }
   ],
   "fileMap": {
@@ -807,6 +817,9 @@ function buildSections(sections, data) {
           data.fileDescriptions
         );
         break;
+      case "funFact":
+        renderFunFactSection(section, container);
+        break;
       default:
         renderParagraphSection(section, container);
     }
@@ -1108,6 +1121,19 @@ function renderFileDescriptionsSection(section, container, fileDescriptions) {
       ul.appendChild(li);
     });
     container.appendChild(ul);
+  });
+}
+
+function renderFunFactSection(section, container) {
+  container.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = section.title || "";
+  container.appendChild(h2);
+
+  (section.body || []).forEach((text) => {
+    const p = document.createElement("p");
+    p.textContent = text;
+    container.appendChild(p);
   });
 }
 

@@ -451,7 +451,8 @@
         ],
         "effects": {
           "addItem": "bronze_key",
-          "addItemQuantity": 1
+          "addItemQuantity": 1,
+          "addFlag" : "has_bronze_key"
         }
       },
       {
@@ -478,7 +479,17 @@
         "choices": [
           {
             "text": "Use the bronze key on the gate.",
-            "nextScene": "a1_s31_gate_unlock"
+            "nextScene": "a1_s31_gate_unlock",
+            "condition": {
+              "flag": "has_bronze_key"
+            }
+          },
+          {
+            "text": "You dropped your key. Wait for someone to find you.",
+            "nextScene": "secret_ending_lost_key",
+            "condition": {
+              "flagsNot": "has_bronze_key"
+            }
           }
         ]
       },
@@ -533,26 +544,47 @@
         "music": "mus_asgard_relic",
         "effects": {
           "addItem": "asgard_sword",
-          "addItemQuantity": 1
+          "addItemQuantity": 1,
+          "addFlag" : "has_asgard_sword"
         },
         "choices": [
           {
             "text": "Head deeper",
-            "nextScene": "a1_s35_asgard_jotun_intro"
+            "nextScene": "a1_s35_asgard_jotun_intro",
+            "condition": {
+              "flag": "has_asgard_sword"
+            }
+          },
+          {
+            "text": "Head deeper",
+            "nextScene": "secret_ending_lost_sword",
+            "condition": {
+              "flagsNot": "has_asgard_sword"
+            }
           }
         ]
       },
       {
         "id": "a1_s35_asgard_jotun_intro",
-        "background": "bg_asgard_jotun_approach",
-        "text": "You follow a frost-rimmed street toward a shattered hall. Three ice giants stand at the broken gate, taller than the walls, skin like carved glacier. One drags a torn banner through the snow. Asgard is empty because they are here. The sword hums, eager for trouble.",
+        "background": "bg_asgard_jotun_battle",
+        "text": "You follow a frost-rimmed street toward a shattered hall. Three ice giants stand at the broken gate, taller than the walls, skin like carved glacier. One drags a torn banner through the snow. Asgard is empty because they are here.",
         "speaker": "Narrator",
         "speakerColor": "#E0E0FF",
         "music": "mus_asgard_battle_build",
         "choices": [
           {
             "text": "Raise the sword",
-            "nextScene": "a1_s36_asgard_jotun_choices"
+            "nextScene": "a1_s36_asgard_jotun_choices",
+            "condition": {
+              "flag": "has_asgard_sword"
+            }
+          },
+          {
+            "text": "You have no weapon to face the giants with.",
+            "nextScene": "a1_s36_asgard_jotun_choices",
+            "condition": {
+              "flagsNot": "has_asgard_sword"
+            }
           }
         ]
       },
@@ -566,19 +598,31 @@
         "choices": [
           {
             "text": "Shockwave through the ground",
-            "nextScene": "a1_s38_asgard_jotun_shockwave"
+            "nextScene": "a1_s38_asgard_jotun_shockwave",
+            "condition": {
+              "flag": "has_asgard_sword"
+            }
           },
           {
             "text": "Use the swords magic to draw runes.",
-            "nextScene": "a1_s39_asgard_jotun_runes"
+            "nextScene": "a1_s39_asgard_jotun_runes",
+            "condition": {
+              "flag": "has_asgard_sword"
+            }
           },
           {
             "text": "Headbutt a giant's knee",
-            "nextScene": "a1_s37_asgard_jotun_failure"
+            "nextScene": "a1_s37_asgard_jotun_failure",
+            "condition": {
+              "flagsNot": "has_asgard_sword"
+            }
           },
           {
             "text": "Call prophecy, fire the beam",
-            "nextScene": "a1_s40_asgard_jotun_beam"
+            "nextScene": "a1_s40_asgard_jotun_beam",
+            "condition": {
+              "flag": "has_asgard_sword"
+            }
           }
         ]
       },
@@ -663,6 +707,20 @@
           {
             "text": "The End",
             "nextScene": "END"
+          }
+        ]
+      },
+      {
+        "id": "secret_ending_lost_key",
+        "background": "secret_lost_key",
+        "text": "You wait for someone to find you. You're so hungry and cold. Days pass. Weeks. The forest reclaims the path. You are never seen again.",
+        "speaker": "Narrator",
+        "speakerColor": "#808080",
+        "music": "mus_world_ended",
+        "choices": [
+          {
+            "text": "Good luck next time.",
+            "nextScene": "a1_s43_end_scene"
           }
         ]
       }

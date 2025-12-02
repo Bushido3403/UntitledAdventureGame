@@ -27,6 +27,7 @@ public:
     bool hasSaveData() const { return !currentScript.empty(); }
     
     void clearSave();
+    void setFlag(const std::string& flag, bool value) { flags[flag] = value; }
 
 private:
     std::unordered_map<std::string, bool> flags;

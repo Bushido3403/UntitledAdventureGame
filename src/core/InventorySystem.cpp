@@ -1,4 +1,5 @@
 #include "InventorySystem.h"
+#include "GameStateManager.h"
 #include <fstream>
 #include <iostream>
 
@@ -89,7 +90,7 @@ bool InventorySystem::addItem(const std::string& itemId, int quantity) {
     return true;
 }
 
-bool InventorySystem::removeItem(const std::string& itemId, int quantity) {
+bool InventorySystem::removeItem(const std::string& itemId, int quantity, GameStateManager* gameState) {
     int remainingQuantity = quantity;
     
     for (auto it = items.begin(); it != items.end();) {
@@ -104,6 +105,14 @@ bool InventorySystem::removeItem(const std::string& itemId, int quantity) {
             }
             
             if (remainingQuantity <= 0) {
+                // Update game state flag when item is completely removed
+                if (gameState && !hasItem(itemId)) {
+                    if (itemId == "asgard_sword") {
+                        gameState->setFlag("has_asgard_sword", false);
+                    } else if (itemId == "bronze_key") {
+                        gameState->setFlag("has_bronze_key", false);
+                    }
+                }
                 return true;
             }
         } else {
@@ -111,18 +120,38 @@ bool InventorySystem::removeItem(const std::string& itemId, int quantity) {
         }
     }
     
+    // Update game state flag if item is completely removed
+    if (gameState && remainingQuantity == 0 && !hasItem(itemId)) {
+        if (itemId == "asgard_sword") {
+            gameState->setFlag("has_asgard_sword", false);
+        } else if (itemId == "bronze_key") {
+            gameState->setFlag("has_bronze_key", false);
+        }
+    }
+    
     return remainingQuantity == 0;
 }
 
-void InventorySystem::removeItemAtIndex(int index, int quantity) {
+void InventorySystem::removeItemAtIndex(int index, int quantity, GameStateManager* gameState) {
     if (index < 0 || index >= static_cast<int>(items.size())) {
         return;
     }
+    
+    std::string itemId = items[index].id;
     
     if (items[index].quantity <= quantity) {
         items.erase(items.begin() + index);
     } else {
         items[index].quantity -= quantity;
+    }
+    
+    // Update game state flag if item is completely removed
+    if (gameState && !hasItem(itemId)) {
+        if (itemId == "asgard_sword") {
+            gameState->setFlag("has_asgard_sword", false);
+        } else if (itemId == "bronze_key") {
+            gameState->setFlag("has_bronze_key", false);
+        }
     }
 }
 

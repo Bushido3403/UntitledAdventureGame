@@ -11,7 +11,6 @@ class InventorySystem;
 
 enum class InventoryAction {
     None,
-    ItemUsed,
     DeleteRequested
 };
 

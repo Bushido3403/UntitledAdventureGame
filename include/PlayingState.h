@@ -35,7 +35,7 @@ private:
         FadingIn
     };
     
-    enum class ConfirmationType { None, ThrowOut, ThrowOutAll, UseItem };
+    enum class ConfirmationType { None, ThrowOut, ThrowOutAll };
     
     void showConfirmationDialog(ConfirmationType type, int itemIndex, 
                                 const sf::Vector2u& windowSize, float titlebarHeight);

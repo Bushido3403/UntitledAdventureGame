@@ -7,16 +7,41 @@
 GameStateManager::GameStateManager() {}
 
 bool GameStateManager::checkCondition(const Condition& condition) const {
-    if (condition.flag.empty()) {
-        return true;
+    std::cout << "Checking condition - flag: '" << condition.flag 
+              << "', flagsNot: '" << condition.flagsNot << "'" << std::endl;
+    
+    // Check 'flag' field (must be true/present)
+    if (!condition.flag.empty()) {
+        auto it = flags.find(condition.flag);
+        bool flagExists = (it != flags.end());
+        bool flagValue = flagExists ? it->second : false;
+        std::cout << "  Flag '" << condition.flag << "' exists: " << flagExists 
+                  << ", value: " << flagValue << ", required: " << condition.requiredValue << std::endl;
+        
+        if (it == flags.end()) {
+            return !condition.requiredValue;
+        }
+        if (it->second != condition.requiredValue) {
+            return false;
+        }
     }
     
-    auto it = flags.find(condition.flag);
-    if (it == flags.end()) {
-        return !condition.requiredValue;
+    // Check 'flagsNot' field (must be false/absent)
+    if (!condition.flagsNot.empty()) {
+        auto it = flags.find(condition.flagsNot);
+        bool flagExists = (it != flags.end());
+        bool flagValue = flagExists ? it->second : false;
+        std::cout << "  FlagsNot '" << condition.flagsNot << "' exists: " << flagExists 
+                  << ", value: " << flagValue << std::endl;
+        
+        if (it != flags.end() && it->second == true) {
+            std::cout << "  -> Condition FAILED (flagsNot is true)" << std::endl;
+            return false;
+        }
     }
     
-    return it->second == condition.requiredValue;
+    std::cout << "  -> Condition PASSED" << std::endl;
+    return true;
 }
 
 void GameStateManager::applyEffects(const Effects& effects, InventorySystem* inventory) {

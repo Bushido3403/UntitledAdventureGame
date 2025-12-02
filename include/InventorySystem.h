@@ -5,6 +5,8 @@
 #include <nlohmann/json.hpp>
 #include "ResourceManager.h"
 
+class GameStateManager;  // Add forward declaration
+
 struct ItemDefinition {
     std::string id;
     std::string name;
@@ -27,14 +29,14 @@ public:
     InventorySystem(ResourceManager& resources);
     
     bool addItem(const std::string& itemId, int quantity = 1);
-    bool removeItem(const std::string& itemId, int quantity = 1);
+    bool removeItem(const std::string& itemId, int quantity = 1, GameStateManager* gameState = nullptr);
     bool hasItem(const std::string& itemId) const;
     int getItemCount(const std::string& itemId) const;
     
     const std::vector<InventoryItem>& getItems() const { return items; }
     const ItemDefinition* getItemDefinition(const std::string& itemId) const;
     
-    void removeItemAtIndex(int index, int quantity = 1);
+    void removeItemAtIndex(int index, int quantity = 1, GameStateManager* gameState = nullptr);
     
     void saveToJson(nlohmann::json& saveData) const;
     void loadFromJson(const nlohmann::json& saveData);

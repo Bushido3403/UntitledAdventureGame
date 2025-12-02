@@ -86,13 +86,10 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
         
         int cellIndex = getCellAtPosition(mousePos);
         if (cellIndex >= 0) {
-            int itemIndex = (scrollOffset * columns) + cellIndex;  // FIX: multiply by columns
+            int itemIndex = (scrollOffset * columns) + cellIndex;
             
             if (itemIndex < static_cast<int>(inventory.getItems().size())) {
-                if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
-                    result.action = InventoryAction::ItemUsed;
-                    result.itemIndex = itemIndex;
-                } else if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
+                if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
                     result.action = InventoryAction::DeleteRequested;
                     result.itemIndex = itemIndex;
                     result.removeAll = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) || 
@@ -204,20 +201,20 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
                     
                     window.draw(sprite);
                     
-                    if (item.quantity > 1) {
-                        sf::Text quantityText(resources.getFont("main"), 
-                                            std::to_string(item.quantity),
-                                            static_cast<unsigned int>(14 * currentScale));
-                        quantityText.setFillColor(sf::Color::White);
+                    // if (item.quantity > 1) {
+                    //     sf::Text quantityText(resources.getFont("main"), 
+                    //                         std::to_string(item.quantity),
+                    //                         static_cast<unsigned int>(14 * currentScale));
+                    //     quantityText.setFillColor(sf::Color::White);
                         
-                        sf::FloatRect textBounds = quantityText.getGlobalBounds();
-                        quantityText.setPosition({
-                            cell.bounds.position.x + cellSize.x - textBounds.size.x - 4.f,
-                            cell.bounds.position.y + cellSize.y - textBounds.size.y - 4.f
-                        });
+                    //     sf::FloatRect textBounds = quantityText.getGlobalBounds();
+                    //     quantityText.setPosition({
+                    //         cell.bounds.position.x + cellSize.x - textBounds.size.x - 4.f,
+                    //         cell.bounds.position.y + cellSize.y - textBounds.size.y - 4.f
+                    //     });
                         
-                        window.draw(quantityText);
-                    }
+                    //     window.draw(quantityText);
+                    // }
                 } catch (...) {
                     // Texture not loaded, skip drawing
                 }

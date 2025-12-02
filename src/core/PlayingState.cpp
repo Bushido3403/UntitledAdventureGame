@@ -217,14 +217,6 @@ void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex,
                 message = "Throw out " + def->name + "?";
             }
         }
-    } else if (type == ConfirmationType::UseItem) {
-        const auto& items = inventorySystem->getItems();
-        if (itemIndex >= 0 && itemIndex < static_cast<int>(items.size())) {
-            const ItemDefinition* def = inventorySystem->getItemDefinition(items[itemIndex].id);
-            if (def) {
-                message = "Use " + def->name + "?";
-            }
-        }
     } else if (type == ConfirmationType::ThrowOutAll) {
         const auto& items = inventorySystem->getItems();
         if (itemIndex >= 0 && itemIndex < static_cast<int>(items.size())) {
@@ -256,19 +248,13 @@ void PlayingState::handleConfirmation(bool confirmed) {
     }
     
     if (confirmationType == ConfirmationType::ThrowOut) {
-        inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1, gameState.get());
         gameState->saveGame(sceneManager->getScript().scriptId, 
                           sceneManager->getCurrentScene()->id,
                           inventorySystem.get());
     }
     else if (confirmationType == ConfirmationType::ThrowOutAll) {
-        inventorySystem->removeItemAtIndex(pendingActionItemIndex, items[pendingActionItemIndex].quantity);
-        gameState->saveGame(sceneManager->getScript().scriptId, 
-                          sceneManager->getCurrentScene()->id,
-                          inventorySystem.get());
-    }
-    else if (confirmationType == ConfirmationType::UseItem) {
-        // inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1);
+        inventorySystem->removeItemAtIndex(pendingActionItemIndex, items[pendingActionItemIndex].quantity, gameState.get());
         gameState->saveGame(sceneManager->getScript().scriptId, 
                           sceneManager->getCurrentScene()->id,
                           inventorySystem.get());
@@ -295,15 +281,10 @@ void PlayingState::handleEvent(const sf::Event& event) {
     }
     
     auto interaction = ui->handleInventoryEvent(event);
-    
+
     if (interaction.action == InventoryAction::DeleteRequested) {
         showConfirmationDialog(interaction.removeAll ? ConfirmationType::ThrowOutAll : ConfirmationType::ThrowOut, 
                               interaction.itemIndex,
-                              currentWindowSize, CustomWindow::getTitlebarHeight());
-        return;
-    }
-    else if (interaction.action == InventoryAction::ItemUsed) {
-        showConfirmationDialog(ConfirmationType::UseItem, interaction.itemIndex, 
                               currentWindowSize, CustomWindow::getTitlebarHeight());
         return;
     }
