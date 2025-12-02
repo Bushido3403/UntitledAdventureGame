@@ -857,7 +857,7 @@ function renderHelpfulLinksSection(section, container) {
 
   const p = document.createElement("p");
   p.innerHTML = `👉 <strong>Full Documentation (Live Site):</strong> You are here!<br>
-<em style="color: var(--color-text-muted); font-size: 0.88rem;">Note: GitHub README links always open in the same tab by default — use Ctrl/Cmd-click or middle-click to open in a new tab.</em>`;
+<em style="color: var(--color-text-muted); font-size: 0.88rem;">Note: GitHub README links always open in the same tab - middle-click to open in a new tab.</em>`;
   container.appendChild(p);
 
   const linkP = document.createElement("p");
@@ -909,6 +909,7 @@ function renderBuildingSection(section, container) {
   const ul = document.createElement("ul");
   const li = document.createElement("li");
   li.innerHTML = `See <a href="install.md" style="color: var(--color-accent);">install.md</a> for building from source`;
+  li.innerHTML = `See <a href="https://github.com/Bushido3403/UntitledAdventureGame/blob/master/install.md" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent);">install.md</a> in source code for building from source`;
   ul.appendChild(li);
   container.appendChild(ul);
 }

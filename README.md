@@ -26,7 +26,7 @@ Contains the compiled `.exe` and required files.
 
 ## Building
 
-- See isntall.md in source code for building from source.
+- See install.md in source code for building from source.
 
 ### Prerequisites for development
 
