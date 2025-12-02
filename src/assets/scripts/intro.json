@@ -135,7 +135,7 @@
             "nextScene": "a1_s07_save_villagers"
           },
           {
-            "text": "Quietly back away from the chaos. Someone braver, or dumber, can deal with this.",
+            "text": "Frolic away from the chaos.",
             "nextScene": "a1_s10_run_away"
           },
           {
@@ -143,7 +143,7 @@
             "nextScene": "a1_s08_diplomacy"
           },
           {
-            "text": "If everything's already on fire… help the bull finish the job.",
+            "text": "If everything's already on fire... help the bull finish the job.",
             "nextScene": "a1_s09_help_bull"
           }
         ]
@@ -160,11 +160,7 @@
             "text": "Stand your ground",
             "nextScene": "a1_s11_bull_fight_intro"
           }
-        ],
-        "effects": {
-          "addItem": "health_potion",
-          "addItemQuantity": 13
-        }
+        ]
       },
       {
         "id": "a1_s08_diplomacy",
@@ -232,7 +228,7 @@
         "choices": [
           {
             "text": "Keep moving into the forest",
-            "nextScene": "a1_s17_bjorn_intro_runaway"
+            "nextScene": "a1_s20_forest_crossroads"
           }
         ]
       },
@@ -246,9 +242,263 @@
         "choices": [
           {
             "text": "Prepare to fight",
-            "nextScene": "BATTLE_BULL"
+            "nextScene": "a1_s12_bull_failure"
           }
         ]
+      },
+      {
+        "id": "a1_s12_bull_failure",
+        "background": "bg_midgard_village_square_burning",
+        "text": "The Muspel-bull hits you like a collapsing house. Heat and force smash the air from your lungs. For a moment you're nothing but pain and light. You register distant screams, the crack of breaking beams, the roar of fire eating roofs. Then even that fades. You are not a hero. Not tonight.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_boss_bull_intro",
+        "choices": [
+          {
+            "text": "...",
+            "nextScene": "a1_s13_burned_village_wake"
+          }
+        ]
+      },
+      {
+        "id": "a1_s13_burned_village_wake",
+        "background": "bg_midgard_village_square_ashes",
+        "text": "You wake on cold stone, staring up at a sky the color of old iron. No screams. No bull. No villagers. Just the crackle of dying embers and the slow groan of ruined beams. The village is a skeleton: blackened frames, a collapsed hall, the crooked well ringed with ash. The only thing that still looks alive is the forest path leading away from the wreckage, disappearing into dark trees.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_mythic_drone",
+        "choices": [
+          {
+            "text": "Leave the dead village behind and follow the path into the forest.",
+            "nextScene": "a1_s20_forest_crossroads"
+          }
+        ]
+      },
+      {
+        "id": "a1_s20_forest_crossroads",
+        "background": "bg_midgard_forest_crossroads",
+        "text": "The village road narrows to a forest path, then spills you into a clearing where the trees pull back like a ring of silent onlookers. Four roads branch off from here. One is paved with pale stone, worn smooth by long-forgotten feet, leading toward a distant shadow of carved rock that might be a gate. The other three are dirt tracks disappearing into thicker, darker woods.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_tense_sneak",
+        "choices": [
+          {
+            "text": "Take the paved road.",
+            "nextScene": "a1_s21_paved_gate_approach"
+          },
+          {
+            "text": "Take the first dirt path.",
+            "nextScene": "a1_s22_dirt_path_1_puzzle"
+          },
+          {
+            "text": "Take the second dirt path.",
+            "nextScene": "a1_s24_dirt_path_2_puzzle"
+          },
+          {
+            "text": "Take the third dirt path.",
+            "nextScene": "a1_s26_dirt_path_3_puzzle"
+          }
+        ]
+      },
+      {
+        "id": "a1_s21_paved_gate_approach",
+        "background": "bg_midgard_forest_gate",
+        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle, no obvious lock—just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Press your hands against the gate.",
+            "nextScene": "a1_s21b_paved_gate_locked"
+          }
+        ]
+      },
+      {
+        "id": "a1_s21b_paved_gate_locked",
+        "background": "bg_midgard_forest_gate",
+        "text": "The metal is cold and unyielding. The circles along its surface glow for a heartbeat, then dim, as if disappointed. You feel the weight of your empty hands: whatever opens this gate, you don't have it yet. Not unless you've found something key-shaped and made of bronze.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Head back to the crossroads.",
+            "nextScene": "a1_s20_forest_crossroads"
+          }
+        ]
+      },
+      {
+        "id": "a1_s22_dirt_path_1_puzzle",
+        "background": "bg_midgard_forest_dirt1",
+        "text": "The leftmost path winds past mossy roots and low, twisted branches until it ends at a squat stone half-swallowed by the earth. Its face is carved with three runes arranged in a row, but the middle one has been chipped away. A faint shimmer hangs over the stone, like heat above a road.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Trace the left rune and speak its name aloud.",
+            "nextScene": "a1_s23_dirt_path_1_result"
+          },
+          {
+            "text": "Trace the right rune and whisper a question.",
+            "nextScene": "a1_s23_dirt_path_1_result"
+          },
+          {
+            "text": "Press your palm over the broken, middle rune.",
+            "nextScene": "a1_s23_dirt_path_1_result"
+          }
+        ]
+      },
+      {
+        "id": "a1_s23_dirt_path_1_result",
+        "background": "bg_midgard_forest_dirt1",
+        "text": "The stone hums under your touch, lines of light crawling along the surviving runes. For a heartbeat you expect an answer, a voice, a gift—anything. Then the shimmer collapses with a soft crackle. The runes go dark. Whatever power lived here is spent. All that's left is damp moss and old carvings that don't care about you.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Head back to the crossroads.",
+            "nextScene": "a1_s20_forest_crossroads"
+          }
+        ]
+      },
+      {
+        "id": "a1_s24_dirt_path_2_puzzle",
+        "background": "bg_midgard_forest_dirt2",
+        "text": "The second dirt path threads between two leaning pines and descends into a hollow where a single dead tree stands, branches stripped bare. Scraps of cloth and bone charms dangle from its limbs, turning slowly in a wind you can't feel. As you approach, the charms clack together with a sound almost like speech.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_whispers",
+        "choices": [
+          {
+            "text": "Ask the tree for guidance.",
+            "nextScene": "a1_s25_dirt_path_2_result"
+          },
+          {
+            "text": "Untangle one of the bone charms and listen closely.",
+            "nextScene": "a1_s25_dirt_path_2_result"
+          },
+          {
+            "text": "Ignore the whispers and simply wait in silence.",
+            "nextScene": "a1_s25_dirt_path_2_result"
+          }
+        ]
+      },
+      {
+        "id": "a1_s25_dirt_path_2_result",
+        "background": "bg_midgard_forest_dirt2",
+        "text": "The clacking charms slow, then stop. For a moment you think you catch words in a language you almost recognize—names, maybe, or warnings. Then a branch snaps, the sound sharp and final, and everything goes still. No visions. No gate opening. Just you, a dead tree, and the growing sense that this path has given you all it's going to.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_whispers",
+        "choices": [
+          {
+            "text": "Head back to the crossroads.",
+            "nextScene": "a1_s20_forest_crossroads"
+          }
+        ]
+      },
+      {
+        "id": "a1_s26_dirt_path_3_puzzle",
+        "background": "bg_midgard_forest_dirt3",
+        "text": "The third dirt path skirts the thickest trees until it opens into a small clearing. At its center stands a waist-high stone plinth, cracked but still solid, with a shallow bronze bowl set into the top. Inside the bowl lie three objects: a river pebble, a charred twig, and a feather black as midnight. Faint runes around the bowl read: \"Choose what remains when all else is taken.\"",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Take the river pebble.",
+            "nextScene": "a1_s27_dirt_path_3_no_key"
+          },
+          {
+            "text": "Take the charred twig.",
+            "nextScene": "a1_s27_dirt_path_3_no_key"
+          },
+          {
+            "text": "Take the black feather.",
+            "nextScene": "a1_s28_dirt_path_3_key_result"
+          }
+        ]
+      },
+      {
+        "id": "a1_s27_dirt_path_3_no_key",
+        "background": "bg_midgard_forest_dirt3",
+        "text": "Nothing happens.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Head back to the crossroads.",
+            "nextScene": "a1_s20_forest_crossroads"
+          }
+        ]
+      },
+      {
+        "id": "a1_s28_dirt_path_3_key_result",
+        "background": "bg_midgard_forest_dirt3",
+        "text": "As your fingers close around your chosen object, the bowl shudders. Metal groans and curls in on itself like a dying leaf. When it uncurls again, the pebble, twig, and feather are gone. In their place lies a small bronze key etched with the same interlocking circles you saw on the distant gate. It's warm in your palm, as if it's been waiting for you specifically.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Head back to the crossroads happily.",
+            "nextScene": "a1_s29_forest_crossroads"
+          }
+        ],
+        "effects": {
+          "addItem": "bronze_key",
+          "addItemQuantity": 1
+        }
+      },
+      {
+        "id": "a1_s29_forest_crossroads",
+        "background": "bg_midgard_forest_crossroads",
+        "text": "The village road narrows to a forest path, then spills you into a clearing where the trees pull back like a ring of silent onlookers. Four roads branch off from here. One is paved with pale stone, worn smooth by long-forgotten feet, leading toward a distant shadow of carved rock that might be a gate. The other three are dirt tracks disappearing into thicker, darker woods.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_tense_sneak",
+        "choices": [
+          {
+            "text": "Take the paved road.",
+            "nextScene": "a1_s30_paved_gate_approach"
+          }
+        ]
+      },
+      {
+        "id": "a1_s30_paved_gate_approach",
+        "background": "bg_midgard_forest_gate",
+        "text": "The paved road winds between old stones carved with half-faded runes. It ends at a towering gate of dark metal set into a cliffside, its surface etched with interlocking circles like gears in some forgotten divine machine. No guards, no handle—just a round depression the size of a coin at the center of the pattern. As you step closer, the metal thrums faintly, as if aware you're there.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery",
+        "choices": [
+          {
+            "text": "Use the bronze key on the gate.",
+            "nextScene": "a1_s31_gate_unlock"
+          }
+        ]
+      },
+      {
+        "id": "a1_s31_gate_unlock",
+        "background": "bg_midgard_forest_gate_open",
+        "text": "You fit the bronze key into the gate's central depression. It turns smoothly, as if it was made for this lock. You see what appears to be Asgard on the other side.",
+        "speaker": "Narrator",
+        "speakerColor": "#E0E0FF",
+        "music": "mus_forest_mystery_resolve",
+        "choices": [
+          {
+            "text": "Step through the gate...",
+            "nextScene": "a1_s32_forest_path_beyond"
+          }
+        ],
+        "effects": {
+          "addItem": "bronze_key",
+          "addItemQuantity": -1
+        }
       }
     ]
   }

@@ -6,25 +6,12 @@
       "stackable": true,
       "maxStackSize": 1
     },
-    "key_bronze": {
+    "bronze_key": {
       "name": "Bronze Key",
-      "description": "Opens bronze locks",
-      "texture": "assets/items/key_bronze.png",
+      "description": "Opens big gates.",
+      "texture": "assets/items/bronze_key.png",
       "stackable": false,
-      "maxStackSize": 1
-    },
-    "ancient_scroll": {
-      "name": "Ancient Scroll",
-      "description": "Contains forgotten knowledge",
-      "texture": "assets/items/scroll.png",
-      "stackable": false,
-      "maxStackSize": 1
-    },
-    "gold_coin": {
-      "name": "Gold Coins",
-      "description": "Currency of the realm",
-      "texture": "assets/items/gold_coin.png",
-      "stackable": true,
-      "maxStackSize": 99
+      "maxStackSize": 1,
+      "usable": false
     }
-  }
+}
