@@ -77,6 +77,21 @@ const PAGE_DATA = {
       "type": "helpfulLinks"
     },
     {
+      "id": "design-approach",
+      "navLabel": "Design Approach",
+      "title": "Design Approach",
+      "type": "designApproach",
+      "body": [
+        "This game was built with a **state-driven architecture** at its core. Every screen—main menu, settings, gameplay—is its own isolated state that can be pushed onto or popped from a stack. This makes transitions clean and keeps concerns separated.",
+        "The **resource management** system uses lazy loading and caching. When a texture or sound is requested, it's loaded once and stored in a map for reuse. This avoids duplicate loads and keeps memory usage predictable.",
+        "For the **UI layer**, I avoided a heavyweight framework. Instead, I built lightweight components (buttons, dialog boxes, confirmation modals) that own their own rendering and input handling. Each widget knows how to draw itself and respond to mouse events, which makes the codebase modular and easy to extend.",
+        "The **scene system** is entirely data-driven. All narrative content, choices, and branching logic live in JSON files. The `ScriptParser` reads these scripts, and the `SceneManager` handles transitions. This separation means I can write new story content without touching C++ code.",
+        "**Game state persistence** is handled through a single JSON save file. Player stats, inventory, story flags, and current position are serialized and deserialized on demand. The `GameStateManager` acts as the single source of truth, and all systems query or modify state through it.",
+        "The **custom window system** was a deliberate choice. I wanted full control over the titlebar, fullscreen behavior, and cursor rendering. By creating a borderless SFML window and drawing my own UI chrome, I got pixel-perfect control over the player experience.",
+        "Throughout development, I prioritized **readability over cleverness**. Class responsibilities are narrow, dependencies are explicit, and there's minimal inheritance. This made debugging easier and kept the codebase approachable for someone coming back to it weeks later."
+      ]
+    },
+    {
       "id": "features",
       "navLabel": "Features I'm Proud Of",
       "title": "Features I'm Proud Of",
@@ -812,6 +827,9 @@ function buildSections(sections, data) {
       case "features":
         renderFeaturesSection(section, container);
         break;
+      case "designApproach":
+        renderDesignApproachSection(section, container);
+        break;
       case "building":
         renderBuildingSection(section, container);
         break;
@@ -897,6 +915,20 @@ function renderFeaturesSection(section, container) {
     });
     container.appendChild(row);
   }
+}
+
+function renderDesignApproachSection(section, container) {
+  container.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = section.title || "Design Approach";
+  container.appendChild(h2);
+
+  (section.body || []).forEach((text) => {
+    const p = document.createElement("p");
+    // Parse markdown-style bold syntax
+    p.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    container.appendChild(p);
+  });
 }
 
 function renderBuildingSection(section, container) {
