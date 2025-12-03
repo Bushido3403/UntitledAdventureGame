@@ -925,8 +925,11 @@ function renderDesignApproachSection(section, container) {
 
   (section.body || []).forEach((text) => {
     const p = document.createElement("p");
-    // Parse markdown-style bold syntax
-    p.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Parse markdown-style bold syntax and also handle backticks for code
+    const processedText = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`(.*?)`/g, '<code>$1</code>');
+    p.innerHTML = processedText;
     container.appendChild(p);
   });
 }
