@@ -17,6 +17,13 @@
           {
             "text": "Continue",
             "nextScene": "a1_s02_prophecy_vision"
+          },
+          {
+            "text": "Skip Intro",
+            "nextScene": "a1_s20_forest_crossroads",
+            "condition": {
+              "flag": "intro_complete"
+            }
           }
         ]
       },
@@ -298,7 +305,10 @@
             "text": "Take the third dirt path.",
             "nextScene": "a1_s26_dirt_path_3_puzzle"
           }
-        ]
+        ],
+        "effects" : {
+          "addFlag": "intro_complete"
+        }
       },
       {
         "id": "a1_s21_paved_gate_approach",
@@ -602,7 +612,7 @@
           },
           {
             "text": "You have no weapon to face the giants with.",
-            "nextScene": "a1_s36_asgard_jotun_choices",
+            "nextScene": "a1_s37_asgard_jotun_failure",
             "condition": {
               "flagsNot": "has_asgard_sword"
             }

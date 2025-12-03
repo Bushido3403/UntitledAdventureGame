@@ -161,19 +161,45 @@ void GameStateManager::loadGame(InventorySystem* inventory) {
 }
 
 void GameStateManager::clearSave() {
+    // Preserve intro_complete flag
+    bool preservedIntroComplete = false;
+    auto it = flags.find("intro_complete");
+    if (it != flags.end()) {
+        preservedIntroComplete = it->second;
+    }
+
     // Reset in-memory state
     flags.clear();
     stats.clear();
     currentScript.clear();
     currentScene.clear();
 
-    // Overwrite / delete save file
+    // Restore intro_complete flag if it existed
+    if (preservedIntroComplete) {
+        flags["intro_complete"] = true;
+    }
+
+    // Save with reset scene
+    using json = nlohmann::json;
+    json saveData;
+    saveData["playerName"] = "";
+    saveData["currentScript"] = "";
+    saveData["currentScene"] = "a1_s01_mythic_void";
+    
+    json flagsJson = json::object();
+    for (const auto& [key, value] : flags) {
+        flagsJson[key] = value;
+    }
+    saveData["flags"] = flagsJson;
+    saveData["stats"] = json::object();
+    saveData["inventory"] = json::array();
+
     std::ofstream file("assets/save_data.json", std::ios::trunc);
     if (file.is_open()) {
-        file << "{}";  // or just leave empty, your loadGame already handles empty file
+        file << saveData.dump(2);
         file.close();
-        std::cout << "Save data cleared" << std::endl;
+        std::cout << "Save data reset to beginning (intro_complete preserved)" << std::endl;
     } else {
-        std::cerr << "Failed to clear save data file" << std::endl;
+        std::cerr << "Failed to reset save data file" << std::endl;
     }
 }
