@@ -195,7 +195,7 @@ void GameEngine::render() {
     if (!stateStack.empty()) {
         stateStack.top()->draw(window->getWindow());
     }
-    
+                  
     window->drawTitlebar();
     window->display();
 }

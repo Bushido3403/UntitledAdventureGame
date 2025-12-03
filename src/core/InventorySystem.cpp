@@ -9,6 +9,7 @@ InventorySystem::InventorySystem(ResourceManager& resources)
     loadItemDefinitions();
 }
 
+// Parse items.json and preload textures
 bool InventorySystem::loadItemDefinitions() {
     using json = nlohmann::json;
     
@@ -22,6 +23,7 @@ bool InventorySystem::loadItemDefinitions() {
         json itemsJson;
         file >> itemsJson;
         
+        // Parse each item definition
         for (auto& [itemId, itemData] : itemsJson.items()) {
             ItemDefinition def;
             def.id = itemId;
@@ -33,7 +35,7 @@ bool InventorySystem::loadItemDefinitions() {
             
             itemDefinitions[itemId] = def;
             
-            // Preload texture
+            // Preload texture for this item
             if (!def.texturePath.empty()) {
                 resources.loadTexture(itemId, def.texturePath);
             }
@@ -56,6 +58,7 @@ const ItemDefinition* InventorySystem::getItemDefinition(const std::string& item
     return nullptr;
 }
 
+// Add items with intelligent stacking behavior
 bool InventorySystem::addItem(const std::string& itemId, int quantity) {
     const ItemDefinition* def = getItemDefinition(itemId);
     if (!def) {
@@ -66,7 +69,7 @@ bool InventorySystem::addItem(const std::string& itemId, int quantity) {
     int remainingQuantity = quantity;
     
     if (def->stackable) {
-        // Try to stack with existing items
+        // First, try to fill existing stacks
         for (auto& item : items) {
             if (item.id == itemId && item.quantity < def->maxStackSize) {
                 int canAdd = std::min(remainingQuantity, def->maxStackSize - item.quantity);
@@ -80,7 +83,7 @@ bool InventorySystem::addItem(const std::string& itemId, int quantity) {
         }
     }
     
-    // Add new stacks
+    // Create new stacks for remaining quantity
     while (remainingQuantity > 0) {
         int stackSize = def->stackable ? std::min(remainingQuantity, def->maxStackSize) : 1;
         items.emplace_back(itemId, stackSize);
@@ -90,9 +93,11 @@ bool InventorySystem::addItem(const std::string& itemId, int quantity) {
     return true;
 }
 
+// Remove items and update game state flags when fully removed
 bool InventorySystem::removeItem(const std::string& itemId, int quantity, GameStateManager* gameState) {
     int remainingQuantity = quantity;
     
+    // Remove from stacks until quantity is satisfied
     for (auto it = items.begin(); it != items.end();) {
         if (it->id == itemId) {
             if (it->quantity <= remainingQuantity) {
@@ -105,7 +110,7 @@ bool InventorySystem::removeItem(const std::string& itemId, int quantity, GameSt
             }
             
             if (remainingQuantity <= 0) {
-                // Update game state flag when item is completely removed
+                // Update game state when item is completely removed
                 if (gameState && !hasItem(itemId)) {
                     if (itemId == "asgard_sword") {
                         gameState->setFlag("has_asgard_sword", false);
@@ -120,7 +125,7 @@ bool InventorySystem::removeItem(const std::string& itemId, int quantity, GameSt
         }
     }
     
-    // Update game state flag if item is completely removed
+    // Final check to update game state
     if (gameState && remainingQuantity == 0 && !hasItem(itemId)) {
         if (itemId == "asgard_sword") {
             gameState->setFlag("has_asgard_sword", false);
@@ -132,6 +137,7 @@ bool InventorySystem::removeItem(const std::string& itemId, int quantity, GameSt
     return remainingQuantity == 0;
 }
 
+// Remove item at specific inventory slot
 void InventorySystem::removeItemAtIndex(int index, int quantity, GameStateManager* gameState) {
     if (index < 0 || index >= static_cast<int>(items.size())) {
         return;
@@ -145,7 +151,7 @@ void InventorySystem::removeItemAtIndex(int index, int quantity, GameStateManage
         items[index].quantity -= quantity;
     }
     
-    // Update game state flag if item is completely removed
+    // Update game state if item is completely removed
     if (gameState && !hasItem(itemId)) {
         if (itemId == "asgard_sword") {
             gameState->setFlag("has_asgard_sword", false);
@@ -164,6 +170,7 @@ bool InventorySystem::hasItem(const std::string& itemId) const {
     return false;
 }
 
+// Sum quantities across all stacks of an item
 int InventorySystem::getItemCount(const std::string& itemId) const {
     int count = 0;
     for (const auto& item : items) {
@@ -174,6 +181,7 @@ int InventorySystem::getItemCount(const std::string& itemId) const {
     return count;
 }
 
+// Serialize inventory to JSON for saving
 void InventorySystem::saveToJson(nlohmann::json& saveData) const {
     using json = nlohmann::json;
     
@@ -188,6 +196,7 @@ void InventorySystem::saveToJson(nlohmann::json& saveData) const {
     saveData["inventory"] = inventoryJson;
 }
 
+// Load inventory from JSON save data
 void InventorySystem::loadFromJson(const nlohmann::json& saveData) {
     items.clear();
     
@@ -199,6 +208,7 @@ void InventorySystem::loadFromJson(const nlohmann::json& saveData) {
         std::string id = itemJson.value("id", "");
         int quantity = itemJson.value("quantity", 1);
         
+        // Only load items that have valid definitions
         if (!id.empty() && getItemDefinition(id)) {
             items.emplace_back(id, quantity);
         }

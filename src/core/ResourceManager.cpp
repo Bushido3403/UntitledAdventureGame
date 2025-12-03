@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include <iostream>
 
+// Load a texture from file and store it with an ID
 bool ResourceManager::loadTexture(const std::string& id, const std::string& path)
 {
     sf::Texture texture;
@@ -16,6 +17,7 @@ bool ResourceManager::loadTexture(const std::string& id, const std::string& path
     return true;
 }
 
+// Load a font from file and store it with an ID
 bool ResourceManager::loadFont(const std::string& id, const std::string& path)
 {
     sf::Font font;
@@ -28,6 +30,7 @@ bool ResourceManager::loadFont(const std::string& id, const std::string& path)
     return true;
 }
 
+// Load music from file and store it with an ID
 bool ResourceManager::loadMusic(const std::string& id, const std::string& path)
 {
     auto musicPtr = std::make_unique<sf::Music>();
@@ -38,10 +41,11 @@ bool ResourceManager::loadMusic(const std::string& id, const std::string& path)
         return false;
     }
     music[id] = std::move(musicPtr);
-    std::cout << "Successfully loaded music: " << id << std::endl; // Add this
+    std::cout << "Successfully loaded music: " << id << std::endl;
     return true;
 }
 
+// Load a sound buffer from file and store it with an ID
 bool ResourceManager::loadSoundBuffer(const std::string& id, const std::string& path)
 {
     sf::SoundBuffer buffer;
@@ -54,21 +58,25 @@ bool ResourceManager::loadSoundBuffer(const std::string& id, const std::string& 
     return true;
 }
 
+// Get a previously loaded texture by ID
 sf::Texture& ResourceManager::getTexture(const std::string& id)
 {
     return textures.at(id);
 }
 
+// Get a previously loaded font by ID
 sf::Font& ResourceManager::getFont(const std::string& id)
 {
     return fonts.at(id);
 }
 
+// Get a previously loaded music track by ID
 sf::Music& ResourceManager::getMusic(const std::string& id)
 {
     return *music.at(id);
 }
 
+// Get a previously loaded sound buffer by ID
 sf::SoundBuffer& ResourceManager::getSoundBuffer(const std::string& id)
 {
     return soundBuffers.at(id);

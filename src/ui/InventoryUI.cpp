@@ -15,6 +15,7 @@ InventoryUI::InventoryUI(ResourceManager& resources)
     tooltipDescription.setFillColor(sf::Color(200, 200, 200));
 }
 
+// Store layout parameters and rebuild grid
 void InventoryUI::updateLayout(const sf::FloatRect& containerBounds, float padding, float scaleY) {
     this->containerBounds = containerBounds;
     this->currentPadding = padding;
@@ -23,22 +24,26 @@ void InventoryUI::updateLayout(const sf::FloatRect& containerBounds, float paddi
     createGrid(containerBounds, padding);
 }
 
+// Calculate grid cell positions and sizes
 void InventoryUI::createGrid(const sf::FloatRect& bounds, float padding) {
     grid.clear();
     
     float availableWidth = bounds.size.x - (padding * 2);
     float availableHeight = bounds.size.y - (padding * 2);
     
+    // Calculate cell size to fit grid
     float cellWidth = (availableWidth - (cellPadding * (columns - 1))) / columns;
     float cellHeight = (availableHeight - (cellPadding * (visibleRows - 1))) / visibleRows;
     float cellSide = std::min(cellWidth, cellHeight);
     
     cellSize = sf::Vector2f(cellSide, cellSide);
     
+    // Center the grid horizontally
     float totalGridWidth = (cellSide * columns) + (cellPadding * (columns - 1));
     float startX = bounds.position.x + padding + (availableWidth - totalGridWidth) / 2.f;
     float startY = bounds.position.y + padding;
     
+    // Create all visible cells
     for (int row = 0; row < visibleRows; ++row) {
         for (int col = 0; col < columns; ++col) {
             GridCell cell;
@@ -58,6 +63,7 @@ void InventoryUI::createGrid(const sf::FloatRect& bounds, float padding) {
     }
 }
 
+// Find which grid cell contains the given position
 int InventoryUI::getCellAtPosition(const sf::Vector2f& pos) const {
     for (size_t i = 0; i < grid.size(); ++i) {
         if (grid[i].bounds.contains(pos)) {
@@ -72,11 +78,13 @@ void InventoryUI::updateScroll(float delta, int totalItems) {
     scrollOffset = std::max(0, std::min(scrollOffset, getMaxScroll(totalItems)));
 }
 
+// Calculate maximum scroll offset based on item count
 int InventoryUI::getMaxScroll(int totalItems) const {
     int totalRows = (totalItems + columns - 1) / columns;
     return std::max(0, totalRows - visibleRows);
 }
 
+// Handle mouse clicks and scrolling
 InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const InventorySystem& inventory) {
     InventoryInteraction result;
     
@@ -86,9 +94,11 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
         
         int cellIndex = getCellAtPosition(mousePos);
         if (cellIndex >= 0) {
+            // Convert cell index to item index accounting for scroll
             int itemIndex = (scrollOffset * columns) + cellIndex;
             
             if (itemIndex < static_cast<int>(inventory.getItems().size())) {
+                // Right-click to delete (shift+right-click for all)
                 if (mouseButtonPressed->button == sf::Mouse::Button::Right) {
                     result.action = InventoryAction::DeleteRequested;
                     result.itemIndex = itemIndex;
@@ -102,6 +112,7 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
         sf::Vector2f mousePos(static_cast<float>(mouseWheelScrolled->position.x),
                               static_cast<float>(mouseWheelScrolled->position.y));
         
+        // Only scroll if mouse is over inventory
         if (containerBounds.contains(mousePos)) {
             updateScroll(mouseWheelScrolled->delta, static_cast<int>(inventory.getItems().size()));
         }
@@ -110,6 +121,7 @@ InventoryInteraction InventoryUI::handleEvent(const sf::Event& event, const Inve
     return result;
 }
 
+// Update hover state and prepare tooltip
 void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& inventory) {
     sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
     
@@ -117,7 +129,8 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
     showTooltip = false;
     
     if (hoveredCell >= 0) {
-        int itemIndex = (scrollOffset * columns) + hoveredCell;  // FIX: multiply by columns
+        // Calculate actual item index with scroll offset
+        int itemIndex = (scrollOffset * columns) + hoveredCell;
         
         if (itemIndex < static_cast<int>(inventory.getItems().size())) {
             const auto& item = inventory.getItems()[itemIndex];
@@ -126,9 +139,11 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
             if (def) {
                 showTooltip = true;
                 
+                // Setup tooltip text
                 tooltipTitle.setString(def->name);
                 tooltipDescription.setString(def->description);
                 
+                // Calculate tooltip size
                 float tooltipPadding = 8.f;
                 float tooltipWidth = std::max(tooltipTitle.getGlobalBounds().size.x,
                                              tooltipDescription.getGlobalBounds().size.x) + tooltipPadding * 2;
@@ -136,6 +151,7 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
                                      tooltipDescription.getGlobalBounds().size.y + 
                                      tooltipPadding * 3;
                 
+                // Position tooltip near mouse, adjusting to stay on screen
                 sf::Vector2f tooltipPos(mousePosF.x + 15.f, mousePosF.y + 15.f);
                 
                 if (tooltipPos.x + tooltipWidth > containerBounds.position.x + containerBounds.size.x) {
@@ -157,18 +173,21 @@ void InventoryUI::update(const sf::Vector2i& mousePos, const InventorySystem& in
         }
     }
     
+    // Clamp scroll to valid range
     int totalItems = static_cast<int>(inventory.getItems().size());
     int maxScroll = getMaxScroll(totalItems);
     scrollOffset = std::clamp(scrollOffset, 0, maxScroll);
 }
 
+// Render grid cells, item sprites, and tooltip
 void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventory) {
     const auto& items = inventory.getItems();
     
     for (size_t i = 0; i < grid.size(); ++i) {
         auto& cell = grid[i];
-        int itemIndex = (scrollOffset * columns) + static_cast<int>(i);  // FIX: multiply by columns
+        int itemIndex = (scrollOffset * columns) + static_cast<int>(i);
         
+        // Highlight hovered cell
         if (static_cast<int>(i) == hoveredCell && itemIndex < static_cast<int>(items.size())) {
             cell.background.setFillColor(sf::Color(70, 70, 80, 200));
         } else {
@@ -177,6 +196,7 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
         
         window.draw(cell.background);
         
+        // Draw item sprite if cell has an item
         if (itemIndex < static_cast<int>(items.size())) {
             const auto& item = items[itemIndex];
             const ItemDefinition* def = inventory.getItemDefinition(item.id);
@@ -186,6 +206,7 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
                     const sf::Texture& texture = resources.getTexture(item.id);
                     sf::Sprite sprite(texture);
                     
+                    // Scale sprite to fit cell with padding
                     float itemPadding = 4.f;
                     float maxSize = cellSize.x - itemPadding * 2;
                     sf::Vector2u texSize = texture.getSize();
@@ -193,6 +214,7 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
                                                     static_cast<float>(texSize.y));
                     sprite.setScale({scale, scale});
                     
+                    // Center sprite in cell
                     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
                     sprite.setPosition({
                         cell.bounds.position.x + (cellSize.x - spriteBounds.size.x) / 2.f,
@@ -200,6 +222,8 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
                     });
                     
                     window.draw(sprite);
+                    
+                    // Quantity text temporarily disabled to fix duplication bug
                     
                     // if (item.quantity > 1) {
                     //     sf::Text quantityText(resources.getFont("main"), 
@@ -222,6 +246,7 @@ void InventoryUI::draw(sf::RenderWindow& window, const InventorySystem& inventor
         }
     }
     
+    // Draw tooltip on top of everything
     if (showTooltip) {
         window.draw(tooltipBackground);
         window.draw(tooltipTitle);

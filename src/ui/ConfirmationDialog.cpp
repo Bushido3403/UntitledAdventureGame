@@ -39,6 +39,7 @@ std::string ConfirmationDialog::wrapText(const std::string& text, float maxWidth
     
     sf::Text testText(font, "", characterSize);
     
+    // Build lines word by word, wrapping when width exceeded
     while (words >> word) {
         std::string testLine = currentLine.empty() ? word : currentLine + " " + word;
         testText.setString(testLine);
@@ -48,6 +49,7 @@ std::string ConfirmationDialog::wrapText(const std::string& text, float maxWidth
                 wrappedText += currentLine + "\n";
                 currentLine = word;
             } else {
+                // Single word is too long, add it anyway
                 wrappedText += word + "\n";
                 currentLine = "";
             }
@@ -64,7 +66,7 @@ std::string ConfirmationDialog::wrapText(const std::string& text, float maxWidth
 }
 
 void ConfirmationDialog::updatePosition(const sf::Vector2u& windowSize, float titlebarHeight) {
-    // Cover the entire window
+    // Cover the entire window (below titlebar)
     background.setSize(sf::Vector2f(static_cast<float>(windowSize.x), 
                                      static_cast<float>(windowSize.y) - titlebarHeight));
     background.setPosition(sf::Vector2f(0.f, titlebarHeight));
@@ -86,7 +88,7 @@ void ConfirmationDialog::updatePosition(const sf::Vector2u& windowSize, float ti
                                           msgFont, messageText.getCharacterSize());
     messageText.setString(wrappedMessage);
     
-    // Center the message text properly
+    // Center the message text
     sf::FloatRect messageBounds = messageText.getLocalBounds();
     float dialogCenterX = dialogX + dialogWidth / 2.f;
     messageText.setPosition(sf::Vector2f(
@@ -94,7 +96,7 @@ void ConfirmationDialog::updatePosition(const sf::Vector2u& windowSize, float ti
         dialogY + 40.f - messageBounds.position.y
     ));
     
-    // Position instruction text (centered)
+    // Center instruction text at bottom
     instructionText.setString("Press Y to confirm or N to cancel");
     sf::FloatRect instructionBounds = instructionText.getLocalBounds();
     instructionText.setPosition(sf::Vector2f(
@@ -110,7 +112,7 @@ void ConfirmationDialog::draw(sf::RenderWindow& window) {
     window.draw(dialogBox);
     window.draw(messageText);
     
-    // Draw instruction text with colored Y and N
+    // Draw instruction text with colored Y (green) and N (red)
     const std::string fullText = "Press Y to confirm or N to cancel";
     const sf::Font& font = instructionText.getFont();
     unsigned int charSize = instructionText.getCharacterSize();

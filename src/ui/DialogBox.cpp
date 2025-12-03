@@ -32,6 +32,7 @@ sf::Color DialogBox::parseHexColor(const std::string& hexColor) {
     }
     
     try {
+        // Parse RGB hex values
         unsigned int r = std::stoi(hex.substr(0, 2), nullptr, 16);
         unsigned int g = std::stoi(hex.substr(2, 2), nullptr, 16);
         unsigned int b = std::stoi(hex.substr(4, 2), nullptr, 16);
@@ -46,9 +47,11 @@ void DialogBox::updateLayout(const sf::FloatRect& bounds, float boxPadding, floa
     speakerText.setCharacterSize(speakerSize);
     dialogText.setCharacterSize(dialogSize);
     
+    // Position speaker text
     speakerText.setPosition(sf::Vector2f(bounds.position.x + boxPadding, 
                                          bounds.position.y + boxPadding));
     
+    // Position dialog text below speaker with gap
     float speakerHeight = speakerText.getGlobalBounds().size.y;
     float speakerToTextGap = 10.f * scaleY;
     
@@ -74,6 +77,7 @@ std::string DialogBox::wrapText(const std::string& text, unsigned int maxWidth,
     
     sf::Text testText(font, "", characterSize);
     
+    // Process each word and wrap to new line if it exceeds maxWidth
     while (words >> word) {
         std::string testLine = line.empty() ? word : line + " " + word;
         testText.setString(testLine);
@@ -83,6 +87,7 @@ std::string DialogBox::wrapText(const std::string& text, unsigned int maxWidth,
                 wrapped << line << "\n";
                 line = word;
             } else {
+                // Single word too long - force it on its own line
                 wrapped << word << "\n";
                 line = "";
             }
@@ -91,6 +96,7 @@ std::string DialogBox::wrapText(const std::string& text, unsigned int maxWidth,
         }
     }
     
+    // Add remaining text
     if (!line.empty()) {
         wrapped << line;
     }

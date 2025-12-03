@@ -16,10 +16,10 @@ CustomWindow::CustomWindow(const sf::Vector2u& size, const std::string& title,
       titleText(font, title, 16),
       closeText(font, "X", 20),
       fullscreenText(font, "[ ]", 20),
-      cursorSprite(cursorTexture) {  // Initialize sprite with texture
+      cursorSprite(cursorTexture) {
     
     // Scale down the cursor
-    cursorSprite.setScale(sf::Vector2f(0.04f, 0.04f));  // Adjust this value as needed
+    cursorSprite.setScale(sf::Vector2f(0.04f, 0.04f));
     
     window.setPosition(windowedPosition);
     window.setFramerateLimit(60);
@@ -69,6 +69,7 @@ void CustomWindow::handleEvent(const sf::Event& event) {
                 fullscreen = !fullscreen;
                 
                 if (fullscreen) {
+                    // Save windowed state before going fullscreen
                     windowedSize = window.getSize();
                     windowedPosition = window.getPosition();
                     
@@ -83,6 +84,7 @@ void CustomWindow::handleEvent(const sf::Event& event) {
                          static_cast<float>(desktopMode.size.y)});
                     window.setView(sf::View(visibleArea));
                 } else {
+                    // Restore windowed state
                     window.create(sf::VideoMode(windowedSize), titleText.getString(), sf::Style::None);
                     window.setPosition(windowedPosition);
                     
@@ -121,11 +123,13 @@ void CustomWindow::handleEvent(const sf::Event& event) {
         }
     }
     else if (event.is<sf::Event::MouseMoved>()) {
+        // Update window position while dragging
         if (dragging) {
             window.setPosition(sf::Mouse::getPosition() - dragOffset);
         }
     }
     else if (const auto* resized = event.getIf<sf::Event::Resized>()) {
+        // Maintain 16:9 aspect ratio
         unsigned int width = resized->size.x;
         unsigned int height = static_cast<unsigned int>(width * 9.0f / 16.0f);
         
@@ -145,7 +149,7 @@ void CustomWindow::drawTitlebar() {
     window.draw(fullscreenText);
     window.draw(closeText);
     
-    // Update and draw cursor
+    // Update and draw custom cursor
     cursorSprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
     window.draw(cursorSprite);
 }

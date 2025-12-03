@@ -13,6 +13,7 @@ Button::Button(ResourceManager& resources, sf::Texture* texture, const sf::Vecto
         sprite->setPosition(position);
     }
     
+    // Initialize shared click sound once
     if (!Button::clickSound) {
         Button::clickSound = std::make_unique<sf::Sound>(resources.getSoundBuffer("click"));
     }
@@ -21,6 +22,7 @@ Button::Button(ResourceManager& resources, sf::Texture* texture, const sf::Vecto
 void Button::setPosition(const sf::Vector2f& position)
 {
     if (hasTexture && sprite) {
+        // Center sprite on position
         auto bounds = sprite->getLocalBounds();
         sprite->setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
         sprite->setPosition(position);
@@ -46,7 +48,8 @@ void Button::setText(const std::string& text, const sf::Font& font, unsigned int
     buttonText->setFont(font);
     buttonText->setString(text);
     buttonText->setCharacterSize(characterSize);
-    // Center text on button if using texture, otherwise just position it
+    
+    // Center text on button sprite if texture is used
     if (hasTexture && sprite) {
         sf::FloatRect textBounds = buttonText->getLocalBounds();
         sf::FloatRect spriteBounds = sprite->getGlobalBounds();
@@ -62,7 +65,7 @@ void Button::setTextSize(unsigned int characterSize)
     if (!buttonText) return;
     buttonText->setCharacterSize(characterSize);
     
-    // Re-center text if using texture
+    // Re-center text after size change
     if (hasTexture && sprite) {
         sf::FloatRect textBounds = buttonText->getLocalBounds();
         sf::FloatRect spriteBounds = sprite->getGlobalBounds();
@@ -86,6 +89,7 @@ void Button::handleEvent(const sf::Event& event)
         {
             sf::Vector2f mousePos(static_cast<float>(mouseReleased->position.x), 
                                   static_cast<float>(mouseReleased->position.y));
+            // Check if click is within button bounds
             if (getBounds().contains(mousePos))
             {
                 if (Button::clickSound) Button::clickSound->play();
@@ -98,8 +102,10 @@ void Button::handleEvent(const sf::Event& event)
 
 void Button::update(const sf::Vector2i& mousePos)
 {
+    // Update hover state
     isHovered = getBounds().contains(static_cast<sf::Vector2f>(mousePos));
     
+    // Change appearance when hovered
     if (hasTexture && sprite) {
         sprite->setColor(isHovered ? sf::Color(180, 180, 180) : sf::Color::White);
     } else if (buttonText) {
@@ -129,6 +135,7 @@ sf::FloatRect Button::getBounds() const
 
 void Button::prime(ResourceManager& resources)
 {
+    // Pre-load and "warm up" click sound to prevent first-click delay
     if (!Button::clickSound) {
         Button::clickSound = std::make_unique<sf::Sound>(resources.getSoundBuffer("click"));
         float old = Button::clickSound->getVolume();

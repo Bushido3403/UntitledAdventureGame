@@ -9,27 +9,38 @@ struct InventoryItem;
 struct ItemDefinition;
 class InventorySystem;
 
+// Actions that can be performed on inventory items
 enum class InventoryAction {
     None,
     DeleteRequested
 };
 
+// Result of user interaction with inventory UI
 struct InventoryInteraction {
     InventoryAction action = InventoryAction::None;
     int itemIndex = -1;
-    bool removeAll = false;  // NEW: indicates shift-click to remove all
+    bool removeAll = false;  // True if shift+right-click
 };
 
+// Renders inventory grid, handles mouse interactions, and shows tooltips
 class InventoryUI {
 public:
     InventoryUI(ResourceManager& resources);
     
+    // Recreate grid layout when window resizes
     void updateLayout(const sf::FloatRect& containerBounds, float padding, float scaleY);
+    
+    // Process mouse clicks and scrolling
     InventoryInteraction handleEvent(const sf::Event& event, const InventorySystem& inventory);
+    
+    // Update hover state and tooltip
     void update(const sf::Vector2i& mousePos, const InventorySystem& inventory);
+    
+    // Render grid, items, and tooltip
     void draw(sf::RenderWindow& window, const InventorySystem& inventory);
     
 private:
+    // Single cell in the inventory grid
     struct GridCell {
         sf::FloatRect bounds;
         sf::RectangleShape background;
@@ -44,7 +55,7 @@ private:
     std::vector<GridCell> grid;
     
     int hoveredCell = -1;
-    int scrollOffset = 0;
+    int scrollOffset = 0;  // How many rows have been scrolled
     
     sf::FloatRect containerBounds;
     sf::Vector2f cellSize;
@@ -54,7 +65,7 @@ private:
     float currentPadding = 0.f;
     float currentScale = 1.f;
     
-    // Tooltip
+    // Tooltip elements
     sf::RectangleShape tooltipBackground;
     sf::Text tooltipTitle;
     sf::Text tooltipDescription;

@@ -11,6 +11,7 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
 {
     ui->setInventorySystem(inventorySystem.get());
     
+    // Initialize transition overlay to full opacity
     transitionOverlay.setFillColor(sf::Color(0, 0, 0, 255));
     transitionOverlay.setSize(sf::Vector2f(800.f, 600.f));
     
@@ -53,6 +54,7 @@ PlayingState::PlayingState(ResourceManager& resources, const std::string& script
         }
     }
     
+    // Start with fade-in transition
     transitionState = TransitionState::FadingIn;
     transitionAlpha = 255.f;
 }
@@ -62,6 +64,7 @@ void PlayingState::setOnScriptComplete(std::function<void()> callback) {
     sceneManager->setOnScriptComplete(callback);
 }
 
+// Load a scene, apply effects, save state, and create choice buttons
 void PlayingState::loadScene(const std::string& sceneId) {
     if (!sceneManager->loadScene(sceneId)) {
         return;
@@ -70,7 +73,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
     const Scene* currentScene = sceneManager->getCurrentScene();
     if (!currentScene) return;
     
-    // Apply effects if present
+    // Apply effects if present (modify stats, add items, etc.)
     if (currentScene->effects.has_value()) {
         gameState->applyEffects(currentScene->effects.value(), inventorySystem.get());
     }
@@ -79,6 +82,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
     gameState->saveGame(sceneManager->getScript().scriptId, currentScene->id, 
                       inventorySystem.get());
     
+    // Calculate layout metrics for text wrapping
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     sf::Vector2u fullWindowSize(ui->getWindowSize().x, 
                                 ui->getWindowSize().y + static_cast<unsigned int>(TITLEBAR_HEIGHT));
@@ -87,6 +91,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
     auto metrics = tempLayoutManager.calculate(fullWindowSize, TITLEBAR_HEIGHT);
     unsigned int dialogSize = tempLayoutManager.getScaledCharacterSize(24, ui->getWindowSize());
     
+    // Wrap text to fit dialog box
     float maxTextWidth = metrics.dialogBoxSize.x - (metrics.scale.boxPadding * 2);
     std::string wrappedText = DialogBox::wrapText(currentScene->text, 
                                                   static_cast<unsigned int>(maxTextWidth), 
@@ -99,6 +104,7 @@ void PlayingState::loadScene(const std::string& sceneId) {
     updatePositions(fullWindowSize);
 }
 
+// Initiate fade-out transition to next scene
 void PlayingState::startTransition(const std::string& sceneId) {
     if (transitionState != TransitionState::None) {
         return;
@@ -109,6 +115,7 @@ void PlayingState::startTransition(const std::string& sceneId) {
     transitionAlpha = 0.f;
 }
 
+// Update fade transition and load next scene at midpoint
 void PlayingState::updateTransition(float deltaTime) {
     if (transitionState == TransitionState::None) {
         return;
@@ -125,6 +132,7 @@ void PlayingState::updateTransition(float deltaTime) {
             std::string sceneToLoad = nextSceneId;
             nextSceneId.clear();
             
+            // Check if story is complete
             if (sceneToLoad == "END") {
                 if (onScriptComplete) {
                     onScriptComplete();
@@ -132,6 +140,7 @@ void PlayingState::updateTransition(float deltaTime) {
                 return;
             }
             
+            // Load next scene at peak of fade
             loadScene(sceneToLoad);
             transitionState = TransitionState::FadingIn;
         }
@@ -145,11 +154,13 @@ void PlayingState::updateTransition(float deltaTime) {
         }
     }
     
+    // Update overlay transparency
     sf::Color overlayColor = transitionOverlay.getFillColor();
     overlayColor.a = static_cast<std::uint8_t>(std::clamp(transitionAlpha, 0.f, 255.f));
     transitionOverlay.setFillColor(overlayColor);
 }
 
+// Create buttons for all visible choices (filtered by conditions)
 void PlayingState::createChoiceButtons() {
     choiceButtons.clear();
     
@@ -162,6 +173,7 @@ void PlayingState::createChoiceButtons() {
     for (size_t i = 0; i < currentScene->choices.size() && labelIndex < 4; ++i) {
         const auto& choice = currentScene->choices[i];
         
+        // Skip choices that don't meet conditions
         if (choice.condition.has_value() && !gameState->checkCondition(choice.condition.value())) {
             continue;
         }
@@ -173,6 +185,7 @@ void PlayingState::createChoiceButtons() {
         std::string nextScene = choice.nextScene;
         std::string nextScript = choice.nextScript;
         
+        // Handle script changes or scene transitions
         button->setOnClick([this, nextScene, nextScript]() {
             if (!nextScript.empty()) {
                 sceneManager->loadScript(nextScript);
@@ -202,6 +215,7 @@ void PlayingState::updatePositions(const sf::Vector2u& newWindowSize) {
     ui->updateChoiceButtons(choiceButtons, currentScene);
 }
 
+// Show Y/N confirmation dialog for item deletion
 void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex, 
                                    const sf::Vector2u& windowSize, float titlebarHeight) {
     confirmationType = type;
@@ -231,6 +245,7 @@ void PlayingState::showConfirmationDialog(ConfirmationType type, int itemIndex,
     ui->getConfirmationDialog().show(message, windowSize, titlebarHeight);
 }
 
+// Execute confirmed action or cancel
 void PlayingState::handleConfirmation(bool confirmed) {
     ui->getConfirmationDialog().hide();
     
@@ -247,6 +262,7 @@ void PlayingState::handleConfirmation(bool confirmed) {
         return;
     }
     
+    // Remove item(s) and save game state
     if (confirmationType == ConfirmationType::ThrowOut) {
         inventorySystem->removeItemAtIndex(pendingActionItemIndex, 1, gameState.get());
         gameState->saveGame(sceneManager->getScript().scriptId, 
@@ -265,6 +281,7 @@ void PlayingState::handleConfirmation(bool confirmed) {
 }
 
 void PlayingState::handleEvent(const sf::Event& event) {
+    // Handle confirmation dialog input first
     if (confirmationType != ConfirmationType::None) {
         if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
             if (keyPressed->code == sf::Keyboard::Key::Y) {
@@ -276,10 +293,12 @@ void PlayingState::handleEvent(const sf::Event& event) {
         return;
     }
     
+    // Don't allow input during transition
     if (transitionState != TransitionState::None) {
         return;
     }
     
+    // Handle inventory interactions (right-click to delete items)
     auto interaction = ui->handleInventoryEvent(event);
 
     if (interaction.action == InventoryAction::DeleteRequested) {
@@ -289,10 +308,12 @@ void PlayingState::handleEvent(const sf::Event& event) {
         return;
     }
     
+    // Handle choice button clicks
     for (auto& button : choiceButtons) {
         button->handleEvent(event);
     }
     
+    // Handle keyboard shortcuts for choices (A, B, C, D)
     if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
         int choiceIndex = -1;
         
@@ -323,6 +344,7 @@ void PlayingState::handleEvent(const sf::Event& event) {
 void PlayingState::update(float deltaTime, sf::RenderWindow& window) {
     updateTransition(deltaTime);
     
+    // Only update interactive elements when not transitioning or confirming
     if (transitionState == TransitionState::None && confirmationType == ConfirmationType::None) {
         auto mousePos = sf::Mouse::getPosition(window);
         
@@ -338,6 +360,7 @@ void PlayingState::draw(sf::RenderWindow& window) {
     auto& graphicsSprite = sceneManager->getGraphicsSprite();
     ui->draw(window, choiceButtons, graphicsSprite.get());
     
+    // Draw transition overlay on top of everything
     if (transitionState != TransitionState::None) {
         window.draw(transitionOverlay);
     }

@@ -12,10 +12,12 @@ StartState::StartState(ResourceManager& resources)
 
 void StartState::updatePositions(const sf::Vector2u& windowSize)
 {
+    // Center placeholder text
     auto placeholderBounds = placeholderText.getLocalBounds();
     placeholderText.setOrigin({placeholderBounds.size.x / 2.f, placeholderBounds.size.y / 2.f});
     placeholderText.setPosition({windowSize.x / 2.f, windowSize.y / 2.f});
     
+    // Center back text below placeholder
     auto backBounds = backText.getLocalBounds();
     backText.setOrigin({backBounds.size.x / 2.f, backBounds.size.y / 2.f});
     backText.setPosition({windowSize.x / 2.f, windowSize.y / 2.f + 100.f});
@@ -28,13 +30,13 @@ void StartState::setOnBackClicked(std::function<void()> callback)
 
 void StartState::handleEvent(const sf::Event& event)
 {
+    // Handle ESC key to return to menu
     if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>())
     {
         if (keyPressed->code == sf::Keyboard::Key::Escape && onBackClicked)
         {
             onBackClicked();
         }
-        
     }
 }
 

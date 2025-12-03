@@ -4,11 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+// Custom window with draggable titlebar, close/fullscreen buttons, and custom cursor
 class CustomWindow
 {
 private:
     sf::RenderWindow window;
-    sf::Sprite cursorSprite;  // Add this
+    sf::Sprite cursorSprite;
     sf::RectangleShape titlebar;
     sf::Text titleText;
     sf::Text closeText;
@@ -27,6 +28,7 @@ private:
     
     static constexpr float titlebarHeight = 40.f;
     
+    // Update button positions when window size changes
     void updateTitlebarElements();
 
 public:
@@ -46,7 +48,7 @@ public:
     void close() { window.close(); }
     
     sf::Vector2u getSize() const;
-    sf::Vector2u getDrawableSize() const;
+    sf::Vector2u getDrawableSize() const;  // Window size minus titlebar
     static constexpr float getTitlebarHeight() { return titlebarHeight; }
     void setView(const sf::View& view) { window.setView(view); }
     

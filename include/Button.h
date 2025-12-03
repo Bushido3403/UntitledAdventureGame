@@ -10,8 +10,10 @@
 #include <optional>
 #include "ResourceManager.h"
 
+// Interactive button with optional texture/text and click sound
 class Button {
 public:
+    // Create button with optional texture at position
     Button(ResourceManager& resources, sf::Texture* texture, const sf::Vector2f& position);
     
     void handleEvent(const sf::Event& event);
@@ -26,6 +28,7 @@ public:
     
     sf::FloatRect getBounds() const;
     
+    // Pre-load click sound (prevents delay on first click)
     static void prime(ResourceManager& resources);
 
 private:
@@ -35,6 +38,7 @@ private:
     bool hasTexture;
     std::function<void()> onClick;
     
+    // Shared click sound for all buttons
     static std::unique_ptr<sf::Sound> clickSound;
 };
 

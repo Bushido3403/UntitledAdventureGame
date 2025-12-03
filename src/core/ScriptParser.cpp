@@ -38,6 +38,7 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
             }
         }
 
+        // Parse each scene
         for (const auto& sceneJson : j["scenes"]) {
             Scene scene;
             scene.id = sceneJson["id"];
@@ -52,6 +53,7 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                 scene.speakerColor = "#ffffffff";  // Default white color
             }
 
+            // Parse choices
             for (const auto& choiceJson : sceneJson["choices"]) {
                 Choice choice;
                 choice.text = choiceJson["text"];
@@ -62,7 +64,7 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                     choice.nextScript = choiceJson["nextScript"];
                 }
 
-                // In the choices loop, after parsing nextScript:
+                // Parse conditions for showing/hiding choices
                 if (choiceJson.contains("condition")) {
                     Condition cond;
                     const auto& condJson = choiceJson["condition"];
@@ -78,7 +80,7 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
                 scene.choices.push_back(choice);
             }
 
-            // After parsing all choices for a scene:
+            // Parse effects applied when scene is displayed
             if (sceneJson.contains("effects")) {
                 Effects eff;
                 const auto& effJson = sceneJson["effects"];
@@ -131,6 +133,7 @@ std::optional<GameScript> ScriptParser::loadScript(const std::string& path) {
 }
 
 const Scene* ScriptParser::findScene(const GameScript& script, const std::string& sceneId) {
+    // Linear search for scene with matching ID
     for (const auto& scene : script.scenes) {
         if (scene.id == sceneId) {
             return &scene;

@@ -10,6 +10,7 @@ PlayingStateUI::PlayingStateUI(ResourceManager& resources)
       confirmationDialog(std::make_unique<ConfirmationDialog>(resources.getFont("main"))),
       windowSize(800, 600)
 {
+    // Set up background colors and borders
     background.setFillColor(sf::Color(20, 20, 30));
     
     dialogBoxShape.setFillColor(sf::Color(40, 40, 50, 220));
@@ -43,16 +44,20 @@ void PlayingStateUI::updateInventory(const sf::Vector2i& mousePos) {
 }
 
 void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Scene* currentScene) {
+    // Adjust for custom titlebar
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     windowSize = sf::Vector2u(newWindowSize.x, 
                               newWindowSize.y - static_cast<unsigned int>(TITLEBAR_HEIGHT));
     
+    // Calculate layout metrics
     auto metrics = layoutManager->calculate(newWindowSize, TITLEBAR_HEIGHT);
     
+    // Update background size and position
     background.setSize(sf::Vector2f(static_cast<float>(newWindowSize.x), 
                                      static_cast<float>(newWindowSize.y) - TITLEBAR_HEIGHT));
     background.setPosition({0.f, TITLEBAR_HEIGHT});
     
+    // Update UI box positions and sizes
     graphicsBox.setSize(metrics.graphicsBoxSize);
     graphicsBox.setPosition(metrics.graphicsBoxPos);
     
@@ -62,13 +67,16 @@ void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Sc
     dialogBoxShape.setSize(metrics.dialogBoxSize);
     dialogBoxShape.setPosition(metrics.dialogBoxPos);
     
+    // Calculate scaled font sizes
     unsigned int dialogSize = layoutManager->getScaledCharacterSize(24, windowSize);
     unsigned int speakerSize = layoutManager->getScaledCharacterSize(28, windowSize);
     
+    // Update dialog box layout
     sf::FloatRect dialogBounds(metrics.dialogBoxPos, metrics.dialogBoxSize);
     dialogBox->updateLayout(dialogBounds, metrics.scale.boxPadding, 
                            metrics.scale.scaleY, dialogSize, speakerSize);
     
+    // Update dialog text if scene exists
     if (currentScene) {
         float maxTextWidth = metrics.dialogBoxSize.x - (metrics.scale.boxPadding * 2);
         std::string wrappedText = DialogBox::wrapText(currentScene->text, 
@@ -93,33 +101,40 @@ void PlayingStateUI::updatePositions(const sf::Vector2u& newWindowSize, const Sc
 void PlayingStateUI::updateChoiceButtons(const std::vector<std::unique_ptr<Button>>& buttons, const Scene* currentScene) {
     if (buttons.empty() || !currentScene) return;
     
+    // Calculate metrics
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     sf::Vector2u fullWindowSize(windowSize.x, windowSize.y + static_cast<unsigned int>(TITLEBAR_HEIGHT));
     auto metrics = layoutManager->calculate(fullWindowSize, TITLEBAR_HEIGHT);
     
+    // Update button text sizes
     unsigned int choiceSize = layoutManager->getScaledCharacterSize(22, windowSize);
     for (auto& button : buttons) {
         button->setTextSize(choiceSize);
     }
     
+    // Update button positions
     updateChoicePositions(buttons, currentScene);
 }
 
 void PlayingStateUI::updateChoicePositions(const std::vector<std::unique_ptr<Button>>& buttons, const Scene* currentScene) {
     if (buttons.empty() || !currentScene) return;
     
+    // Calculate layout metrics
     const float TITLEBAR_HEIGHT = CustomWindow::getTitlebarHeight();
     sf::Vector2u fullWindowSize(windowSize.x, windowSize.y + static_cast<unsigned int>(TITLEBAR_HEIGHT));
     auto metrics = layoutManager->calculate(fullWindowSize, TITLEBAR_HEIGHT);
     
     sf::FloatRect dialogBoxBounds = dialogBoxShape.getGlobalBounds();
     
+    // Calculate spacing between choices
     float baseChoiceSpacing = 35.f;
     float choiceSpacing = baseChoiceSpacing * metrics.scale.scaleY;
     
+    // Determine layout (single or two columns)
     size_t numChoices = buttons.size();
     bool useTwoColumns = numChoices > 2;
     
+    // Calculate total height needed for choices
     float totalChoiceHeight;
     if (useTwoColumns) {
         size_t rows = (numChoices + 1) / 2;
@@ -134,9 +149,11 @@ void PlayingStateUI::updateChoicePositions(const std::vector<std::unique_ptr<But
         }
     }
     
+    // Calculate starting Y position for choices
     float dialogBoxBottom = dialogBoxBounds.position.y + dialogBoxBounds.size.y;
     float choiceStartY = dialogBoxBottom - totalChoiceHeight - metrics.scale.boxPadding;
     
+    // Position buttons in one or two columns
     if (useTwoColumns) {
         float columnWidth = (metrics.dialogBoxSize.x - (metrics.scale.boxPadding * 3)) / 2.f;
         float leftColumnX = dialogBoxShape.getPosition().x + metrics.scale.boxPadding;
@@ -158,6 +175,7 @@ void PlayingStateUI::updateChoicePositions(const std::vector<std::unique_ptr<But
         }
     }
     
+    // Check if text overlaps choices and shrink if needed
     sf::FloatRect dialogTextBounds = dialogBox->getTextBounds();
     float textBottomY = dialogTextBounds.position.y + dialogTextBounds.size.y;
     float baseTextToChoiceGap = 20.f;
@@ -168,6 +186,7 @@ void PlayingStateUI::updateChoicePositions(const std::vector<std::unique_ptr<But
         unsigned int currentSize = dialogBox->getDialogText().getCharacterSize();
         unsigned int minSize = static_cast<unsigned int>(12 * metrics.scale.minScale);
         
+        // Shrink text until it fits
         while (currentSize > minSize && textBottomY > requiredTextEndY) {
             currentSize -= 1;
             
@@ -188,10 +207,13 @@ void PlayingStateUI::updateChoicePositions(const std::vector<std::unique_ptr<But
 
 void PlayingStateUI::draw(sf::RenderWindow& window, const std::vector<std::unique_ptr<Button>>& buttons, 
                          sf::Sprite* graphicsSprite) {
+    // Draw background
     window.draw(background);
     window.draw(graphicsBox);
     
+    // Draw graphics sprite if available
     if (graphicsSprite) {
+        // Scale and center sprite within graphics box
         sf::FloatRect texBounds = graphicsSprite->getLocalBounds();
         float graphicsWidth = graphicsBox.getSize().x;
         float graphicsHeight = graphicsBox.getSize().y;
@@ -212,20 +234,23 @@ void PlayingStateUI::draw(sf::RenderWindow& window, const std::vector<std::uniqu
         window.draw(*graphicsSprite);
     }
     
+    // Draw stats box and inventory
     window.draw(statsBox);
     
     if (inventorySystem && inventoryUI) {
         inventoryUI->draw(window, *inventorySystem);
     }
     
+    // Draw dialog box and text
     window.draw(dialogBoxShape);
     dialogBox->draw(window);
     
+    // Draw choice buttons
     for (auto& button : buttons) {
         button->draw(window);
     }
     
-    // Draw confirmation dialog last (on top of everything)
+    // Draw confirmation dialog on top
     drawConfirmationDialog(window);
 }
 
