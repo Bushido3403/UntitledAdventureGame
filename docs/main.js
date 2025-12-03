@@ -918,31 +918,18 @@ function renderFeaturesSection(section, container) {
 }
 
 function renderDesignApproachSection(section, container) {
-  console.log("renderDesignApproachSection called", section);
   container.innerHTML = "";
   const h2 = document.createElement("h2");
   h2.textContent = section.title || "Design Approach";
   container.appendChild(h2);
 
-  if (!section.body || !Array.isArray(section.body)) {
-    console.log("No body array found", section);
-    return;
-  }
-
-  console.log("Processing body with", section.body.length, "paragraphs");
-  
-  section.body.forEach((text, index) => {
-    console.log(`Processing paragraph ${index}:`, text);
+  (section.body || []).forEach((text) => {
     const p = document.createElement("p");
-    const processedText = text
+    p.innerHTML = text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/`(.*?)`/g, '<code>$1</code>');
-    p.innerHTML = processedText;
     container.appendChild(p);
-    console.log("Appended paragraph", p);
   });
-  
-  console.log("Final container:", container);
 }
 
 function renderBuildingSection(section, container) {
